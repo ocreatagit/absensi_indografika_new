@@ -13,19 +13,7 @@
 @section('main')
 <div class="well well-sm">
     <div class="row">
-        <div class="col-sm-3 padleft6percent" style="text-align: center;">
-            <!--<img src="{{ url("uploads")."/".$karyawan->pic }}" width="200" height="250" class="thumbnail">-->
-            <a href="{{ url("uploads/".$karyawan->pic) }}" data-lightbox="roadtrip"> {{ $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 200, "height" => 250)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)) }} </a>
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Nama : </label>
-                    <div class="col-sm-8">
-                        <label class="" style="margin-top: 8px;">{{ $karyawan->nama }}</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-sm-9" style="padding-left: 35px;">
+        <div class="col-sm-10 col-sm-offset-1" style="">
             <div class="panel panel-default">
                 <div class="panel-heading">Laporan Gaji</div>
                 <div class="panel-body">

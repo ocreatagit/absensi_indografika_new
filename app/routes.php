@@ -77,10 +77,32 @@ Route::get('myindografika/detail_pinjaman_karyawan/{id}', "FiturController@show_
 Route::get('myindografika/omzetkaryawan', "FiturController@histori_omzet");
 Route::post('myindografika/omzetkaryawan', "FiturController@histori_omzet_query");
 
-Route::get('myindografika/absenkaryawan', "FiturController@absen_karyawan");
-Route::post('myindografika/absenkaryawan', "FiturController@absen_karyawan");
+Route::get('myindografika/presensikaryawan', "FiturController@presensi_karyawan");
+Route::post('myindografika/presensikaryawan', "FiturController@presensi_karyawan_query");
 
 // end fitur
+
+// Admin
+
+Route::get('admin/allgajikaryawan', "LaporanAdminController@histori_pembayaran_gaji");
+Route::post('admin/allgajikaryawan', "LaporanAdminController@histori_pembayaran_gaji_query");
+Route::get('admin/detail_gaji_karyawan/{id}', "LaporanAdminController@show_gaji");
+
+Route::get('admin/alltabungankaryawan', "LaporanAdminController@histori_tabungan");
+Route::post('admin/alltabungankaryawan', "LaporanAdminController@histori_tabungan_query");
+
+Route::get('admin/allpinjamankaryawan', "LaporanAdminController@histori_hutang");
+Route::post('admin/allpinjamankaryawan', "LaporanAdminController@histori_hutang_query");
+Route::get('admin/detail_pinjaman_karyawan/{id}', "LaporanAdminController@show_pinjaman");
+
+Route::get('admin/allomzetkaryawan', "LaporanAdminController@histori_omzet");
+Route::post('admin/allomzetkaryawan', "LaporanAdminController@histori_omzet_query");
+
+Route::get('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan");
+Route::post('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan_query");
+
+// end Admin
+
 // Input data
 // Transaksi Hutang
 Route::get('inputdata/hutang', "TransaksiHutangController@index");

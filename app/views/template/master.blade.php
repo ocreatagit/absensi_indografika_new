@@ -150,7 +150,7 @@
                         </li>
                         <?php if (in_array(13, $usermatrik)) { ?>
                             <li>
-                                {{ HTML::link('myindografika', 'My Indografika') }}
+                                {{-- HTML::link('myindografika', 'My Indografika') --}}
                             </li>
                         <?php } ?>
                         <li>
@@ -158,16 +158,35 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fitur <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <?php if (in_array(14, $usermatrik)) { ?>
-                                        <li>{{ HTML::link('myindografika/gajikaryawan', 'Histori Pembayaran Gaji')}}</li>
+                                        <li>{{ HTML::link('myindografika/gajikaryawan', 'Pembayaran Gaji')}}</li>
                                     <?php } ?>
                                     <?php if (in_array(15, $usermatrik)) { ?>
                                         <li>{{ HTML::link('myindografika/tabungankaryawan', 'Tabungan Karyawan')}}</li>
                                     <?php } ?>
                                     <?php if (in_array(16, $usermatrik)) { ?>
-                                        <li>{{ HTML::link('myindografika/pinjamankaryawan', 'Laporan Pinjaman Karyawan')}}</li>
+                                        <li>{{ HTML::link('myindografika/pinjamankaryawan', 'Pinjaman Karyawan')}}</li>
                                     <?php } ?>
                                     <?php if (in_array(17, $usermatrik)) { ?>
-                                        <li>{{ HTML::link('myindografika/omzetkaryawan', 'Laporan Omzet Karyawan')}}</li>
+                                        <li>{{ HTML::link('myindografika/omzetkaryawan', 'Omzet Karyawan')}}</li>
+                                    <?php } ?>
+                                    <?php if (in_array(18, $usermatrik)) { ?>
+                                        <li>{{ HTML::link('myindografika/presensikaryawan', 'Presensi Karyawan')}}</li>
+                                    <?php } ?>
+
+                                    <?php if (in_array(19, $usermatrik)) { ?>
+                                        <li>{{ HTML::link('admin/allgajikaryawan', 'Laporan Pembayaran Gaji Karyawan')}}</li>
+                                    <?php } ?>
+                                    <?php if (in_array(20, $usermatrik)) { ?>
+                                        <li>{{ HTML::link('admin/alltabungankaryawan', 'Laporan Tabungan Karyawan')}}</li>
+                                    <?php } ?>
+                                    <?php if (in_array(21, $usermatrik)) { ?>
+                                        <li>{{ HTML::link('admin/allpinjamankaryawan', 'Laporan Pinjaman Karyawan')}}</li>
+                                    <?php } ?>
+                                    <?php if (in_array(22, $usermatrik)) { ?>
+                                        <li>{{ HTML::link('admin/allomzetkaryawan', 'Laporan Omzet Karyawan')}}</li>
+                                    <?php } ?>
+                                    <?php if (in_array(23, $usermatrik)) { ?>
+                                        <li>{{ HTML::link('admin/allpresensikaryawan', 'Laporan Presensi Karyawan')}}</li>
                                     <?php } ?>
                                 </ul>
                             <?php } ?>

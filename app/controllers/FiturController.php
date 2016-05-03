@@ -142,7 +142,7 @@ class FiturController extends \BaseController {
             $data["karyawan"] = mk01::find($userloginid["idkar"]);
             $data["gajis"] = $tg01->getGajiStatusN(date("Y-m-d", strtotime($tglfrom)), date("Y-m-d", strtotime($tglto)), $userloginid["idkar"], $status);
             Session::flash('filter', 'Pencarian Gaji dengan status <b>' . ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
-            
+
             $data['filter'] = Session::get('filter');
             $data['usermatrik'] = User::getUserMatrix();
             return View::make('master.my_gaji', $data);
@@ -325,5 +325,21 @@ class FiturController extends \BaseController {
                             ->withErrors($validator)
                             ->withInput();
         }
+    }
+
+    public function presensi_karyawan() {
+        $userloginid = Session::get("user");
+//        $ta01 = new ta01();
+        $tglfrom = "";
+        $tglto = "";
+        $data = array(
+            "karyawan" => mk01::find($userloginid["idkar"]),
+            "usermatrik" => User::getUserMatrix()
+        );
+        return View::make('master.my_presensi', $data);
+    }
+    
+    public function presensi_karyawan_query() {
+        
     }
 }
