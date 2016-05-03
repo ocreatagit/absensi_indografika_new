@@ -135,16 +135,6 @@
                                             {{ HTML::link('daftarmasuk', 'Daftar Masuk Karyawan')}}
                                         </li>
                                     <?php } ?>
-                                    <?php if (in_array(11, $usermatrik)) { ?>
-                                        <li>
-                                            {{ HTML::link('daftarpulang', 'Daftar Pulang Karyawan')}}
-                                        </li>
-                                    <?php } ?>
-                                    <?php if (in_array(12, $usermatrik)) { ?>
-                                        <li>
-                                            {{ HTML::link('daftarlembur', 'Daftar Lembur Karyawan')}}
-                                        </li>
-                                    <?php } ?>
                                 </ul>
                             <?php } ?>
                         </li>

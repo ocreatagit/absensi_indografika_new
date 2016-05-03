@@ -64,7 +64,7 @@ class th01 extends Eloquent {
         if ($tglfrom != '' && $idkar != 0) {
             $sql .= " WHERE th01.tglhut >= '$tglfrom' AND th01.tglhut <= '$tglto' AND th01.idkar = $idkar ";
         } else if ($tglfrom != '' && $idkar == 0) {
-            $sql .= " WHERE th01.tgltb >= '$tglfrom' AND th01.tgltb <= '$tglto' ";
+            $sql .= " WHERE th01.tglhut >= '$tglfrom' AND th01.tglhut <= '$tglto' ";
         } else if ($tglfrom == '' && $idkar != 0) {
             $sql .= " WHERE th01.idkar = $idkar ";
         }

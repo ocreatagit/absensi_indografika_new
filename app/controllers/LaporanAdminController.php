@@ -70,7 +70,7 @@ class LaporanAdminController extends \BaseController {
     }
 
     // ------------------- Gaji ------------------- //
-    
+
     public function histori_pembayaran_gaji() {
         $mk01 = new mk01();
         $tg01 = new tg01();
@@ -108,7 +108,7 @@ class LaporanAdminController extends \BaseController {
             "referrals" => $mk01->getReferralKar($tg01->idkar),
             "usermatrik" => User::getUserMatrix()
         );
-        return View::make('master.my_gaji_detail', $data);
+        return View::make('admin.gaji_karyawan_detail', $data);
     }
 
     public function histori_pembayaran_gaji_query() {
@@ -132,42 +132,244 @@ class LaporanAdminController extends \BaseController {
             $tglfrom = Input::get("tglfrom");
             $tglto = Input::get("tglto");
             $status = Input::get("status");
+            $idkar = Input::get("idkar");
 
-            $userloginid = Session::get("user");
             $tg01 = new tg01();
-            $data = array();
-            $data["karyawan"] = mk01::find($userloginid["idkar"]);
-            $data["gajis"] = $tg01->getGajiStatusN(date("Y-m-d", strtotime($tglfrom)), date("Y-m-d", strtotime($tglto)), $userloginid["idkar"], $status);
-            Session::flash('filter', 'Pencarian Gaji dengan status <b>' . ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
+            $mk01 = new mk01();
+            $karyawan = mk01::find($idkar);
+            if ($idkar == 0) {
+                $nama = "Semua Karyawan";
+            } else {
+                $nama = $karyawan->nama;
+            }
+
+            $data["karyawans"] = $mk01->getKaryawanAktif();
+            $data["gajis"] = $tg01->getGajiStatusN(date("Y-m-d", strtotime($tglfrom)), date("Y-m-d", strtotime($tglto)), $idkar, $status);
+            Session::flash('filter', 'Pencarian Gaji <b>' . $nama . '</b> dengan status <b>' . ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
 
             $data['filter'] = Session::get('filter');
             $data['usermatrik'] = User::getUserMatrix();
-            return View::make('master.my_gaji', $data);
+            return View::make('admin.gaji_karyawan', $data);
         }
         // 2b. jika tidak, kembali ke halaman form registrasi
         else {
-            return Redirect::to('myindografika/gajikaryawan')
+            return Redirect::to('admin/allgajikaryawan')
                             ->withErrors($validator)
                             ->withInput();
         }
     }
-    
+
     // ------------------- END Gaji ------------------- //
-    
     // ------------------- Tabungan ------------------- //
-    
+    public function histori_tabungan() {
+        $tt01 = new tt01();
+        $mk01 = new mk01();
+        $data = array(
+            "karyawans" => $mk01->getKaryawanAktif(),
+            "allTabungans" => $tt01->getAllTabunganKaryawan(),
+            "usermatrik" => User::getUserMatrix()
+        );
+        return View::make('admin.tabungan_karyawan', $data);
+    }
+
+    public function show_tabungan($idkar) {
+        $tt01 = new tt01();
+        $tglfrom = "";
+        $tglto = "";
+        $data = array(
+            "karyawan" => mk01::find($idkar),
+            "allTabungans" => $tt01->getAllTabungan($tglfrom, $tglto, $idkar),
+            "usermatrik" => User::getUserMatrix()
+        );
+        return View::make('admin.tabungan_karyawan_detail', $data);
+    }
+
+    public function histori_tabungan_query() {
+        // 1. setting validasi
+        $messages = array(
+            'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
+            'numeric' => 'Inputan <b>Harus Angka</b>!',
+            'same' => 'Password <b>Tidak Sama</b>!'
+        );
+
+        $validator = Validator::make(
+                        Input::all(), array(
+                    "tglfrom" => "required",
+                    "tglto" => "required"
+                        ), $messages
+        );
+
+        // 2a. jika semua validasi terpenuhi simpan ke database
+        if ($validator->passes()) {
+            $tglfrom = Input::get("tglfrom");
+            $tglto = Input::get("tglto");
+            $idkar = Input::get("idkar");
+
+            $userloginid = Session::get("user");
+            $tt01 = new tt01();
+            $data = array();
+            $data["karyawan"] = mk01::find($idkar);
+            $data["allTabungans"] = $tt01->getAllTabungan(date("Y-m-d", strtotime($tglfrom)), date("Y-m-d", strtotime($tglto)), $idkar);
+            Session::flash('filter', 'Pencarian Tabungan Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
+
+            $data['filter'] = Session::get('filter');
+            $data['usermatrik'] = User::getUserMatrix();
+            return View::make('admin.tabungan_karyawan_detail', $data);
+        }
+        // 2b. jika tidak, kembali ke halaman form registrasi
+        else {
+            return Redirect::to('myindografika/tabungankaryawan')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+    }
+
     // ------------------- END Tabungan ------------------- //
-    
     // ------------------- Hutang ------------------- //
-    
+
+    public function histori_hutang() {
+        $userloginid = Session::get("user");
+        $th01 = new th01();
+        $tglfrom = "";
+        $tglto = "";
+        $jenis = "Hutang";
+        $status = "N";
+        $mk01 = new mk01();
+        $data = array(
+            "karyawans" => $mk01->getKaryawanAktif(),
+            "allHutangs" => $th01->getAllHutang($tglfrom, $tglto, 0, $jenis, $status),
+            "usermatrik" => User::getUserMatrix()
+        );
+        return View::make('admin.pinjaman_karyawan', $data);
+    }
+
+    public function histori_hutang_query() {
+        // 1. setting validasi
+        $messages = array(
+            'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
+            'numeric' => 'Inputan <b>Harus Angka</b>!',
+            'same' => 'Password <b>Tidak Sama</b>!'
+        );
+
+        $validator = Validator::make(
+                        Input::all(), array(
+                    "tglfrom" => "required",
+                    "tglto" => "required"
+                        ), $messages
+        );
+
+        // 2a. jika semua validasi terpenuhi simpan ke database
+        if ($validator->passes()) {
+            $tglfrom = Input::get("tglfrom");
+            $tglto = Input::get("tglto");
+            $status = Input::get("status");
+            $jenis = Input::get("jenis");
+            $idkar = Input::get("idkar");
+
+            $th01 = new th01();
+            $data = array();
+            $mk01 = new mk01();
+            $karyawan = mk01::find($idkar);
+            if ($idkar == 0) {
+                $nama = "Semua Karyawan";
+            } else {
+                $nama = $karyawan->nama;
+            }
+            $data["karyawans"] = $mk01->getKaryawanAktif();
+            $data["allHutangs"] = $th01->getAllHutang(date("Y-m-d", strtotime($tglfrom)), date("Y-m-d", strtotime($tglto)), $idkar, $jenis, $status);
+            Session::flash('filter', 'Pencarian Pinjaman <b> (' . $jenis . ') ' . $nama . ' ' . '</b> dengan status <b>' . ($status == "Y" ? "Lunas" : "Belum Lunas") . '</b> Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
+
+            $data['filter'] = Session::get('filter');
+            $data['usermatrik'] = User::getUserMatrix();
+            return View::make('admin.pinjaman_karyawan', $data);
+        }
+        // 2b. jika tidak, kembali ke halaman form registrasi
+        else {
+            return Redirect::to('admin/allpinjamankaryawan')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+    }
+
+    public function show_pinjaman($idhut) {
+        $userloginid = Session::get("user");
+        $th01 = new th01();
+        $hutang = th01::find($idhut);
+        $data = array(
+            "karyawan" => mk01::find($hutang->idkar),
+            "hutang" => $hutang,
+            "detail_hutangs" => $th01->getDetailHutang($idhut),
+            "usermatrik" => User::getUserMatrix()
+        );
+        return View::make('admin.pinjaman_karyawan_detail', $data);
+    }
+
     // ------------------- END Hutang ------------------- //
-    
     // ------------------- Omzet ------------------- //
-    
+    public function histori_omzet() {
+        $userloginid = Session::get("user");
+        $tz01 = new tz01();
+        $tglfrom = "";
+        $tglto = "";
+        $mk01 = new mk01();
+        $data = array(
+            "karyawans" => $mk01->getKaryawanAktif(),
+            "allOmzets" => $tz01->getAllOmzet($tglfrom, $tglto, 0),
+            "usermatrik" => User::getUserMatrix()
+        );
+        return View::make('admin.omzet_karyawan', $data);
+    }
+
+    public function histori_omzet_query() {
+        // 1. setting validasi
+        $messages = array(
+            'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
+            'numeric' => 'Inputan <b>Harus Angka</b>!',
+            'same' => 'Password <b>Tidak Sama</b>!'
+        );
+
+        $validator = Validator::make(
+                        Input::all(), array(
+                    "tglfrom" => "required",
+                    "tglto" => "required"
+                        ), $messages
+        );
+
+        // 2a. jika semua validasi terpenuhi simpan ke database
+        if ($validator->passes()) {
+            $tglfrom = Input::get("tglfrom");
+            $tglto = Input::get("tglto");
+            $idkar = Input::get("idkar");
+
+            $tz01 = new tz01();
+            $mk01 = new mk01();
+            $karyawan = mk01::find($idkar);
+
+            if ($idkar == 0) {
+                $nama = "Semua Karyawan";
+            } else {
+                $nama = $karyawan->nama;
+            }
+
+            $data["karyawans"] = $mk01->getKaryawanAktif();
+            $data["allOmzets"] = $tz01->getAllOmzet(date("Y-m-d", strtotime($tglfrom)), date("Y-m-d", strtotime($tglto)), $idkar);
+            Session::flash('filter', 'Pencarian Omzet <b>' . $nama . '</b> Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
+
+            $data['filter'] = Session::get('filter');
+            $data['usermatrik'] = User::getUserMatrix();
+            return View::make('admin.omzet_karyawan', $data);
+        }
+        // 2b. jika tidak, kembali ke halaman form registrasi
+        else {
+            return Redirect::to('admin/allomzetkaryawan')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+    }
+
     // ------------------- END Omzet ------------------- //
-    
     // ------------------- Presensi ------------------- //
-    
+
     public function presensi_karyawan() {
         $userloginid = Session::get("user");
 //        $ta01 = new ta01();
@@ -178,11 +380,10 @@ class LaporanAdminController extends \BaseController {
         );
         return View::make('admin.presensi_karyawan', $data);
     }
-    
+
     public function presensi_karyawan_query() {
         
     }
-    
-    // ------------------- END Presensi ------------------- //
 
+    // ------------------- END Presensi ------------------- //
 }

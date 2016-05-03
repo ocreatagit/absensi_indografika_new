@@ -89,7 +89,8 @@ Route::post('admin/allgajikaryawan', "LaporanAdminController@histori_pembayaran_
 Route::get('admin/detail_gaji_karyawan/{id}', "LaporanAdminController@show_gaji");
 
 Route::get('admin/alltabungankaryawan', "LaporanAdminController@histori_tabungan");
-Route::post('admin/alltabungankaryawan', "LaporanAdminController@histori_tabungan_query");
+Route::post('admin/detail_tabungan_karyawan', "LaporanAdminController@histori_tabungan_query");
+Route::get('admin/detail_tabungan_karyawan/{id}', "LaporanAdminController@show_tabungan");
 
 Route::get('admin/allpinjamankaryawan', "LaporanAdminController@histori_hutang");
 Route::post('admin/allpinjamankaryawan', "LaporanAdminController@histori_hutang_query");

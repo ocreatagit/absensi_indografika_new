@@ -63,7 +63,7 @@
                });
            } else {
                str += "<tr>";
-               str += "<td class='text-center' colspan='5'>No Data available in table </td>";
+               str += "<td class='text-center' colspan='6'>No Data available in table </td>";
                str += "</tr>";
            }
            $("#tblMasuk").html(str);

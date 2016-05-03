@@ -39,10 +39,10 @@ class tt01 extends Eloquent {
         $tt01 = DB::select(DB::raw($sql));
         return $tt01;
     }
-    
+
     function getAllTabungan($tglfrom, $tglto, $idkar) {
         $sql = "SELECT tt01.idtb, tt01.nortb, tt01.tgltb, tt01.niltb, tt01.idkar, mk01.nama FROM tt01 INNER JOIN mk01 ON mk01.idkar = tt01.idkar";
-        
+
         if ($tglfrom != '' && $idkar != 0) {
             $sql .= " WHERE tt01.tgltb >= '$tglfrom' AND tt01.tgltb <= '$tglto' AND tt01.idkar = $idkar ";
         } else if ($tglfrom != '' && $idkar == 0) {
@@ -63,6 +63,13 @@ class tt01 extends Eloquent {
             $sql .= " WHERE tt02.idkar = $idkar ";
         }
 //        dd($sql);
+        $tt01 = DB::select(DB::raw($sql));
+        return $tt01;
+    }
+
+    public function getAllTabunganKaryawan() {
+        $sql = "SELECT mk01.idkar, mk01.nama, (SELECT SUM(niltb) FROM tt01 WHERE tt01.idkar = mk01.idkar) as tbmsk, (SELECT SUM(niltt) FROM tt02 WHERE tt02.idkar = mk01.idkar) as tbklr, mk01.tbsld FROM mk01;";
+//        echo $sql; exit;
         $tt01 = DB::select(DB::raw($sql));
         return $tt01;
     }

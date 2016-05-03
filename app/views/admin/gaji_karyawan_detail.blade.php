@@ -12,7 +12,7 @@
 
 @section('main')
 <div class="well well-sm">
-    <a href="{{ url("myindografika/gajikaryawan") }}" class="btn btn-primary"><i class="fa fa-backward"></i> Kembali</a>
+    <a href="{{ url("admin/allgajikaryawan") }}" class="btn btn-primary"><i class="fa fa-backward"></i> Kembali</a>
 </div>
 <div class="well well-sm">
     <div class="row">
