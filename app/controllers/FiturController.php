@@ -329,17 +329,50 @@ class FiturController extends \BaseController {
 
     public function presensi_karyawan() {
         $userloginid = Session::get("user");
-//        $ta01 = new ta01();
-        $tglfrom = "";
-        $tglto = "";
+
         $data = array(
             "karyawan" => mk01::find($userloginid["idkar"]),
-            "usermatrik" => User::getUserMatrix()
+            "usermatrik" => User::getUserMatrix(),
+            "presensi" => Presensi::getPresensi($userloginid["idkar"])
         );
+
         return View::make('master.my_presensi', $data);
     }
     
     public function presensi_karyawan_query() {
-        
+        $messages = array(
+            'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
+            'numeric' => 'Inputan <b>Harus Angka</b>!',
+            'same' => 'Password <b>Tidak Sama</b>!'
+        );
+
+        $validator = Validator::make(
+                        Input::all(), array(
+                    "tglfrom" => "required",
+                    "tglto" => "required"
+                        ), $messages
+        );
+
+
+        if ($validator->passes()) {
+
+            $tglfrom = Input::get("tglfrom");
+            $tglto = Input::get("tglto");
+
+            $userloginid = Session::get("user");
+
+            $data = array(
+            "karyawan" => mk01::find($userloginid["idkar"]),
+            "usermatrik" => User::getUserMatrix(),
+            "presensi" => Presensi::getPresensi($userloginid["idkar"], $tglfrom, $tglto)
+            );
+
+            return View::make('master.my_presensi', $data);
+        }
+        else{
+            return Redirect::to('myindografika/presensikaryawan')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
     }
 }
