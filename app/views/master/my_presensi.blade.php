@@ -58,7 +58,7 @@
                     <table class="table table-bordered table-hover" id="datatable">
                         <thead>
                             <tr>
-                                <th class="text-center">Tanggal</th>
+                                <th class="text-center" width="15%">Tanggal</th>
                                 <th class="text-center">Jam Masuk</th>
                                 <th class="text-center">Jam Istirahat Keluar </th>
                                 <th class="text-center">Jam Istirahat Kembali </th>
@@ -68,7 +68,17 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            
+                            <?php foreach ($presensi as $pres) { ?>
+                                <tr>
+                                    <td><?= date("d-m-Y", strtotime( $pres[2])) ?></td>
+                                    <td><?= $pres[3] ?></td>
+                                    <td><?= $pres[5] ?></td>
+                                    <td><?= $pres[6] ?></td>
+                                    <td><?= $pres[4] ?></td>
+                                    <td><?= $pres[7] ?></td>
+                                    <td><?= $pres[8] ?></td>
+                                </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>

@@ -170,17 +170,52 @@ class LaporanAdminController extends \BaseController {
     
     public function presensi_karyawan() {
         $userloginid = Session::get("user");
-//        $ta01 = new ta01();
         $tglfrom = "";
         $tglto = "";
+        $mk01 = new mk01();
         $data = array(
-            "usermatrik" => User::getUserMatrix()
+            "karyawans" => $mk01->getKaryawanAktif(),
+            "usermatrik" => User::getUserMatrix(),
+            "presensies" => Presensi::getPresensi()
         );
         return View::make('admin.presensi_karyawan', $data);
     }
     
     public function presensi_karyawan_query() {
-        
+        $messages = array(
+            'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
+            'numeric' => 'Inputan <b>Harus Angka</b>!',
+            'same' => 'Password <b>Tidak Sama</b>!'
+        );
+
+        $validator = Validator::make(
+                        Input::all(), array(
+                    "tglfrom" => "required",
+                    "tglto" => "required"
+                        ), $messages
+        );
+
+        if ($validator->passes()) {
+            $tglfrom = Input::get("tglfrom");
+            $tglto = Input::get("tglto");
+            $idkar = Input::get("idkar");
+
+            $userloginid = Session::get("user");
+            $mk01 = new mk01();
+            $data = array(
+                "karyawans" => $mk01->getKaryawanAktif(),
+                "usermatrik" => User::getUserMatrix(),
+                "presensies" => Presensi::getPresensi($idkar,$tglfrom, $tglto)
+            );
+            return View::make('admin.presensi_karyawan', $data);
+        }
+        // 2b. jika tidak, kembali ke halaman form registrasi
+        else {
+            return Redirect::to('admin/allpresensikaryawan')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+
     }
     
     // ------------------- END Presensi ------------------- //
