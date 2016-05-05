@@ -31,19 +31,25 @@ class loginController extends \BaseController {
                     Session::put('user.idkar', $kar[0]->idkar);
                     Session::put('user.nama', $kar[0]->nama);
                     Session::put('user.tipe', $kar[0]->jnsusr);
-                    return Redirect::to('master/jamkerja');
+
+                    if ($kar[0]->jnsusr == 1) {
+                        return Redirect::to('myindografika/presensikaryawan');
+                    } else {
+                        return Redirect::to('master/jamkerja');
+                    }
                 }
             }
             return Redirect::to('login');
         }
     }
 
-    public function logout() {        
+    public function logout() {
         Session::forget('user');
         return Redirect::to('/');
     }
-    
-    public function error_404(){
+
+    public function error_404() {
         return View::make('template.error');
     }
+
 }

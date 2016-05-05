@@ -184,3 +184,5 @@ Route::get('myaccount', 'MasterKaryawanController@myaccount');
 Route::post('changepassword', 'MasterKaryawanController@changepassword');
 Route::get('usermatrix/{id}', 'MasterKaryawanController@usermatrix');
 Route::post('usermatrix/{id}', 'MasterKaryawanController@usermatrixsave');
+
+Route::get('test', 'HomeController@test');

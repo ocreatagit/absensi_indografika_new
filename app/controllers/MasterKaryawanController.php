@@ -633,7 +633,11 @@ class MasterKaryawanController extends \BaseController {
             "mk01_success" => $success,
             "usermatrik" => User::getUserMatrix()
         );
-        return View::make('master.my_account', $data);
+        if ($userloginid["tipe"] == 1) {
+            return View::make('myindografika.my_account', $data);
+        } else {
+            return View::make('master.my_account', $data);
+        }
     }
 
     public function changepassword() {

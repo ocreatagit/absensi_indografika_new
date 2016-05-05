@@ -82,7 +82,8 @@ class FiturController extends \BaseController {
         $data["gajis"] = $tg01->getGajiStatusN('', '', $userloginid["idkar"]);
         $data['filter'] = Session::get('filter');
         $data['usermatrik'] = User::getUserMatrix();
-        return View::make('master.my_gaji', $data);
+//        return View::make('master.my_gaji', $data);
+        return View::make('myindografika.my_gaji', $data);
     }
 
     public function show_gaji($id) {
@@ -111,7 +112,7 @@ class FiturController extends \BaseController {
             "referrals" => $mk01->getReferralKar($tg01->idkar),
             "usermatrik" => User::getUserMatrix()
         );
-        return View::make('master.my_gaji_detail', $data);
+        return View::make('myindografika.my_gaji_detail', $data);
     }
 
     public function histori_pembayaran_gaji_query() {
@@ -145,7 +146,7 @@ class FiturController extends \BaseController {
 
             $data['filter'] = Session::get('filter');
             $data['usermatrik'] = User::getUserMatrix();
-            return View::make('master.my_gaji', $data);
+            return View::make('myindografika.my_gaji', $data);
         }
         // 2b. jika tidak, kembali ke halaman form registrasi
         else {
@@ -161,11 +162,12 @@ class FiturController extends \BaseController {
         $tglfrom = "";
         $tglto = "";
         $data = array(
+            "filter" => Session::get('filter'),
             "karyawan" => mk01::find($userloginid["idkar"]),
             "allTabungans" => $tt01->getAllTabungan($tglfrom, $tglto, $userloginid["idkar"]),
             "usermatrik" => User::getUserMatrix()
         );
-        return View::make('master.my_tabungan', $data);
+        return View::make('myindografika.my_tabungan', $data);
     }
 
     public function histori_tabungan_query() {
@@ -197,7 +199,7 @@ class FiturController extends \BaseController {
 
             $data['filter'] = Session::get('filter');
             $data['usermatrik'] = User::getUserMatrix();
-            return View::make('master.my_tabungan', $data);
+            return View::make('myindografika.my_tabungan', $data);
         }
         // 2b. jika tidak, kembali ke halaman form registrasi
         else {
@@ -219,7 +221,7 @@ class FiturController extends \BaseController {
             "allHutangs" => $th01->getAllHutang($tglfrom, $tglto, $userloginid["idkar"], $jenis, $status),
             "usermatrik" => User::getUserMatrix()
         );
-        return View::make('master.my_pinjaman', $data);
+        return View::make('myindografika.my_pinjaman', $data);
     }
 
     public function histori_hutang_query() {
@@ -253,7 +255,7 @@ class FiturController extends \BaseController {
 
             $data['filter'] = Session::get('filter');
             $data['usermatrik'] = User::getUserMatrix();
-            return View::make('master.my_pinjaman', $data);
+            return View::make('myindografika.my_pinjaman', $data);
         }
         // 2b. jika tidak, kembali ke halaman form registrasi
         else {
@@ -272,7 +274,7 @@ class FiturController extends \BaseController {
             "detail_hutangs" => $th01->getDetailHutang($idhut),
             "usermatrik" => User::getUserMatrix()
         );
-        return View::make('master.my_pinjaman_detail', $data);
+        return View::make('myindografika.my_pinjaman_detail', $data);
     }
 
     public function histori_omzet() {
@@ -285,7 +287,7 @@ class FiturController extends \BaseController {
             "allOmzets" => $tz01->getAllOmzet($tglfrom, $tglto, $userloginid["idkar"]),
             "usermatrik" => User::getUserMatrix()
         );
-        return View::make('master.my_omzet', $data);
+        return View::make('myindografika.my_omzet', $data);
     }
 
     public function histori_omzet_query() {
@@ -317,7 +319,7 @@ class FiturController extends \BaseController {
 
             $data['filter'] = Session::get('filter');
             $data['usermatrik'] = User::getUserMatrix();
-            return View::make('master.my_omzet', $data);
+            return View::make('myindografika.my_omzet', $data);
         }
         // 2b. jika tidak, kembali ke halaman form registrasi
         else {
@@ -331,12 +333,13 @@ class FiturController extends \BaseController {
         $userloginid = Session::get("user");
 
         $data = array(
+            "filter" => Session::get('filter'),
             "karyawan" => mk01::find($userloginid["idkar"]),
             "usermatrik" => User::getUserMatrix(),
             "presensi" => Presensi::getPresensi($userloginid["idkar"])
         );
 
-        return View::make('master.my_presensi', $data);
+        return View::make('myindografika.my_presensi', $data);
     }
     
     public function presensi_karyawan_query() {
@@ -367,7 +370,7 @@ class FiturController extends \BaseController {
             "presensi" => Presensi::getPresensi($userloginid["idkar"], $tglfrom, $tglto)
             );
 
-            return View::make('master.my_presensi', $data);
+            return View::make('myindografika.my_presensi', $data);
         }
         else{
             return Redirect::to('myindografika/presensikaryawan')
