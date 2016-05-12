@@ -76,4 +76,31 @@ class mk01 extends Eloquent {
         return $mk01;
     }
 
+    function saveSuperAdminUserMatrix($idkaryawan) {
+        $sql = "INSERT INTO mm02(mk01_id, mm01_id, created_at, updated_at)
+                SELECT $idkaryawan, mm01.idmnu, '".date('Y-m-d H:i:s')."' , '".date("Y-m-d H:i:s")."'
+                FROM mm01
+                WHERE url NOT LIKE 'myindografika/%' OR url NOT LIKE 'myindografika%';";
+        DB::select(DB::raw($sql));
+        return TRUE;
+    }
+    
+    function saveAdminUserMatrix($idkaryawan) {
+        $sql = "INSERT INTO mm02(mk01_id, mm01_id, created_at, updated_at)
+                SELECT $idkaryawan, mm01.idmnu,'".date('Y-m-d H:i:s')."', '".date("Y-m-d H:i:s")."'
+                FROM mm01
+                WHERE url NOT LIKE 'admin/%';";
+        DB::select(DB::raw($sql));
+        return TRUE;
+    }
+    
+    function saveKaryawanUserMatrix($idkaryawan) {
+        $sql = "INSERT INTO mm02(mk01_id, mm01_id, created_at, updated_at)
+                SELECT $idkaryawan, mm01.idmnu, '".date('Y-m-d H:i:s')."', '".date("Y-m-d H:i:s")."'
+                FROM mm01
+                WHERE url LIKE 'myindografika/%' OR url like 'myindografika%';";
+        DB::select(DB::raw($sql));
+        return TRUE;
+    }
+
 }

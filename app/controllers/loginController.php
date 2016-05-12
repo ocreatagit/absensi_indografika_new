@@ -32,7 +32,7 @@ class loginController extends \BaseController {
                     Session::put('user.nama', $kar[0]->nama);
                     Session::put('user.tipe', $kar[0]->jnsusr);
 
-                    if ($kar[0]->jnsusr == 1) {
+                    if ($kar[0]->jnsusr == 2) {
                         return Redirect::to('myindografika/presensikaryawan');
                     } else {
                         return Redirect::to('master/jamkerja');

@@ -64,6 +64,16 @@
                         @endif
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-4 control-label">Tipe User</label>
+                        <div class="col-sm-6 input-group ">
+                            <select class="form-control" name="jnsusr">
+                                <option value="0" {{ $karyawan["jnsusr"] == 0 ? "selected" : "" }}>Super Admin</option>
+                                <option value="1" {{ $karyawan["jnsusr"] == 1 ? "selected" : "" }}>Admin</option>
+                                <option value="2" {{ $karyawan["jnsusr"] == 2 ? "selected" : "" }}>Karyawan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-4 control-label">Gender</label>
                         <div class="col-sm-6">
                             <div class="col-sm-10 input-group">

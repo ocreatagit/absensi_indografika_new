@@ -368,8 +368,8 @@ class FiturController extends \BaseController {
             "karyawan" => mk01::find($userloginid["idkar"]),
             "usermatrik" => User::getUserMatrix(),
             "presensi" => Presensi::getPresensi($userloginid["idkar"], $tglfrom, $tglto)
-            );
-
+            );            
+            Session::flash('filter', 'Pencarian Presensi Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
             return View::make('myindografika.my_presensi', $data);
         }
         else{

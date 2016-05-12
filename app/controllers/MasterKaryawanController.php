@@ -61,6 +61,10 @@ class MasterKaryawanController extends \BaseController {
      * @return Response
      */
     public function store() {
+        $jenissuperadmin = 0;
+        $jenisadmin = 1;
+        $jeniskaryawan = 2;
+
         $var = User::loginCheck([0, 1], 4);
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
@@ -129,6 +133,7 @@ class MasterKaryawanController extends \BaseController {
             $karyawan->idjb = Input::get('idjb');
             $karyawan->kmindv = Input::get('kmindv');
             $karyawan->kmtim = Input::get('kmtim');
+            $karyawan->jnsusr = Input::get("jnsusr");
             $karyawan->save();
 
             // Jam Kerja
@@ -148,6 +153,15 @@ class MasterKaryawanController extends \BaseController {
             $mk02->mk01_id_child = $idkaryawan;
             $mk02->flglead = "No";
             $mk02->save();
+
+            $mk01 = new mk01();
+            if ($karyawan->jnsusr == $jenissuperadmin) {
+                $return = $mk01->saveSuperAdminUserMatrix($idkaryawan);
+            } else if ($karyawan->jnsusr == $jenisadmin) {
+                $mk01->saveAdminUserMatrix($idkaryawan);
+            } else {
+                $mk01->saveKaryawanUserMatrix($idkaryawan);
+            }
 
             Session::flash('mk01_success', 'Data Telah Ditambahkan!');
             return Redirect::to('master/karyawan/add_gaji/' . $karyawan->idkar);
@@ -304,6 +318,7 @@ class MasterKaryawanController extends \BaseController {
             $karyawan->idjb = Input::get('idjb');
             $karyawan->kmindv = Input::get('kmindv');
             $karyawan->kmtim = Input::get('kmtim');
+            $karyawan->jnsusr = Input::get("jnsusr");
             $karyawan->save();
 
             $datas = $karyawan->mj03;
@@ -348,6 +363,20 @@ class MasterKaryawanController extends \BaseController {
         foreach ($temp_mj03 as $temp) {
             $relasi = mj03::find($temp->id);
             $relasi->delete();
+        }
+        
+        $mk02 = new mk02();
+        $temp_mk02 = $mk02->getReferral($id);
+        foreach ($temp_mk02 as $temp) {
+            $referral = mk02::find($temp->id);
+            $referral->delete();
+        }
+        
+        $mm01 = new mm01();
+        $temp_mm01 = $mm01->getKaryawanUserMatrix($id);
+        foreach ($temp_mm01 as $temp) {
+            $usermatrix = mm02::find($temp->id);
+            $usermatrix->delete();
         }
 
         $mk01 = new mk01();
@@ -633,7 +662,7 @@ class MasterKaryawanController extends \BaseController {
             "mk01_success" => $success,
             "usermatrik" => User::getUserMatrix()
         );
-        if ($userloginid["tipe"] == 1) {
+        if ($userloginid["tipe"] == 2) {
             return View::make('myindografika.my_account', $data);
         } else {
             return View::make('master.my_account', $data);

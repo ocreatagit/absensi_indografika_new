@@ -378,7 +378,8 @@ class LaporanAdminController extends \BaseController {
         $data = array(
             "karyawans" => $mk01->getKaryawanAktif(),
             "usermatrik" => User::getUserMatrix(),
-            "presensies" => Presensi::getPresensi()
+            "presensies" => Presensi::getPresensi(),
+            "filter" => Session::get('filter')
         );
         return View::make('admin.presensi_karyawan', $data);
     }
@@ -401,13 +402,22 @@ class LaporanAdminController extends \BaseController {
             $tglfrom = Input::get("tglfrom");
             $tglto = Input::get("tglto");
             $idkar = Input::get("idkar");
+            
+            $karyawan = mk01::find($idkar);
+            if ($idkar == 0) {
+                $nama = "Semua Karyawan";
+            } else {
+                $nama = $karyawan->nama;
+            }
 
             $userloginid = Session::get("user");
             $mk01 = new mk01();
+            Session::flash('filter', 'Pencarian Presensi Karyawan <b>' . $nama . '</b> Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
             $data = array(
                 "karyawans" => $mk01->getKaryawanAktif(),
                 "usermatrik" => User::getUserMatrix(),
-                "presensies" => Presensi::getPresensi($idkar,$tglfrom, $tglto)
+                "presensies" => Presensi::getPresensi($idkar,$tglfrom, $tglto),
+                "filter" => Session::get('filter')
             );
             return View::make('admin.presensi_karyawan', $data);
         }

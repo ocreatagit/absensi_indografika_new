@@ -144,7 +144,7 @@
                             </li>
                         <?php } ?>
                         <li>
-                            <?php if (count(array_intersect([14, 15, 16, 17], $usermatrik)) > 0) { ?>
+                            <?php if (count(array_intersect([14, 15, 16, 17, 18, 19, 20, 21, 22, 23], $usermatrik)) > 0) { ?>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fitur <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <?php if (in_array(14, $usermatrik)) { ?>
