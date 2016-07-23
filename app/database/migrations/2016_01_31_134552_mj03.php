@@ -17,6 +17,8 @@ class Mj03 extends Migration {
             $table->foreign('mj02_id')->references('idjk')->on('mj02');
             $table->integer('mk01_id')->unsigned();
             $table->foreign('mk01_id')->references('idkar')->on('mk01');
+            $table->integer('alt');
+            $table->char("selected", 1);
             $table->timestamps();
         });
     }

@@ -39,11 +39,35 @@ class th01 extends Eloquent {
         $th02 = DB::select(DB::raw($sql));
         return $th02;
     }
+    
+    function getTotalHutangBulan($idkar, $date) {
+        $sql = "SELECT COALESCE(SUM(nilph), 0) as hutang FROM th02 INNER JOIN th01 ON th01.idhut = th02.idhut WHERE MONTH(th02.tglph) = " . date("n", strtotime($date)) . " AND YEAR(th02.tglph) = " . date("Y", strtotime($date)) . " AND th01.jenhut = 'Hutang' AND th01.idkar = $idkar;";
+        $count = DB::select(DB::raw($sql));
+        if (count($count) != 0) {
+            $count = $count[0];
+            $count = $count->hutang;
+        } else {
+            $count = 0;
+        }
+        return $count;
+    }
 
     function getKasBonBulan($idkar, $date) {
         $sql = "SELECT * FROM th02 INNER JOIN th01 ON th01.idhut = th02.idhut WHERE MONTH(th02.tglph) = " . date("n", strtotime($date)) . " AND YEAR(th02.tglph) = " . date("Y", strtotime($date)) . " AND th01.jenhut = 'Kas Bon' AND th01.idkar = $idkar;";
         $th02 = DB::select(DB::raw($sql));
         return $th02;
+    }
+
+    function getTotalKasBonBulan($idkar, $date) {
+        $sql = "SELECT COALESCE(SUM(nilph), 0) as kasbon FROM th02 INNER JOIN th01 ON th01.idhut = th02.idhut WHERE MONTH(th02.tglph) = " . date("n", strtotime($date)) . " AND YEAR(th02.tglph) = " . date("Y", strtotime($date)) . " AND th01.jenhut = 'Kas Bon' AND th01.idkar = $idkar;";
+        $count = DB::select(DB::raw($sql));
+        if (count($count) != 0) {
+            $count = $count[0];
+            $count = $count->kasbon;
+        } else {
+            $count = 0;
+        }
+        return $count;
     }
 
     function checkAktifHutang($idkar) {

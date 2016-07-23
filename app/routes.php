@@ -59,6 +59,7 @@ Route::get('master/karyawan/delete_karyawan_gaji/{id}', 'MasterKaryawanControlle
 Route::get('master/karyawan/get_karyawan/{id}', 'MasterKaryawanController@getKaryawan');
 Route::post('master/karyawan/save_referral_karyawan', 'MasterKaryawanController@saveReferral');
 Route::get('master/karyawan/delete_referral_karyawan/{id}/{idkar}', 'MasterKaryawanController@deleteReferral');
+Route::get('master/karyawan/set_jam_kerja/{id}', 'MasterKaryawanController@setJamKerja');
 
 //Fitur
 Route::get('myindografika', "FiturController@myindografika");
@@ -101,6 +102,16 @@ Route::post('admin/allomzetkaryawan', "LaporanAdminController@histori_omzet_quer
 
 Route::get('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan");
 Route::post('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan_query");
+
+Route::get('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan");
+Route::post('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan_query");
+
+Route::get('admin/laporankaryawan', "LaporanAdminController@laporan_karyawan");
+Route::post('admin/laporankaryawan', "LaporanAdminController@laporan_karyawan_query");
+Route::post('admin/exportlaporankaryawan', "LaporanAdminController@laporan_karyawan_export");
+
+Route::get('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan");
+Route::post('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan_save");
 
 // end Admin
 
@@ -145,6 +156,15 @@ Route::get('inputdata/tarik_tabungan', "TransaksiTarikTabunganController@index")
 Route::post('inputdata/update_saldo_tabungan', "TransaksiTarikTabunganController@update_saldo_tabungan");
 Route::get('inputdata/batal_saldo/{id}', "TransaksiTarikTabunganController@delete");
 
+// Transaksi Input Absensi
+Route::get('inputdata/absensi', "TransaksiAbsensiController@index");
+Route::get('inputdata/absensi_jam_kerja/{id}', "TransaksiAbsensiController@show");
+Route::post('inputdata/absensi_store/{id}', "TransaksiAbsensiController@store");
+
+// Transaksi Input Absensi (Cuti dan Alpha)
+Route::get('inputdata/alpha', "TransaksiAlphaController@index");
+Route::post('inputdata/save_alpha', "TransaksiAlphaController@store");
+Route::get('inputdata/delete_alpha/{id}', "TransaksiAlphaController@destroy");
 // End Input data
 
 Route::get('daftarmasuk', function() {
@@ -184,5 +204,3 @@ Route::get('myaccount', 'MasterKaryawanController@myaccount');
 Route::post('changepassword', 'MasterKaryawanController@changepassword');
 Route::get('usermatrix/{id}', 'MasterKaryawanController@usermatrix');
 Route::post('usermatrix/{id}', 'MasterKaryawanController@usermatrixsave');
-
-Route::get('test', 'HomeController@test');

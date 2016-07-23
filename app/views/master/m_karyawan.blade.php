@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">No Reg. Karyawan</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="text" class="form-control" value="{{ Input::old('usernm', $karyawan["usernm"]) }}" name="usernm">
+                            <input type="text" class="form-control" id="usernm" value="{{ Input::old('usernm', $karyawan["usernm"]) }}" name="usernm" onkeyup="setPassword(this)" onmouseup="setPassword(this)" onmouseout="setPassword(this)" onmousedown="setPassword(this)">
                         </div>
                         @if($errors->first('usernm'))
                         <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('usernm') }}</div>
@@ -48,7 +48,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Password</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="password" class="form-control" value="{{ Input::old('passwd') }}" name="passwd">
+                            <input type="password" class="form-control" id="passwd" value="{{ Input::old('passwd') }}" name="passwd">
                         </div>
                         @if($errors->first('passwd'))
                         <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('passwd') }}</div>
@@ -57,7 +57,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Ulangi Password</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="password" class="form-control" name="passwd2" value="{{ Input::old('passwd2') }}">
+                            <input type="password" class="form-control" id="passwd2" name="passwd2" value="{{ Input::old('passwd2') }}">
                         </div>
                         @if($errors->first('passwd2'))
                         <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('passwd2') }}</div>
@@ -183,6 +183,26 @@
                             <select class="form-control" name="idjk1">
                                 @foreach($jamkerjas as $jamkerja)
                                 <option value="{{ $jamkerja->idjk }}" {{ isset($karyawan) == true ? ($jamkerja1->idjk == $jamkerja->idjk ? "selected" : "") : "" }}><?php echo strftime("%H:%M", strtotime($jamkerja->jmmsk)) ?> - <?php echo strftime("%H:%M", strtotime($jamkerja->jmklr)) ?></option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Jam Masuk - Jam Pulang <font color="green">(Alternatif 2)</font></label>
+                        <div class="col-sm-6 input-group ">
+                            <select class="form-control" name="idjk_alt1">
+                                @foreach($jamkerjas as $jamkerja)
+                                <option value="{{ $jamkerja->idjk }}" {{ isset($karyawan) == true ? ($jamkerja_alt1->idjk == $jamkerja->idjk ? "selected" : "") : "" }}><?php echo strftime("%H:%M", strtotime($jamkerja->jmmsk)) ?> - <?php echo strftime("%H:%M", strtotime($jamkerja->jmklr)) ?></option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Jam Masuk - Jam Pulang <font color="green">(Alternatif 3)</font></label>
+                        <div class="col-sm-6 input-group ">
+                            <select class="form-control" name="idjk_alt2">
+                                @foreach($jamkerjas as $jamkerja)
+                                <option value="{{ $jamkerja->idjk }}" {{ isset($karyawan) == true ? ($jamkerja_alt2->idjk == $jamkerja->idjk ? "selected" : "") : "" }}><?php echo strftime("%H:%M", strtotime($jamkerja->jmmsk)) ?> - <?php echo strftime("%H:%M", strtotime($jamkerja->jmklr)) ?></option>
                                 @endforeach
                             </select>
                         </div>
@@ -401,6 +421,11 @@
                 scrollTop: $("#" + div).offset().top},
             'slow');
         });
+    }
+    
+    function setPassword(noreg) {
+        $("#passwd").val(noreg.value);
+        $("#passwd2").val(noreg.value);
     }
 </script> 
 @stop

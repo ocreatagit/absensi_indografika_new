@@ -14,8 +14,11 @@ class MasterKaryawanController extends \BaseController {
         }
 
         $success = Session::get('mk01_success');
+        $mk01 = new mk01();
+        $karyawans = mk01::all();
         $data = array(
-            "karyawans" => mk01::all(),
+            "karyawans" => $karyawans,
+            "jam_kerjas" => $mk01->get_all_jam_kerja($karyawans),
             "mk01_success" => $success,
             "usermatrik" => User::getUserMatrix()
         );
@@ -74,13 +77,15 @@ class MasterKaryawanController extends \BaseController {
         $messages = array(
             'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
             'numeric' => 'Inputan <b>Harus Angka</b>!',
-            'same' => 'Password <b>Tidak Sama</b>!'
+            'same' => 'Password <b>Tidak Sama</b>!',
+            'unique' => 'Inputan telah terdaftar'
         );
 
         $validator = Validator::make(
                         Input::all(), array(
-                    "nama" => "required",
-                    "usernm" => "required",
+                    "nama" => "required|unique:mk01,nama",
+                    "usernm" => "required|unique:mk01,usernm",
+                    "email" => "required",
                     "passwd" => "required",
                     "passwd2" => "same:passwd",
                     "norek1" => "required|numeric",
@@ -136,16 +141,36 @@ class MasterKaryawanController extends \BaseController {
             $karyawan->jnsusr = Input::get("jnsusr");
             $karyawan->save();
 
-            // Jam Kerja
+            // Jam Kerja 1
             $jam_kerja = new mj03();
             $jam_kerja->mj02_id = Input::get('idjk1');
             $jam_kerja->mk01_id = $idkaryawan;
+            $jam_kerja->alt = 1;
+            $jam_kerja->selected = "Y";
+            $jam_kerja->save();
+
+            // Jam Kerja 2
+            $jam_kerja = new mj03();
+            $jam_kerja->mj02_id = Input::get('idjk_alt1');
+            $jam_kerja->mk01_id = $idkaryawan;
+            $jam_kerja->alt = 2;
+            $jam_kerja->selected = "N";
+            $jam_kerja->save();
+
+            // Jam Kerja 3
+            $jam_kerja = new mj03();
+            $jam_kerja->mj02_id = Input::get('idjk_alt2');
+            $jam_kerja->mk01_id = $idkaryawan;
+            $jam_kerja->alt = 3;
+            $jam_kerja->selected = "N";
             $jam_kerja->save();
 
             // Jam Istirahat
             $jam_kerja = new mj03();
             $jam_kerja->mj02_id = Input::get('idjk2');
             $jam_kerja->mk01_id = $idkaryawan;
+            $jam_kerja->alt = 1;
+            $jam_kerja->selected = "Y";
             $jam_kerja->save();
 
             $mk02 = new mk02();
@@ -225,6 +250,8 @@ class MasterKaryawanController extends \BaseController {
                 "gajis" => $mg01->getOtherGaji($karyawan->idkar),
                 "mk01_status" => $success,
                 "jamkerja1" => $mk01->getJamKerja($id),
+                "jamkerja_alt1" => $mk01->getJamKerja_Alt1($id),
+                "jamkerja_alt2" => $mk01->getJamKerja_Alt2($id),
                 "jamkerja2" => $mk01->getJamIstirahat($id),
                 "referrals" => $mk01->getReferralKar($id),
                 "usermatrik" => User::getUserMatrix()
@@ -322,11 +349,34 @@ class MasterKaryawanController extends \BaseController {
             $karyawan->save();
 
             $datas = $karyawan->mj03;
-            $datas[0]->mj02_id = Input::get('idjk1');
-            $datas[0]->save();
+            
+            // Jam Kerja
+            $mj02 = mj02::find($datas[0]->mj02_id);
+            if ($mj02->tipe == 1) {
+                $datas[0]->mj02_id = Input::get('idjk1');
+                $datas[0]->save();
+            }
 
-            $datas[1]->mj02_id = Input::get('idjk2');
-            $datas[1]->save();
+            // Alternatif 1
+            $mj02 = mj02::find($datas[1]->mj02_id);
+            if ($mj02->tipe == 1) {
+                $datas[1]->mj02_id = Input::get('idjk_alt1');
+                $datas[1]->save();
+            }
+
+            // Alternatif 2
+            $mj02 = mj02::find($datas[2]->mj02_id);
+            if ($mj02->tipe == 1) {
+                $datas[2]->mj02_id = Input::get('idjk_alt2');
+                $datas[2]->save();
+            }
+
+            // Jam Istirahat
+            $mj02 = mj02::find($datas[3]->mj02_id);
+            if ($mj02->tipe == 2) {
+                $datas[3]->mj02_id = Input::get('idjk2');
+                $datas[3]->save();
+            }
 
             Session::flash('mk01_success', 'Data Telah Diubah!');
             return Redirect::to('master/karyawan');
@@ -364,14 +414,14 @@ class MasterKaryawanController extends \BaseController {
             $relasi = mj03::find($temp->id);
             $relasi->delete();
         }
-        
+
         $mk02 = new mk02();
         $temp_mk02 = $mk02->getReferral($id);
         foreach ($temp_mk02 as $temp) {
             $referral = mk02::find($temp->id);
             $referral->delete();
         }
-        
+
         $mm01 = new mm01();
         $temp_mm01 = $mm01->getKaryawanUserMatrix($id);
         foreach ($temp_mm01 as $temp) {
@@ -703,4 +753,31 @@ class MasterKaryawanController extends \BaseController {
         }
     }
 
+    public function setJamKerja($id = FALSE) {
+        $var = User::loginCheck([0, 1], 4);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
+        
+        if($id == FALSE) {
+            return Redirect::to('master/karyawan');
+        }
+        
+        $mj03 = mj03::find($id);
+        $idkar = $mj03->mk01_id;
+        
+        $jam_kerja = new mk01();
+        $datax = $jam_kerja->get_jam_kerja_karyawan($idkar);
+        foreach($datax as $data) {
+            $temp_mj03 = mj03::find($data->id);
+            $temp_mj03->selected = "N";
+            $temp_mj03->save();
+        }
+        
+        $mj03->selected = "Y";
+        $mj03->save();
+        
+        Session::flash('mk01_success', 'Data Telah Diubah!');
+        return Redirect::to('master/karyawan');
+    }
 }

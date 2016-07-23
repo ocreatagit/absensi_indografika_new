@@ -33,8 +33,8 @@
                             <th class="text-left">Username</th>
                             <th class="text-left">Jabatan</th>
                             <th class="text-left">Tanggal Lahir</th>
-                            <th class="text-left">Saldo</th>                            
-                            <th class="text-left">Status</th>                            
+                            <th class="text-left">Jam Kerja</th>                            
+                            <th class="text-center">Status</th>                            
                             <th class="text-left">Opsi</th>
                         </tr>
                     </thead>
@@ -48,7 +48,18 @@
                             <td>{{ $karyawan->usernm }}</td>
                             <td>{{ $karyawan->mj01->nama }}</td>
                             <td>{{ strftime("%d-%b-%Y", strtotime($karyawan->ttl)) }}</td>
-                            <td width="35%">
+                            <td width="19%">
+                                <?php
+                                for ($i = 0; $i < count($jam_kerjas[$karyawan->idkar]); $i++) {
+                                    ?>
+                                    <a href="{{ action('MasterKaryawanController@setJamKerja', $jam_kerjas[$karyawan->idkar][$i]->id) }}" class="{{ $jam_kerjas[$karyawan->idkar][$i]->selected == "Y" ? 'btn btn-success' : 'btn btn-danger' }}">
+                                        {{ $jam_kerjas[$karyawan->idkar][$i]->selected == "Y" ? "<i class='fa fa-check-circle'></i>" : "<i class='fa fa-minus-circle'></i>" }}
+                                    </a> {{ $jam_kerjas[$karyawan->idkar][$i]->jmmsk." - ".$jam_kerjas[$karyawan->idkar][$i]->jmklr }} <br><br>
+                                    <?php
+                                }
+                                ?>
+                            </td>
+<!--                            <td width="35%">
                                 <div class="row">
                                     <div class="col-lg-6 text-right">Tabungan : </div>
                                     <div class="col-lg-6 text-right">Rp.{{ number_format($karyawan->tbsld, 0, ",", ".") }},-</div>
@@ -57,14 +68,22 @@
                                     <div class="col-lg-6 text-right">Hutang : </div>
                                     <div class="col-lg-6 text-right">Rp.{{ number_format($karyawan->htsld, 0, ",", ".") }},-</div>
                                 </div>
-                            </td>
+                            </td>-->
                             <td class="text-center" width="15%">
                                 {{ $karyawan->status == 'N' ? '<font color="red">Tidak Aktif</font>' : '<font color="green">Aktif</font>'; $no++; }} <a href="{{ action('MasterKaryawanController@changeStatus', $karyawan->idkar) }}" data-toggle="tooltip" data-placement="left" title="Change Status?">{{ $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>' }}</a>
                                 <!--<br>-->
                                 <!--<a href="{{ action('MasterKaryawanController@changeStatus', $karyawan->idkar) }}" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Change Status?">{{ $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>' }}</a>-->
                             </td>
                             <td class="text-center" width="5%">
-                                <a href="{{ action('MasterKaryawanController@edit', $karyawan->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
+                                <?php if ($karyawan->mj01->nama == 'CEO') {
+                                    ?>
+                                    <a href="{{ action('MasterKaryawanController@edit', $karyawan->idkar) }}" class="btn btn-info disabled" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <a href="{{ action('MasterKaryawanController@edit', $karyawan->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
+                                <?php }
+                                ?>
                                 <a href="{{ action('MasterKaryawanController@usermatrix', $karyawan->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="center" title="User Matrix?"><i class="fa fa-user"></i></a> <br><br>
                                 <a href="{{ action('MasterKaryawanController@destroy', $karyawan->idkar) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
                             </td>
@@ -80,7 +99,7 @@
 
 @section('script')
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.clockpicker').clockpicker({
             placement: 'bottom',
             align: 'left',
@@ -95,7 +114,7 @@
             changeMonth: true
         });
     });
-    
+
     alertify.defaults = {
         // dialogs defaults
         modal: true,
@@ -141,10 +160,10 @@
         }
     };
 
-    $(".delete").click(function (e) {
+    $(".delete").click(function(e) {
         e.preventDefault();
         var a = this.href;
-        alertify.confirm('Hapus Master Karyawan?', function (e) {
+        alertify.confirm('Hapus Master Karyawan?', function(e) {
             if (e) {
                 window.location.assign(a);
             } else {

@@ -5,7 +5,7 @@ class DaftarController extends \BaseController {
     public function getTimeServer() {
         date_default_timezone_set('Asia/Jakarta');
 //        echo date('H:i:s');
-        echo date('d-F-Y H:i:s');
+        echo date('H:i:s');
     }
 
     public function getDateServer() {
@@ -14,94 +14,57 @@ class DaftarController extends \BaseController {
     }
 
     public function getDaftarMasuk() {
-        $sqlMasuk = "SELECT mk01.idkar, 
-                       mk01.nama, 
-                       DATE_FORMAT(ta02.tglmsk, '%H:%i') as tglmsk
-                FROM mk01
-                RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
-                WHERE date(ta02.tglmsk) = date(NOW()) AND ta02.abscd = 0";
-        $sqlPulang = "SELECT mk01.idkar, 
-                       mk01.nama, 
-                       DATE_FORMAT(ta02.tglmsk, '%H:%i') as tglmsk
-                FROM mk01
-                RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
-                WHERE date(ta02.tglmsk) = date(NOW()) AND ta02.abscd = 1";
-        $sqlKeluar = "SELECT mk01.idkar, 
-                       mk01.nama, 
-                       DATE_FORMAT(ta02.tglmsk, '%H:%i') as tglmsk
-                FROM mk01
-                RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
-                WHERE date(ta02.tglmsk) = date(NOW()) AND ta02.abscd = 2";
-        $sqlKembali = "SELECT mk01.idkar, 
-                       mk01.nama, 
-                       DATE_FORMAT(ta02.tglmsk, '%H:%i') as tglmsk
-                FROM mk01
-                RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
-                WHERE date(ta02.tglmsk) = date(NOW()) AND ta02.abscd = 3";
+        $sql = "SELECT tableAbsen.tglabs, tableAbsen.idkar, tableAbsen.nama,  
+                        CASE WHEN SUM(jammasuk) = 0 THEN '-' ELSE from_unixtime(SUM(jammasuk), '%H:%i') END as jammasuk, 
+                        CASE WHEN SUM(jamkeluar) = 0 THEN '-' ELSE from_unixtime(SUM(jamkeluar), '%H:%i') END as jamkeluar, 
+                        CASE WHEN SUM(jamkembali) = 0 THEN '-' ELSE from_unixtime(SUM(jamkembali), '%H:%i') END as jamkembali, 
+                        CASE WHEN SUM(jampulang) = 0 THEN '-' ELSE from_unixtime(SUM(jampulang), '%H:%i') END as jampulang,
+                        CASE WHEN SUM(jamlemburmasuk) = 0 THEN '-' ELSE from_unixtime(SUM(jamlemburmasuk), '%H:%i') END as jamlemburmasuk,
+                        CASE WHEN SUM(jamlemburpulang) = 0 THEN '-' ELSE from_unixtime(SUM(jamlemburpulang), '%H:%i') END as jamlemburpulang,
+                        CASE WHEN tableAbsen.lbt = 0 THEN '-' ELSE CONCAT(FLOOR(tableAbsen.lbt/60), ' Jam ' , tableAbsen.lbt % 60, ' Menit') END as lbt
+                FROM (SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, UNIX_TIMESTAMP(ta02.tglmsk) as jammasuk, 0 as jamkeluar, 0 as jamkembali,  0 as jampulang, 0 as jamlemburmasuk, 0 as jamlemburpulang, 
+                        sum( CASE WHEN (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(ta02.tglmsk, '%H:%i'), DATE_FORMAT(mj02.jmmsk, '%H:%i')))/60 as integer)) < 0 THEN 0 ELSE (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(ta02.tglmsk, '%H:%i'), DATE_FORMAT(mj02.jmmsk, '%H:%i')))/60 as integer)) END ) as lbt
 
-        $dbMasuk = DB::select(DB::raw($sqlMasuk));
-        $dbPulang = DB::select(DB::raw($sqlPulang));
-        $dbKeluar = DB::select(DB::raw($sqlKeluar));
-        $dbKembali = DB::select(DB::raw($sqlKembali));
+                        FROM mk01
+                        RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        RIGHT JOIN mj02 ON mj02.idjk = ta01.idjk
+                        WHERE date(ta02.tglmsk) = date(now()) AND ta02.abscd = 0
+                        GROUP BY idabs, idkar
+                        UNION
+                        SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, 0 as jamkeluar, 0 as jamkembali,  UNIX_TIMESTAMP(ta02.tglmsk) as jampulang, 0 as jamlemburmasuk, 0 as jamlemburpulang, 0 as lbt
+                        FROM mk01
+                        RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        WHERE date(ta02.tglmsk) = date(now()) AND ta02.abscd = 1
+                        UNION
+                        SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, UNIX_TIMESTAMP(ta02.tglmsk) as jamkeluar, 0 as jamkembali, 0 as jampulang, 0 as jamlemburmasuk, 0 as jamlemburpulang, 0 as lbt
+                        FROM mk01
+                        RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        WHERE date(ta02.tglmsk) = date(now()) AND ta02.abscd = 2
+                        UNION
+                        SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, 0 as jamkeluar, UNIX_TIMESTAMP(ta02.tglmsk) as jamkembali, 0 as jampulang, 0 as jamlemburmasuk, 0 as jamlemburpulang, 0 as lbt
+                        FROM mk01
+                        RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        WHERE date(ta02.tglmsk) = date(now()) AND ta02.abscd = 3
+                        UNION
+                        SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, 0 as jamkeluar, 0 as jamkembali, 0 as jampulang, UNIX_TIMESTAMP(ta02.tglmsk) as jamlemburmasuk, 0 as jamlemburpulang, 0 as lbt
+                        FROM mk01
+                        RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        WHERE date(ta02.tglmsk) = date(now()) AND ta02.abscd = 4
+                        UNION
+                        SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, 0 as jamkeluar, 0 as jamkembali, 0 as jampulang, 0 as jamlemburmasuk, UNIX_TIMESTAMP(ta02.tglmsk) as jamlemburpulang, 0 as lbt
+                        FROM mk01
+                        RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        WHERE date(ta02.tglmsk) = date(now()) AND ta02.abscd = 5) as tableAbsen
+                GROUP by tableAbsen.idabs, tableAbsen.tglabs, tableAbsen.idkar, tableAbsen.nama";
 
-        $cMasuk = 0;
-        $cPulang = 0;
-        $cKeluar = 0;
-        $cKembali = 0;
-
-        $cek = true;
-        $global_array = array();
-        do {
-            $array = array();
-            if (count($dbMasuk) > $cMasuk) {
-                array_push($array, $dbMasuk[$cMasuk]->idkar);
-                array_push($array, $dbMasuk[$cMasuk]->nama);
-                array_push($array, $dbMasuk[$cMasuk]->tglmsk);
-                $cMasuk++;
-            } else {
-                $cek = FALSE;
-            }
-
-            if (count($dbPulang) > $cPulang) {
-                if ($dbPulang[$cPulang]->idkar == $array[0]) {
-                    array_push($array, $dbPulang[$cPulang]->tglmsk);
-                    $cPulang++;
-                } else {
-                    array_push($array, "-");
-                }
-            } else {
-                array_push($array, "-");
-            }
-
-            if (count($dbKeluar) > $cKeluar) {
-                if ($dbKeluar[$cKeluar]->idkar == $array[0]) {
-                    array_push($array, $dbKeluar[$cKeluar]->tglmsk);
-                    $cKeluar++;
-                } else {
-                    array_push($array, "-");
-                }
-            } else {
-                array_push($array, "-");
-            }
-
-            if (count($dbKembali) > $cKembali) {
-                if ($dbKembali[$cKembali]->idkar == $array[0]) {
-                    array_push($array, $dbKembali[$cKembali]->tglmsk);
-                    $cKembali++;
-                } else {
-                    array_push($array, "-");
-                }
-            } else {
-                array_push($array, "-");
-            }
-            if ($cek) {
-                array_push($global_array, $array);
-            }
-        } while ($cek);
-
-
-
-        echo json_encode($global_array);
+        $dbAbsen = DB::select(DB::raw($sql));
+        echo json_encode($dbAbsen);
     }
 
     public function getDaftarPulang() {

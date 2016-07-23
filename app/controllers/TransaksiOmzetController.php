@@ -61,13 +61,14 @@ class TransaksiOmzetController extends \BaseController {
         $messages = array(
             'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
             'numeric' => 'Inputan <b>Harus Angka</b>!',
-            'same' => 'Password <b>Tidak Sama</b>!'
+            'same' => 'Password <b>Tidak Sama</b>!',
+            'date' => 'Inputan Tanggal Salah!'
         );
 
         $validator = Validator::make(
                         Input::all(), array(
                     "nilomz" => "required|numeric",
-                    "tglomz" => "required"
+                    "tglomz" => "required|date"
                         ), $messages
         );
 

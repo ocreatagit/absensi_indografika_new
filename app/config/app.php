@@ -78,7 +78,7 @@ return array(
 	|
 	*/
 
-	'key' => 'rsvKUpZRjQMQiGyCsBtAUP9BXahaKdU9',
+	'key' => 'EwmXOKaYoGAqT5EhD8zh3C4KaVl1Lmb8',
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 
@@ -122,6 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
                 'Gloudemans\Shoppingcart\ShoppingcartServiceProvider',
+                'Maatwebsite\Excel\ExcelServiceProvider',
 	),
 
 	/*
@@ -189,6 +190,7 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
                 'Cart'            => 'Gloudemans\Shoppingcart\Facades\Cart',
+                'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
 	),
 
 );

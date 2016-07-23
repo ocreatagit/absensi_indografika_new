@@ -7,7 +7,7 @@
 @section('header')
 <h1 class="page-header">
     Daftar Masuk Kerja Karyawan
-    <span id="timeServer" class="pull-right">{{ date('d-M-Y H:i:s') }}</span>
+    <span id="timeServer" class="pull-right">{{ date('H:i:s') }}</span>
 </h1>
 @stop
 
@@ -22,6 +22,9 @@
                 <td>Jam Istirahat</td>
                 <td>Jam Kembali</td>
                 <td>Jam Pulang</td>
+                <td>Jam Lembur Masuk</td>
+                <td>Jam Lembur Pulang</td>
+                <td>Keterlambatan</td>
             </tr>
         </thead>
         <tbody id="tblMasuk">
@@ -50,25 +53,28 @@
         //ambil data dari json
         $.getJSON('<?php echo action('DaftarController@getDaftarMasuk') ?>', function (data) {
            var str = "";
-           if (data.length > 0) {
+            if (data.length > 0) {
                $.each(data, function (key, val) {
-                   str += "<tr>";
-                   str += "<td>" + val[0] + "</td>";
-                   str += "<td>" + val[1] + "</td>";
-                   str += "<td>" + val[2] + "</td>";
-                   str += "<td>" + val[3] + "</td>";
-                   str += "<td>" + val[4] + "</td>";
-                   str += "<td>" + val[5] + "</td>";
+                   str += "<tr>";                   
+                   str += "<td>" + val.idkar + "</td>";
+                   str += "<td>" + val.nama + "</td>";
+                   str += "<td>" + val.jammasuk + "</td>";
+                   str += "<td>" + val.jamkeluar + "</td>";
+                   str += "<td>" + val.jamkembali + "</td>";
+                   str += "<td>" + val.jampulang + "</td>";
+				   str += "<td>" + val.jamlemburmasuk + "</td>";
+				   str += "<td>" + val.jamlemburpulang + "</td>";
+                   str += "<td>" + val.lbt + "</td>";
                    str += "</tr>";
                });
            } else {
                str += "<tr>";
-               str += "<td class='text-center' colspan='6'>No Data available in table </td>";
+               str += "<td class='text-center' colspan='9'>No Data available in table </td>";
                str += "</tr>";
            }
            $("#tblMasuk").html(str);
         });
-    }, 10);
+    }, 1000);
 </script>
 @stop
 

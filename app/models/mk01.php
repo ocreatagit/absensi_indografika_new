@@ -38,6 +38,28 @@ class mk01 extends Eloquent {
                         ->join("mj03", "mj03.mk01_id", "=", "mk01.idkar")
                         ->join("mj02", "mj02.idjk", "=", "mj03.mj02_id")
                         ->where("tipe", 1)
+                        ->where("alt", 1)
+                        ->where("selected", "Y")
+                        ->where("idkar", $idkar)->first();
+    }
+
+    function getJamKerja_Alt1($idkar) {
+        return DB::table('mk01')
+                        ->select("mj02.idjk", "mj02.tipe", "mj02.jmmsk", "mj02.jmklr", "mj02.status")
+                        ->join("mj03", "mj03.mk01_id", "=", "mk01.idkar")
+                        ->join("mj02", "mj02.idjk", "=", "mj03.mj02_id")
+                        ->where("tipe", 1)
+                        ->where("alt", 2)
+                        ->where("idkar", $idkar)->first();
+    }
+
+    function getJamKerja_Alt2($idkar) {
+        return DB::table('mk01')
+                        ->select("mj02.idjk", "mj02.tipe", "mj02.jmmsk", "mj02.jmklr", "mj02.status")
+                        ->join("mj03", "mj03.mk01_id", "=", "mk01.idkar")
+                        ->join("mj02", "mj02.idjk", "=", "mj03.mj02_id")
+                        ->where("tipe", 1)
+                        ->where("alt", 3)
                         ->where("idkar", $idkar)->first();
     }
 
@@ -47,6 +69,7 @@ class mk01 extends Eloquent {
                         ->join("mj03", "mj03.mk01_id", "=", "mk01.idkar")
                         ->join("mj02", "mj02.idjk", "=", "mj03.mj02_id")
                         ->where("tipe", 2)
+                        ->where("selected", "Y")
                         ->where("idkar", $idkar)->first();
     }
 
@@ -78,29 +101,66 @@ class mk01 extends Eloquent {
 
     function saveSuperAdminUserMatrix($idkaryawan) {
         $sql = "INSERT INTO mm02(mk01_id, mm01_id, created_at, updated_at)
-                SELECT $idkaryawan, mm01.idmnu, '".date('Y-m-d H:i:s')."' , '".date("Y-m-d H:i:s")."'
+                SELECT $idkaryawan, mm01.idmnu, '" . date('Y-m-d H:i:s') . "' , '" . date("Y-m-d H:i:s") . "'
                 FROM mm01
                 WHERE url NOT LIKE 'myindografika/%' OR url NOT LIKE 'myindografika%';";
         DB::select(DB::raw($sql));
         return TRUE;
     }
-    
+
     function saveAdminUserMatrix($idkaryawan) {
         $sql = "INSERT INTO mm02(mk01_id, mm01_id, created_at, updated_at)
-                SELECT $idkaryawan, mm01.idmnu,'".date('Y-m-d H:i:s')."', '".date("Y-m-d H:i:s")."'
+                SELECT $idkaryawan, mm01.idmnu,'" . date('Y-m-d H:i:s') . "', '" . date("Y-m-d H:i:s") . "'
                 FROM mm01
                 WHERE url NOT LIKE 'admin/%';";
         DB::select(DB::raw($sql));
         return TRUE;
     }
-    
+
     function saveKaryawanUserMatrix($idkaryawan) {
         $sql = "INSERT INTO mm02(mk01_id, mm01_id, created_at, updated_at)
-                SELECT $idkaryawan, mm01.idmnu, '".date('Y-m-d H:i:s')."', '".date("Y-m-d H:i:s")."'
+                SELECT $idkaryawan, mm01.idmnu, '" . date('Y-m-d H:i:s') . "', '" . date("Y-m-d H:i:s") . "'
                 FROM mm01
                 WHERE url LIKE 'myindografika/%' OR url like 'myindografika%';";
         DB::select(DB::raw($sql));
         return TRUE;
+    }
+
+    function get_all_jam_kerja($arrKar) {
+        $counter = 0;
+        $data = array();
+        foreach ($arrKar as $karyawan) {
+            $sql = "SELECT mj03.id, mj02.idjk, mj02.tipe, mj02.jmmsk, mj02.jmklr, mj03.mk01_id, mj03.alt, mj03.selected
+                    FROM mj02
+                    INNER JOIN mj03 ON mj03.mj02_id = mj02.idjk
+                    WHERE mk01_id = " . $karyawan->idkar . " AND tipe = 1;";
+            $jamkerja = DB::select(DB::raw($sql));
+
+            $data[$karyawan->idkar] = $jamkerja;
+            $counter++;
+        }
+        return $data;
+    }
+
+    function get_jam_kerja_karyawan($idkar) {
+        $sql = "SELECT mj03.id, mj02.idjk, mj02.tipe, mj02.jmmsk, mj02.jmklr, mj03.mk01_id, mj03.alt, mj03.selected
+                    FROM mj02
+                    INNER JOIN mj03 ON mj03.mj02_id = mj02.idjk
+                    WHERE mk01_id = " . $idkar . " AND tipe = 1;";
+        $jamkerja = DB::select(DB::raw($sql));
+        return $jamkerja;
+    }
+
+    function update_jam_kerja($mj02_id, $mk01_id, $alt) {
+        $jamkerja = DB::table('mj03')
+                        ->select("mj03.id")
+                        ->where("mj02_id", $mj02_id)
+                        ->where("mk01_id", $mk01_id)
+                        ->where("alt", $alt)->first();
+
+        $mj03 = mj03::find($jamkerja->id);
+        $mj03->mj02 = $mj02_id;
+        $mj03->save();
     }
 
 }

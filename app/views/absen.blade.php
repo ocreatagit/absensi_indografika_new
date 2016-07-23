@@ -20,7 +20,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="col-sm-8">Absensi Indografika</h3>
-                    <h3><span id="dateServer">{{ date('d F Y') }}</span> | <span id="timeServer">{{ date('H:i:s') }}</span></h3>
+                    <h3>
+                        <!--<span id="dateServer">{{ date('d F Y') }}</span> |--> 
+                        <span id="timeServer">{{-- date('j F Y, H:i:s') --}}</span></h3>
                 </div>
                 <div class="panel-body">
                     <div class="col-sm-8"> 
@@ -90,7 +92,7 @@
                                         <td style="padding: 0px 5px;"> : </td>
                                         <td>untuk jam pulang lembur</td>
                                     </tr>
-                                    
+
                                 </table>                                                             
                             </div>
                         </div>
@@ -116,6 +118,17 @@
         <script src="js/bootstrap.min.js"></script>
         <script>
 $(document).ready(function () {
+    var currentdate = new Date();
+        var options = {
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric',
+            hour12: false
+        };
+        var formatter = new Intl.DateTimeFormat("en-GB", options),
+                date = formatter.format(currentdate).toLocaleString('en-US', options);
+
+        $('#timeServer').html(date);
+    
     $('#noAbsen').html("-");
     $('#nama').html("-");
     $('#jam').html("<tr style='font-size: 30px'>" +
@@ -125,17 +138,23 @@ $(document).ready(function () {
     $('#status').html('');
     console.log("ready!");
     setInterval(function () {
-        $.get('<?php echo action('DaftarController@getTimeServer') ?>', function (data) {
-            $('#timeServer').html(data);
-        });
-        $.get('<?php echo action('DaftarController@getDateServer') ?>', function (data) {
-            $('#dateServer').html(data);
-        });
+        var currentdate = new Date();
+        var options = {
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric',
+            hour12: false
+        };
+        var formatter = new Intl.DateTimeFormat("en-GB", options),
+                date = formatter.format(currentdate).toLocaleString('en-US', options);
+
+        $('#timeServer').html(date);
+
         $.getJSON("<?php echo action('HomeController@getAbsen') ?>", function (data) {
+            console.log(data);
             if (data.length > 0) {
                 $('#noAbsen').html(data[0].idkar);
                 $('#nama').html(data[0].nama);
-                $("#image").attr('src', "<?php echo url('uploads//'); ?>/"+data[0].pic);
+                $("#image").attr('src', "<?php echo url('uploads//'); ?>/" + data[0].pic);
                 if (data[0].abscd == 0) {
                     $('#jam').html("<tr style='font-size: 30px'>" +
                             "<td class='text-right'>Telat (menit) :</td>" +
@@ -194,20 +213,24 @@ $(document).ready(function () {
                 $("#image").attr('src', "http://dummyimage.com/200x200");
 
             }
-        })
-                .done(function () {
+        }).done(function () {
 
-                })
-                .fail(function (jqXHR, textStatus, errorThrown) {
-                    //                console.log('getJSON request failed! ' + JSON.stringify(jqXHR));
-                    //                console.log('getJSON request failed! ' + JSON.stringify(textStatus));
-                    //                console.log('getJSON request failed! ' + JSON.stringify(errorThrown));
-                    //                console.log('============================');
-                })
-                .always(function () {
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            //                console.log('getJSON request failed! ' + JSON.stringify(jqXHR));
+            //                console.log('getJSON request failed! ' + JSON.stringify(textStatus));
+            //                console.log('getJSON request failed! ' + JSON.stringify(errorThrown));
+            //                console.log('============================');
+        }).always(function () {
 
-                });
+        });
     }, 1000);
+    
+    setInterval(function(){
+        console.log("Refresh!!!");
+        location.reload();
+    }, 5000);
+    
+    
 });
         </script>
     </body>

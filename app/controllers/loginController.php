@@ -8,7 +8,8 @@ class loginController extends \BaseController {
      * @return Response
      */
     public function index() {
-        return View::make('login');
+        $data["login_failed"] = Session::get('login_failed');
+        return View::make('login', $data);
     }
 
     public function login() {
@@ -24,7 +25,7 @@ class loginController extends \BaseController {
             $usernm = Input::get('usernm');
             $passwd = Input::get('password');
 
-            $sql = "SELECT * FROM mk01 WHERE usernm = " . $usernm;
+            $sql = "SELECT * FROM mk01 WHERE usernm = '" . $usernm."'";
             $kar = DB::select(DB::raw($sql));
             if (!empty($kar)) {
                 if ($kar[0]->passwd == $passwd) {
@@ -37,7 +38,11 @@ class loginController extends \BaseController {
                     } else {
                         return Redirect::to('master/jamkerja');
                     }
+                } else {
+                    Session::flash('login_failed', 'Password yang diinputkan Salah!');
                 }
+            } else {
+                Session::flash('login_failed', 'Username Tidak Terdaftar!');
             }
             return Redirect::to('login');
         }

@@ -103,6 +103,7 @@ class TransaksiGajiController extends \BaseController {
                 $th01 = new th01();
                 $tt01 = new tt01();
                 $tz01 = new tz01();
+                $mk03 = new mk03();
 
                 $infohutang = $th01->getHutangBulan($tg01->idkar, $tg01->tgltg);
                 $infokasbon = $th01->getKasBonBulan($tg01->idkar, $tg01->tgltg);
@@ -128,6 +129,8 @@ class TransaksiGajiController extends \BaseController {
                     $tg01->ttlgj += (($mk01->kmtim * $omzetTim) / 100);
                     $tg01->save();
                 }
+                $tg01->ttlbns = (($mk03->getNilKeterangan("prsbns") / 100.0) * $tg01->ttlgj);
+                $tg01->save();
             });
             Session::flash('tg01_success', 'Slip Gaji Karyawan tersebut Telah Dibuat!');
         } else {

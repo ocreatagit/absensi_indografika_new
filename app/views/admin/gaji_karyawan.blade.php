@@ -22,13 +22,25 @@
             <form class="form-horizontal" action="{{ action("LaporanAdminController@histori_pembayaran_gaji_query") }}" method="POST">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Periode</label>
-                    <div class="col-sm-3">
-                        <input type="text" class="form-control siku" value="{{ date('d-m-Y') }}" name="tglfrom" id="tglfrom">
+                    <div class="col-sm-2">
+                        <select class="form-control siku" name="bulan">
+                            <option value="0">-- Semua Bulan --</option>
+                            <?php for ($i = 1; $i < 13; $i++) { ?>
+                                <option value="<?php echo (strlen($i) == 1 ? "0" . $i : $i) ?>">
+                                    <?php
+                                    setlocale(LC_ALL, 'IND');
+                                    echo strftime('%B', strtotime("2016-" . (strlen($i) == 1 ? "0" . $i : $i) . "-01"));
+                                    ?>
+                                </option>
+                            <?php } ?>
+                        </select>
                     </div>
-                    <label class="col-sm-1 control-label">s/d</label>
-                    <div class="col-sm-3">
-                        <input type="text" class="form-control siku" value="{{ date('d-m-Y') }}" name="tglto" id="tglto">
+                    <div class="col-sm-1">
+                        <input type="text" class="form-control siku" value="{{ date('Y') }}" name="tahun">
                     </div>
+                    @if($errors->first('tahun'))
+                    <div class="col-sm-3 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tahun') }}</div>
+                    @endif
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Karyawan</label>
@@ -45,6 +57,7 @@
                     <label class="col-sm-2 control-label">Status</label>
                     <div class="col-sm-2">                                        
                         <select class="form-control siku" name="status">
+                            <option value="A">-- Semua Status --</option>
                             <option value="Y">Terbayar</option>
                             <option value="N">Belum Terbayar</option>
                         </select>
@@ -89,6 +102,7 @@
                         ?>
                         <td> 
                             <a href="{{ action('LaporanAdminController@show_gaji', [$gaji->idtg]) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Detail?"><i class="fa fa-info-circle"></i></a> 
+                            <a target="_blank" href="{{ action('TransaksiTransferController@printgaji', [$gaji->idtg]) }}" class="btn btn-default {{ $gaji->status == "Y" ? "" : "disabled" }}" data-toggle="tooltip" data-placement="left" title="Cetak Slip Gaji?"><i class="fa fa-print"></i></a>
                         </td>
                     </tr>
                     @endforeach

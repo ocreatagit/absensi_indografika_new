@@ -22,6 +22,12 @@
                             <div class="form-group">
                                 <h4 class="col-lg-4 text-left"><i class="fa fa-user"></i> No Absensi</h4>
                             </div>
+                            @if(Session::has('login_failed'))
+                            <div class="form-group alert alert-info alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <i class="fa fa-info-circle"></i> {{ $login_failed }}
+                            </div>
+                            @endif
                             <div class="form-group">
                                 <div class="col-lg-12">
                                     {{ Form::text('usernm','',array('placeholder' => 'Username', "required"=>"required", "class" => "form-control siku")) }}
@@ -40,7 +46,7 @@
                                     <button type="submit" value="btn_submit" class="btn btn-primary btn-block siku"><i class="fa fa-sign-in"></i> Login</button>
                                 </div>
                             </div>
-                            
+
                         </form>
                     </div>
                 </div>

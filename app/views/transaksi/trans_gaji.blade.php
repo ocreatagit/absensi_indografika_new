@@ -38,7 +38,6 @@
                                 <th class="text-left">No</th>
                                 <th class="text-left">Tanggal</th>
                                 <th class="text-left">Karyawan</th>
-                                <th class="text-left">Total Gaji yang Dibayarkan</th>
                                 <th class="text-left">Status <br> Pembayaran</th>
                                 <th class="text-left">Opsi</th>
                             </tr>
@@ -52,7 +51,6 @@
                                 </td>
                                 <td>{{ strftime("%d-%b-%Y", strtotime($gaji->tgltg)) }}</td>
                                 <td>{{ $gaji->nama }}</td>
-                                <td>Rp.{{ number_format($gaji->ttlgj,0, ',','.') }},-</td>
                                 <?php
                                 if ($gaji->status == "N") {
                                     ?>

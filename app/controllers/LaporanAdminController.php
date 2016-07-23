@@ -122,15 +122,14 @@ class LaporanAdminController extends \BaseController {
 
         $validator = Validator::make(
                         Input::all(), array(
-                    "tglfrom" => "required",
-                    "tglto" => "required"
+                    "tahun" => "required|numeric"
                         ), $messages
         );
 
         // 2a. jika semua validasi terpenuhi simpan ke database
         if ($validator->passes()) {
-            $tglfrom = Input::get("tglfrom");
-            $tglto = Input::get("tglto");
+            $month = Input::get("bulan");
+            $year = Input::get("tahun");
             $status = Input::get("status");
             $idkar = Input::get("idkar");
 
@@ -144,8 +143,15 @@ class LaporanAdminController extends \BaseController {
             }
 
             $data["karyawans"] = $mk01->getKaryawanAktif();
-            $data["gajis"] = $tg01->getGajiStatusN(date("Y-m-d", strtotime($tglfrom)), date("Y-m-d", strtotime($tglto)), $idkar, $status);
-            Session::flash('filter', 'Pencarian Gaji <b>' . $nama . '</b> dengan status <b>' . ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada Tanggal <b>' . $tglfrom . ' s/d ' . $tglto . '</b>');
+            $month = ($month == 0 ? '' : $month);
+            $status = ($status == "A" ? '%' : $status);
+
+            $data["gajis"] = $tg01->getGajiStatusNMonthYear($month, $year, $idkar, $status);
+
+            setlocale(LC_ALL, 'IND');
+            $monthname = strftime('%B', strtotime("2016-" . $month . "-01"));
+
+            Session::flash('filter', 'Pencarian Gaji <b>' . $nama . '</b> dengan status <b>' . ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada '.($month == "" ? "<b> Semua Bulan </b>" : "Bulan <b>$monthname </b>").' <b>' . ' ' . $year . '</b>');
 
             $data['filter'] = Session::get('filter');
             $data['usermatrik'] = User::getUserMatrix();
@@ -402,7 +408,7 @@ class LaporanAdminController extends \BaseController {
             $tglfrom = Input::get("tglfrom");
             $tglto = Input::get("tglto");
             $idkar = Input::get("idkar");
-            
+
             $karyawan = mk01::find($idkar);
             if ($idkar == 0) {
                 $nama = "Semua Karyawan";
@@ -416,7 +422,7 @@ class LaporanAdminController extends \BaseController {
             $data = array(
                 "karyawans" => $mk01->getKaryawanAktif(),
                 "usermatrik" => User::getUserMatrix(),
-                "presensies" => Presensi::getPresensi($idkar,$tglfrom, $tglto),
+                "presensies" => Presensi::getPresensi($idkar, $tglfrom, $tglto),
                 "filter" => Session::get('filter')
             );
             return View::make('admin.presensi_karyawan', $data);
@@ -427,8 +433,242 @@ class LaporanAdminController extends \BaseController {
                             ->withErrors($validator)
                             ->withInput();
         }
-
     }
 
     // ------------------- END Presensi ------------------- //
+    // ------------------- Total Absensi ------------------- //
+    public function total_absensi_karyawan() {
+        $userloginid = Session::get("user");
+        $tglfrom = "";
+        $tglto = "";
+        $mk01 = new mk01();
+        $data = array(
+            "karyawans" => $mk01->getKaryawanAktif(),
+            "usermatrik" => User::getUserMatrix(),
+            "presensies" => Presensi::getPresensi(),
+            "filter" => Session::get('filter')
+        );
+        //total_absensi_karyawan
+        return View::make('admin.presensi_karyawan', $data);
+    }
+
+    // ------------------- END Total Absensi ------------------- //
+    // ------------------- Laporan Presensi + Hutang + Tabungan ------------------- //
+
+    public function laporan_karyawan() {
+        $mk01 = new mk01();
+        $tg01 = new tg01();
+        $ta03 = new ta03();
+        $tz01 = new tz01();
+        $th01 = new th01();
+
+        $data = array();
+        $data['karyawans'] = $mk01->getKaryawanAktif();
+        $data["gajis"] = $tg01->getGajiStatusN('', '', 0);
+        $data['filter'] = Session::get('filter');
+        $data['usermatrik'] = User::getUserMatrix();
+
+        $date = date("Y-m-d");
+
+        $arrLaporan = array();
+        foreach ($data['karyawans'] as $karyawan) {
+            // ID Karyawan
+            $temp["idkar"] = $karyawan->idkar;
+            // Nama Karyawan
+            $temp["nama"] = $karyawan->nama;
+            // Jam Masuk (Kehadiran) Karyawan
+            $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
+            // Jam Lembur Karyawan (in second)
+            $temp["lbr"] = $tg01->getDurasiLemburGaji($date, $karyawan->idkar);
+            // Total Alpha
+            $temp["aph"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Alpha");
+            // Total Cuti
+            $temp["cuti"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Cuti");
+            // Telat
+            $temp["telat"] = $tg01->getKeterlambatan($date, $karyawan->idkar);
+            // Kasbon
+            $temp["kasbon"] = $th01->getTotalHutangBulan($karyawan->idkar, $date);
+            // Hutang
+            $temp["hutang"] = $th01->getTotalKasBonBulan($karyawan->idkar, $date);
+            // Omzet Karyawan
+            $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date);
+            $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date);
+            $referrals = $mk01->getReferralKar($karyawan->idkar);
+
+            $temp["omzet"] = $omzetIndividu;
+
+            array_push($arrLaporan, $temp);
+        }
+
+        $data['laporans'] = $arrLaporan;
+
+        return View::make('admin.laporan_bulanan_karyawan', $data);
+    }
+
+    public function laporan_karyawan_query() {
+        $mk01 = new mk01();
+        $tg01 = new tg01();
+        $ta03 = new ta03();
+        $tz01 = new tz01();
+        $th01 = new th01();
+
+        $date = Input::get("thn") . "-" . Input::get("bln") . "-01";
+
+        $data = array();
+        $data['karyawans'] = $mk01->getKaryawanAktif();
+        $data["gajis"] = $tg01->getGajiStatusN('', '', 0);
+        $data['usermatrik'] = User::getUserMatrix();
+
+        $arrLaporan = array();
+        foreach ($data['karyawans'] as $karyawan) {
+            // ID Karyawan
+            $temp["idkar"] = $karyawan->idkar;
+            // Nama Karyawan
+            $temp["nama"] = $karyawan->nama;
+            // Jam Masuk (Kehadiran) Karyawan
+            $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
+            // Jam Lembur Karyawan (in second)
+            $temp["lbr"] = $tg01->getDurasiLemburGaji($date, $karyawan->idkar);
+            // Total Alpha
+            $temp["aph"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Alpha");
+            // Total Cuti
+            $temp["cuti"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Cuti");
+            // Telat
+            $temp["telat"] = $tg01->getKeterlambatan($date, $karyawan->idkar);
+            // Kasbon
+            $temp["kasbon"] = $th01->getTotalHutangBulan($karyawan->idkar, $date);
+            // Hutang
+            $temp["hutang"] = $th01->getTotalKasBonBulan($karyawan->idkar, $date);
+            // Omzet Karyawan
+            $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date);
+            $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date);
+            $referrals = $mk01->getReferralKar($karyawan->idkar);
+
+            $temp["omzet"] = $omzetIndividu;
+
+            array_push($arrLaporan, $temp);
+        }
+
+        $data['laporans'] = $arrLaporan;
+
+        if (Input::get("btn_filter")) {
+            Session::flash('filter', "Pencarian Laporan Karyawan pada Bulan " . strftime("%B", strtotime($date)) . " - " . Input::get("thn")) . "";
+            $data['filter'] = Session::get('filter');
+            return View::make('admin.laporan_bulanan_karyawan', $data);
+        } else if (Input::get("btn_export")) {
+            $filename = 'Absensi ' . strftime("%B %Y", strtotime($date));
+            Excel::create($filename, function($excel) {
+                $date = Input::get("thn") . "-" . Input::get("bln") . "-01";
+                $sheetname = strftime("%B-%Y", strtotime($date));
+
+                $excel->sheet($sheetname, function($sheet) {
+
+                    $mk01 = new mk01();
+                    $tg01 = new tg01();
+                    $ta03 = new ta03();
+                    $tz01 = new tz01();
+                    $th01 = new th01();
+
+                    $date = Input::get("thn") . "-" . Input::get("bln") . "-01";
+
+                    $data = array();
+                    $data['karyawans'] = $mk01->getKaryawanAktif();
+                    $data["gajis"] = $tg01->getGajiStatusN('', '', 0);
+                    $data['filter'] = Session::get('filter');
+                    $data['usermatrik'] = User::getUserMatrix();
+
+                    $arrLaporan = array();
+                    foreach ($data['karyawans'] as $karyawan) {
+                        // ID Karyawan
+                        $temp["idkar"] = $karyawan->idkar;
+                        // Nama Karyawan
+                        $temp["nama"] = $karyawan->nama;
+                        // Gaji Bersih
+                        $temp["gajibersih"] = 0;
+                        // Gaji Kotor
+                        $temp["gajikotor"] = 0;
+                        // Jam Masuk (Kehadiran) Karyawan
+                        $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
+                        // Jam Lembur Karyawan (in second)
+                        $temp["lbr"] = $tg01->getDurasiLemburGaji($date, $karyawan->idkar);
+                        // Total Alpha
+                        $temp["aph"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Alpha");
+                        // Total Cuti
+                        $temp["cuti"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Cuti");
+                        // Telat
+                        $temp["telat"] = $tg01->getKeterlambatan($date, $karyawan->idkar);
+                        // Kasbon
+                        $temp["kasbon"] = $th01->getTotalHutangBulan($karyawan->idkar, $date);
+                        // Hutang
+                        $temp["hutang"] = $th01->getTotalKasBonBulan($karyawan->idkar, $date);
+                        // Omzet Karyawan
+                        $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date);
+                        $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date);
+                        $referrals = $mk01->getReferralKar($karyawan->idkar);
+
+                        $temp["omzet"] = $omzetIndividu;
+
+                        array_push($arrLaporan, $temp);
+                    }
+
+                    $sheet->loadView('admin.laporan_bulanan_karyawan_excel', array('laporans' => $arrLaporan));
+                });
+            })->export('xlsx');
+        }
+    }
+
+    // ------------------- END Laporan Presensi + Hutang + Tabungan ------------------- //
+    // ------------------- Ubah Persen Bonus ------------------- //
+
+    public function persen_bonus_karyawan() {
+        $mk03 = new mk03();
+
+        $data = array();
+        $data['usermatrik'] = User::getUserMatrix();
+        $data['prsbns'] = $mk03->getNilKeterangan("prsbns");
+
+        return View::make('admin.persen_bonus_karyawan', $data);
+    }
+
+    public function persen_bonus_karyawan_save() {
+        // 1. setting validasi
+        $messages = array(
+            'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
+            'numeric' => 'Inputan <b>Harus Angka</b>!',
+            'same' => 'Password <b>Tidak Sama</b>!'
+        );
+
+        $validator = Validator::make(
+                        Input::all(), array(
+                    "prsbns" => "required|numeric"
+                        ), $messages
+        );
+
+        // 2a. jika semua validasi terpenuhi simpan ke database
+        if ($validator->passes()) {
+            $prsbns = Input::get("prsbns");
+
+            $temp_mk03 = new mk03();
+            $idket = $temp_mk03->getIDKeterangan("prsbns");
+            $mk03 = mk03::find($idket);
+            $mk03->nilket = $prsbns;
+            $mk03->save();
+
+            $data = array();
+            Session::flash('filter', 'Persen Bonus Karyawan Telah Disimpan!');
+
+            $data['filter'] = Session::get('filter');
+            $data['usermatrik'] = User::getUserMatrix();
+            $data['prsbns'] = $mk03->getNilKeterangan("prsbns");
+            return View::make('admin.persen_bonus_karyawan', $data);
+        }
+        // 2b. jika tidak, kembali ke halaman form registrasi
+        else {
+            return Redirect::to('admin/persenbonus')
+                            ->withErrors($validator)
+                            ->withInput();
+        }
+    }
+
+    // ------------------- END Ubah Persen Bonus ------------------- //
 }

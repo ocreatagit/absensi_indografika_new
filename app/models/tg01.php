@@ -175,6 +175,23 @@ class tg01 extends Eloquent {
         $tg01 = DB::select(DB::raw($sql));
         return $tg01;
     }
+    
+    function getGajiStatusNMonthYear($month = '', $year = '', $idkar = 0, $statusBayar = "%") {
+        $sql = "SELECT tg01.*, mk01.nama FROM tg01 INNER JOIN mk01 ON mk01.idkar = tg01.idkar";
+        if ($month != '' && $idkar != 0) {
+            $sql .= " WHERE MONTH(tg01.tgltg) = '$month' AND YEAR(tg01.tgltg) = '$year' AND tg01.idkar = $idkar";
+        } else if ($month != '' && $idkar == 0) {
+            $sql .= " WHERE MONTH(tg01.tgltg) = '$month' AND YEAR(tg01.tgltg) = '$year'";
+        } else if ($month == '' && $idkar != 0) {
+            $sql .= " WHERE YEAR(tg01.tgltg) = '$year' AND tg01.idkar = $idkar";
+        } else {
+            $sql .= " WHERE YEAR(tg01.tgltg) = '$year'";
+        }
+        $sql.= " AND tg01.status LIKE '$statusBayar';";
+//        dd($sql);
+        $tg01 = DB::select(DB::raw($sql));
+        return $tg01;
+    }
 
     function getKehadiranGaji($date, $idkar) {
         $sql = "SELECT COUNT(*) as countHadir FROM ta02 WHERE mk01_id = $idkar AND MONTH(tglmsk) = " . date("n", strtotime($date)) . " AND abscd = 0;";
@@ -336,8 +353,12 @@ class tg01 extends Eloquent {
 
     function updateStatusGaji($idtg, $status) {
         $tg01 = tg01::find($idtg);
-        $tg01->status = "Y";
+        $tg01->status = $status;
         $tg01->save();
+    }
+    
+    function getGajiKaryawan($tanggal, $idkar) {
+        
     }
 
 }
