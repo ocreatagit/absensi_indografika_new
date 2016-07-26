@@ -129,6 +129,7 @@ class LaporanAdminController extends \BaseController {
         // 2a. jika semua validasi terpenuhi simpan ke database
         if ($validator->passes()) {
             $month = Input::get("bulan");
+            $month2 = Input::get("bulan2");
             $year = Input::get("tahun");
             $status = Input::get("status");
             $idkar = Input::get("idkar");
@@ -143,17 +144,33 @@ class LaporanAdminController extends \BaseController {
             }
 
             $data["karyawans"] = $mk01->getKaryawanAktif();
-            $month = ($month == 0 ? '' : $month);
             $status = ($status == "A" ? '%' : $status);
 
-            $data["gajis"] = $tg01->getGajiStatusNMonthYear($month, $year, $idkar, $status);
+            $data["gajis"] = $tg01->getGajiStatusNMonthYear($month, $month2, $year, $idkar, $status);
 
             setlocale(LC_ALL, 'IND');
             $monthname = strftime('%B', strtotime("2016-" . $month . "-01"));
+            $monthname2 = strftime('%B', strtotime("2016-" . $month2 . "-01"));
+            
+            $flash = 'Pencarian Gaji <b>' . $nama . '</b> dengan status <b>'.
+                    ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada ';
+            
+            if($month == $month2) {
+                $flash .= "Pada Bulan <b>".$monthname."</b>";
+            } else {
+                $flash .= "Pada Bulan <b>".$monthname." - ".$monthname2."</b>";
+            }
+            $flash .= ' <b>' . ' ' . $year . '</b>';
 
-            Session::flash('filter', 'Pencarian Gaji <b>' . $nama . '</b> dengan status <b>' . ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada '.($month == "" ? "<b> Semua Bulan </b>" : "Bulan <b>$monthname </b>").' <b>' . ' ' . $year . '</b>');
-
+            if($month > $month2) {
+                $flash = "Filter Pencarian Tidak Valid!";
+                Session::flash('filter2', $flash);
+            } else {
+                Session::flash('filter', $flash);
+            }
+            
             $data['filter'] = Session::get('filter');
+            $data['filter2'] = Session::get('filter2');
             $data['usermatrik'] = User::getUserMatrix();
             return View::make('admin.gaji_karyawan', $data);
         }
@@ -476,6 +493,10 @@ class LaporanAdminController extends \BaseController {
             $temp["idkar"] = $karyawan->idkar;
             // Nama Karyawan
             $temp["nama"] = $karyawan->nama;
+            // Gaji Bersih
+            $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
+            // Gaji Kotor
+            $temp["gajikotor"] = $tg01->getGajiKaryawanKotor($date, $karyawan->idkar);
             // Jam Masuk (Kehadiran) Karyawan
             $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
             // Jam Lembur Karyawan (in second)
@@ -525,6 +546,10 @@ class LaporanAdminController extends \BaseController {
             $temp["idkar"] = $karyawan->idkar;
             // Nama Karyawan
             $temp["nama"] = $karyawan->nama;
+            // Gaji Bersih
+            $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
+            // Gaji Kotor
+            $temp["gajikotor"] = $tg01->getGajiKaryawanKotor($date, $karyawan->idkar);
             // Jam Masuk (Kehadiran) Karyawan
             $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
             // Jam Lembur Karyawan (in second)
@@ -584,9 +609,9 @@ class LaporanAdminController extends \BaseController {
                         // Nama Karyawan
                         $temp["nama"] = $karyawan->nama;
                         // Gaji Bersih
-                        $temp["gajibersih"] = 0;
+                        $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
                         // Gaji Kotor
-                        $temp["gajikotor"] = 0;
+                        $temp["gajikotor"] = $tg01->getGajiKaryawanKotor($date, $karyawan->idkar);
                         // Jam Masuk (Kehadiran) Karyawan
                         $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
                         // Jam Lembur Karyawan (in second)
@@ -611,7 +636,7 @@ class LaporanAdminController extends \BaseController {
                         array_push($arrLaporan, $temp);
                     }
 
-                    $sheet->loadView('admin.laporan_bulanan_karyawan_excel', array('laporans' => $arrLaporan));
+                    $sheet->loadView('admin.laporan_bulanan_karyawan_excel', array('laporans' => $arrLaporan, 'usermatrik' => $data['usermatrik']));
                 });
             })->export('xlsx');
         }
@@ -625,6 +650,7 @@ class LaporanAdminController extends \BaseController {
 
         $data = array();
         $data['usermatrik'] = User::getUserMatrix();
+        $data['filter'] = Session::get('filter');
         $data['prsbns'] = $mk03->getNilKeterangan("prsbns");
 
         return View::make('admin.persen_bonus_karyawan', $data);

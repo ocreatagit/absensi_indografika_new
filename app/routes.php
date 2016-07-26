@@ -106,9 +106,9 @@ Route::post('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyaw
 Route::get('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan");
 Route::post('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan_query");
 
-Route::get('admin/laporankaryawan', "LaporanAdminController@laporan_karyawan");
-Route::post('admin/laporankaryawan', "LaporanAdminController@laporan_karyawan_query");
-Route::post('admin/exportlaporankaryawan', "LaporanAdminController@laporan_karyawan_export");
+Route::get('admin/adminlaporankaryawan', "LaporanAdminController@laporan_karyawan");
+Route::post('admin/adminlaporankaryawan', "LaporanAdminController@laporan_karyawan_query");
+Route::post('admin/exportadminlaporankaryawan', "LaporanAdminController@laporan_karyawan_export");
 
 Route::get('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan");
 Route::post('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan_save");
@@ -165,6 +165,12 @@ Route::post('inputdata/absensi_store/{id}', "TransaksiAbsensiController@store");
 Route::get('inputdata/alpha', "TransaksiAlphaController@index");
 Route::post('inputdata/save_alpha', "TransaksiAlphaController@store");
 Route::get('inputdata/delete_alpha/{id}', "TransaksiAlphaController@destroy");
+
+// Transaksi Input Saldo Tabungan
+Route::get('inputdata/saldotabungan', "TransaksiSaldoTabunganController@index");
+Route::get('inputdata/saldotabungan/{id}', "TransaksiSaldoTabunganController@show");
+Route::post('inputdata/save_saldotabungan', "TransaksiSaldoTabunganController@store");
+Route::post('inputdata/save_saldotabungan/{id}', "TransaksiSaldoTabunganController@update");
 // End Input data
 
 Route::get('daftarmasuk', function() {

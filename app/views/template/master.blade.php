@@ -105,7 +105,7 @@
                             <?php } ?>
                         </li>
                         <li>
-                            <?php if (count(array_intersect([5, 6, 7, 8, 9], $usermatrik)) > 0) { ?>
+                            <?php if (count(array_intersect([5, 6, 7, 8, 9, 24, 25, 29], $usermatrik)) > 0) { ?>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Input Data <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <?php if (in_array(5, $usermatrik)) { ?>
@@ -129,6 +129,9 @@
                                     <?php if (in_array(25, $usermatrik)) { ?>
                                         <li>{{ HTML::link('inputdata/alpha', 'Alpha / Cuti Karyawan')}}</li>
                                     <?php } ?>
+                                    <?php if (in_array(29, $usermatrik)) { ?>
+                                        <li>{{ HTML::link('inputdata/saldotabungan', 'Saldo Tabungan')}}</li>
+                                    <?php } ?>
                                 </ul>
                             <?php } ?>
                         </li>
@@ -150,7 +153,7 @@
                             </li>
                         <?php } ?>
                         <li>
-                            <?php if (count(array_intersect([14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 26], $usermatrik)) > 0) { ?>
+                            <?php if (count(array_intersect([14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 26, 27], $usermatrik)) > 0) { ?>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fitur <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <?php if (in_array(14, $usermatrik)) { ?>
@@ -185,7 +188,7 @@
                                         <li>{{ HTML::link('admin/allpresensikaryawan', 'Laporan Presensi Karyawan')}}</li>
                                     <?php } ?>                                    
                                     <?php if (in_array(26, $usermatrik)) { ?>
-                                        <li>{{ HTML::link('admin/laporankaryawan', 'Laporan Karyawan')}}</li>
+                                        <li>{{ HTML::link('admin/adminlaporankaryawan', 'Admin Laporan Karyawan')}}</li>
                                     <?php } ?>
                                     <?php if (in_array(27, $usermatrik)) { ?>
                                         <li>{{ HTML::link('admin/persenbonus', 'Ubah Persen Bonus')}}</li>

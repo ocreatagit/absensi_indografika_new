@@ -57,6 +57,10 @@
                 <thead>
                     <tr>
                         <th class="text-center"></th>
+                        <?php if (in_array(26, $usermatrik)) { ?>
+                            <th class="text-right">Gaji Bersih</th>
+                            <th class="text-right">Gaji Kotor</th>
+                        <?php } ?>
                         <th class="text-right">Msk</th>
                         <th class="text-right">Lbr</th>
                         <th class="text-right">Aph</th>
@@ -68,10 +72,21 @@
                     </tr>
                 </thead>
                 <tbody class="text-center">
-                    <?php $totalOmzet = 0; ?>
+                    <tr>
+                        <td colspan="<?php echo ((in_array(26, $usermatrik)) ? 12 : 9) ?>" class="cell">&nbsp;</td>
+                    </tr>
+                    <?php
+                    $totalOmzet = 0;
+                    $totalGajiBersih = 0;
+                    $totalGajiKotor = 0;
+                    ?>
                     @foreach($laporans as $laporan)
                     <tr>
                         <td>{{ $laporan["nama"] }}</td>
+                        <?php if (in_array(26, $usermatrik)) { ?>
+                            <td align="right">Rp.{{ number_format($laporan["gajibersih"], 0, ",", ".") }},-</td>
+                            <td align="right">Rp.{{ number_format($laporan["gajikotor"], 0, ",", ".") }},-</td>
+                        <?php } ?>
                         <td align="right">{{ $laporan["msk"] }}</td>
                         <td align="right">
                             <?php
@@ -86,15 +101,22 @@
                         <td align="right">Rp.{{ number_format($laporan["omzet"], 0, ",", ".") }},-</td>
                         <?php
                         $totalOmzet += $laporan["omzet"];
+                        $totalGajiBersih += $laporan["gajibersih"];
+                        $totalGajiKotor += $laporan["gajikotor"];
                         ?>
                     </tr>
                     @endforeach
                     <tr>
-                        <td colspan="9">&nbsp;</td>
+                        <td colspan="<?php echo ((in_array(26, $usermatrik)) ? 12 : 9) ?>" class="cell">&nbsp;</td>
                     </tr>
-                    <tr style="background-color: lightblue; color: black">
-                        <td colspan="8" align="right">Total Omzet</td>
-                        <td>Rp.{{ number_format($totalOmzet, 0, ",", ".") }},-</td>
+                    <tr>
+                        <?php if (in_array(26, $usermatrik)) { ?>
+                            <td align="right">Total</td>
+                            <td align="right">Rp.{{ number_format($totalGajiBersih, 0, ",", ".") }},-</td>
+                            <td align="right">Rp.{{ number_format($totalGajiKotor, 0, ",", ".") }},-</td>
+                        <?php } ?>
+                        <td colspan="<?php echo ((in_array(26, $usermatrik)) ? 7 : 8) ?>" align="right" class="">Total Omzet</td>
+                        <td align="right" class="cell">{{ $totalOmzet }}</td>
                     </tr>
                 </tbody>
             </table>

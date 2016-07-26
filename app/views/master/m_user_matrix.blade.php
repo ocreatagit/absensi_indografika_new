@@ -14,8 +14,8 @@
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-body">
-            <form action="<?php echo action("MasterKaryawanController@usermatrixsave", [$id]) ?>" method="POST">
-                <div class="row">        
+            <form action="<?php echo action("MasterKaryawanController@usermatrixsave", [$id]) ?>" method="POST" class="form-horizontal">
+                <div class="form-group">        
                     @foreach ($usermatrixs as $usermatrix)
                     <div class="checkbox col-md-4">
                         <label><input type="checkbox" name="matrix{{ $usermatrix->idmnu }}" value="{{ $usermatrix->idmnu }}" <?php
@@ -29,8 +29,8 @@
                     </div>
                     @endforeach
                 </div>
-                <div class="row"> 
-                    {{ Form::submit('Simpan', array('class'=>'btn btn-primary btn-large center')) }}
+                <div class="form-group">
+                    &nbsp;&nbsp;&nbsp;{{ Form::submit('Simpan', array('class'=>'btn btn-primary btn-large center siku')) }}
                 </div>
             </form>
         </div>

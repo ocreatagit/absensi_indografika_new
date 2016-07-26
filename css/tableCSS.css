@@ -15,7 +15,7 @@ and open the template in the editor.
 
 .cell {
 }
-
+/*
 tr {
     border: 1px solid #111;
 }
@@ -26,4 +26,4 @@ tr td {
 
 tr > td {
     border: 1px solid #000000;
-}
+}*/

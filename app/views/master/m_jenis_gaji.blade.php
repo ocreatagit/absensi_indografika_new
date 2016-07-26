@@ -58,7 +58,7 @@
             <label class="col-sm-2 control-label"></label>
             <div class="col-sm-4">
                 <div class="col-sm-8 input-group">
-                    <button class="btn btn-success"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                    <button class="btn btn-success"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button> &nbsp;
                     <a href="{{ action('MasterGajiController@index') }}" class="btn btn-default"><i class="fa fa-repeat"></i> Reset</a>
                 </div>
             </div>

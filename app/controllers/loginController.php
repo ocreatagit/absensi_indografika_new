@@ -35,6 +35,8 @@ class loginController extends \BaseController {
 
                     if ($kar[0]->jnsusr == 2) {
                         return Redirect::to('myindografika/presensikaryawan');
+                    } else if ($kar[0]->jnsusr == 2) {
+                        return Redirect::to('myindografika/gajikaryawan');
                     } else {
                         return Redirect::to('master/jamkerja');
                     }

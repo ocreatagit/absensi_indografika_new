@@ -19,12 +19,17 @@
                 <i class="fa fa-info-circle"></i> {{ $filter }}
             </div>    
             @endif
+            @if(Session::has('filter2'))
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-info-circle"></i> {{ $filter2 }}
+            </div>    
+            @endif
             <form class="form-horizontal" action="{{ action("LaporanAdminController@histori_pembayaran_gaji_query") }}" method="POST">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Periode</label>
                     <div class="col-sm-2">
                         <select class="form-control siku" name="bulan">
-                            <option value="0">-- Semua Bulan --</option>
                             <?php for ($i = 1; $i < 13; $i++) { ?>
                                 <option value="<?php echo (strlen($i) == 1 ? "0" . $i : $i) ?>">
                                     <?php
@@ -35,6 +40,18 @@
                             <?php } ?>
                         </select>
                     </div>
+                    <div class="col-sm-2">
+                        <select class="form-control siku" name="bulan2">
+                            <?php for ($i = 1; $i < 13; $i++) { ?>
+                                <option value="<?php echo (strlen($i) == 1 ? "0" . $i : $i) ?>">
+                                    <?php
+                                    setlocale(LC_ALL, 'IND');
+                                    echo strftime('%B', strtotime("2016-" . (strlen($i) == 1 ? "0" . $i : $i) . "-01"));
+                                    ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>                    
                     <div class="col-sm-1">
                         <input type="text" class="form-control siku" value="{{ date('Y') }}" name="tahun">
                     </div>

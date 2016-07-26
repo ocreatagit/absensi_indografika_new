@@ -175,13 +175,13 @@ class tg01 extends Eloquent {
         $tg01 = DB::select(DB::raw($sql));
         return $tg01;
     }
-    
-    function getGajiStatusNMonthYear($month = '', $year = '', $idkar = 0, $statusBayar = "%") {
+
+    function getGajiStatusNMonthYear($month = '', $month2 = '', $year = '', $idkar = 0, $statusBayar = "%") {
         $sql = "SELECT tg01.*, mk01.nama FROM tg01 INNER JOIN mk01 ON mk01.idkar = tg01.idkar";
         if ($month != '' && $idkar != 0) {
-            $sql .= " WHERE MONTH(tg01.tgltg) = '$month' AND YEAR(tg01.tgltg) = '$year' AND tg01.idkar = $idkar";
+            $sql .= " WHERE MONTH(tg01.tgltg) >= '$month' AND MONTH(tg01.tgltg) <= '$month2' AND YEAR(tg01.tgltg) = '$year' AND tg01.idkar = $idkar";
         } else if ($month != '' && $idkar == 0) {
-            $sql .= " WHERE MONTH(tg01.tgltg) = '$month' AND YEAR(tg01.tgltg) = '$year'";
+            $sql .= " WHERE MONTH(tg01.tgltg) >= '$month' AND MONTH(tg01.tgltg) <= '$month2' AND YEAR(tg01.tgltg) = '$year'";
         } else if ($month == '' && $idkar != 0) {
             $sql .= " WHERE YEAR(tg01.tgltg) = '$year' AND tg01.idkar = $idkar";
         } else {
@@ -258,13 +258,13 @@ class tg01 extends Eloquent {
                 RIGHT JOIN mj02 ON mj02.idjk = mj03.mj02_id
                 RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
                 WHERE MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND ta02.abscd = 0 AND mj02.tipe = 1 AND mk01.idkar = $idkar"
-                ;
+        ;
         $sqlpulang = "SELECT sum( CASE WHEN (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(mj02.jmklr, '%H:%i'), DATE_FORMAT(ta02.tglmsk, '%H:%i')))/60 as integer)) < 0 THEN 0 ELSE (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(mj02.jmklr, '%H:%i'), DATE_FORMAT(ta02.tglmsk, '%H:%i')))/60 as integer)) END ) as lbt  FROM mk01
                 RIGHT JOIN mj03 ON mj03.mk01_id = mk01.idkar
                 RIGHT JOIN mj02 ON mj02.idjk = mj03.mj02_id
                 RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
                 WHERE MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND ta02.abscd = 0 AND mj02.tipe = 1 AND mk01.idkar = $idkar"
-                ;
+        ;
         $sqlistirahat = "SELECT IFNULL(SUM(jumlahIstirahat.lbt),0) as lbt
                 FROM( 
                     SELECT tabel_istirahat.idkar, CAST((ABS(CAST((TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(tabel_istirahat.jamkeluar, '%H:%i'), DATE_FORMAT(tabel_istirahat.jammasuk, '%H:%i')))/60)-60 as integer))+CAST((TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(tabel_istirahat.jamkeluar, '%H:%i'), DATE_FORMAT(tabel_istirahat.jammasuk, '%H:%i')))/60)-60 as integer))/2 as integer) as lbt 
@@ -280,25 +280,25 @@ class tg01 extends Eloquent {
         $count = DB::select(DB::raw($sqlmasuk));
         $count1 = DB::select(DB::raw($sqlpulang));
         $count2 = DB::select(DB::raw($sqlistirahat));
-        
+
         if (count($count) != 0) {
             $count = $count[0]->lbt;
         } else {
             $count = 0;
         }
-        
+
         if (count($count1) != 0) {
             $count1 = $count1[0]->lbt;
         } else {
             $count1 = 0;
         }
-        
+
         if (count($count2) != 0) {
             $count2 = $count2[0]->lbt;
         } else {
             $count2 = 0;
         }
-        
+
         return $count + $count1 + $count2;
     }
 
@@ -356,9 +356,27 @@ class tg01 extends Eloquent {
         $tg01->status = $status;
         $tg01->save();
     }
-    
-    function getGajiKaryawan($tanggal, $idkar) {
-        
+
+    function getGajiKaryawanBersih($date, $idkar) {
+        $SQL = "SELECT COALESCE(ttlgj, 0) as ttlgj FROM tg01 WHERE MONTH(tgltg) = '" . date("m", strtotime($date)) . "' AND YEAR(tgltg) = '" . date("Y", strtotime($date)) . "' AND idkar = " . $idkar . ";";
+        $tg01 = DB::select(DB::raw($SQL));
+        if (count($tg01) > 0) {
+            $tg01 = $tg01[0];
+            return $tg01->ttlgj;
+        } else {
+            return 0;
+        }
+    }
+
+    function getGajiKaryawanKotor($date, $idkar) {
+        $SQL = "SELECT COALESCE((ttlgj + ttlbns), 0) as ttlgjktr FROM tg01 WHERE MONTH(tgltg) = '" . date("m", strtotime($date)) . "' AND YEAR(tgltg) = '" . date("Y", strtotime($date)) . "' AND idkar = " . $idkar . ";";
+        $tg01 = DB::select(DB::raw($SQL));
+        if (count($tg01) > 0) {
+            $tg01 = $tg01[0];
+            return $tg01->ttlgjktr;
+        } else {
+            return 0;
+        }
     }
 
 }
