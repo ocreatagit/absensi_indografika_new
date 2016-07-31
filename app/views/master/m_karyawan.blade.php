@@ -67,9 +67,8 @@
                         <label class="col-sm-4 control-label">Tipe User</label>
                         <div class="col-sm-6 input-group ">
                             <select class="form-control" name="jnsusr">
-                                <option value="0" {{ $karyawan["jnsusr"] == 0 ? "selected" : "" }}>Super Admin</option>
-                                <option value="1" {{ $karyawan["jnsusr"] == 1 ? "selected" : "" }}>Admin</option>
                                 <option value="2" {{ $karyawan["jnsusr"] == 2 ? "selected" : "" }}>Karyawan</option>
+                                <option value="1" {{ $karyawan["jnsusr"] == 1 ? "selected" : "" }}>Admin</option>
                             </select>
                         </div>
                     </div>
@@ -177,47 +176,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Jam Masuk - Jam Pulang</label>
-                        <div class="col-sm-6 input-group ">
-                            <select class="form-control" name="idjk1">
-                                @foreach($jamkerjas as $jamkerja)
-                                <option value="{{ $jamkerja->idjk }}" {{ isset($karyawan) == true ? ($jamkerja1->idjk == $jamkerja->idjk ? "selected" : "") : "" }}><?php echo strftime("%H:%M", strtotime($jamkerja->jmmsk)) ?> - <?php echo strftime("%H:%M", strtotime($jamkerja->jmklr)) ?></option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Jam Masuk - Jam Pulang <font color="green">(Alternatif 2)</font></label>
-                        <div class="col-sm-6 input-group ">
-                            <select class="form-control" name="idjk_alt1">
-                                @foreach($jamkerjas as $jamkerja)
-                                <option value="{{ $jamkerja->idjk }}" {{ isset($karyawan) == true ? ($jamkerja_alt1->idjk == $jamkerja->idjk ? "selected" : "") : "" }}><?php echo strftime("%H:%M", strtotime($jamkerja->jmmsk)) ?> - <?php echo strftime("%H:%M", strtotime($jamkerja->jmklr)) ?></option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Jam Masuk - Jam Pulang <font color="green">(Alternatif 3)</font></label>
-                        <div class="col-sm-6 input-group ">
-                            <select class="form-control" name="idjk_alt2">
-                                @foreach($jamkerjas as $jamkerja)
-                                <option value="{{ $jamkerja->idjk }}" {{ isset($karyawan) == true ? ($jamkerja_alt2->idjk == $jamkerja->idjk ? "selected" : "") : "" }}><?php echo strftime("%H:%M", strtotime($jamkerja->jmmsk)) ?> - <?php echo strftime("%H:%M", strtotime($jamkerja->jmklr)) ?></option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Jam Istirahat</label>
-                        <div class="col-sm-6 input-group ">
-                            <select class="form-control" name="idjk2">
-                                @foreach($jamistirahats as $jamistirahat)
-                                <option value="{{ $jamistirahat->idjk }}" {{ isset($karyawan) == true ? ($jamkerja2->idjk == $jamistirahat->idjk ? "selected" : "") : "" }}><?php echo strftime("%H:%M", strtotime($jamistirahat->jmmsk)) ?> - <?php echo strftime("%H:%M", strtotime($jamistirahat->jmklr)) ?></option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
                     <h2 class="page-header" style="margin-top: 0px;">Foto Karyawan</h2>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Foto</label>
@@ -239,7 +197,7 @@
                 </div>
                 <div class="col-sm-12" style="margin-top: 2%; margin-bottom: 1.5%">
                     <!--<a class="btn btn-info btn-block" id="next" onclick="goToDiv('next','infGaji')"><i class="fa fa-arrow-down"></i> Tambah Informasi Gaji <i class="fa fa-arrow-down"></i></a>-->
-                    <button class="btn btn-info btn-block" type="submit"><h3 style="margin-top: 0px; margin-bottom: 0px;"> <i class="fa fa-save"></i> {{ !isset($karyawan) ? 'Tambah Gaji' : 'Ubah Data Karyawan' }} </h3> </button>
+                    <button class="btn btn-info btn-block" type="submit"><h3 style="margin-top: 0px; margin-bottom: 0px;"> <i class="fa fa-save"></i> {{ !isset($karyawan) ? 'Tambah Jam Kerja' : 'Ubah Data Karyawan' }} </h3> </button>
                 </div>
             </form>
         </div>
@@ -247,64 +205,136 @@
 </div>
 <?php if (isset($karyawan)) { ?>
     <div class="row">
-        <div class="panel panel-default" id="infGaji">
-            <div class="panel-heading">Informasi Gaji</div>
-            <div class="panel-body">
-                <form class="form-horizontal" action="{{ action("MasterKaryawanController@saveKaryawanGaji", array($idkaryawan)) }}" method="POST">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Jenis Gaji</label>
-                        <div class="col-sm-3 input-group ">
-                            <select class="form-control" name="idgj">
-                                @foreach($gajis as $gaji)
-                                <option value="{{ $gaji->idgj }}">{{ $gaji->jenis }}</option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" name="idkaryawan" value="{{ $idkaryawan }}"/>
+        <div class="col-lg-6">
+            <div class="panel panel-default" id="infGaji">
+                <div class="panel-heading">Informasi Gaji</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" action="{{ action("MasterKaryawanController@saveKaryawanGaji", array($idkaryawan)) }}" method="POST">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Jenis Gaji</label>
+                            <div class="col-sm-5 input-group ">
+                                <select class="form-control" name="idgj">
+                                    @foreach($gajis as $gaji)
+                                    <option value="{{ $gaji->idgj }}">{{ $gaji->jenis }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="idkaryawan" value="{{ $idkaryawan }}"/>
+                            </div>
+                            @if($errors->first('idgj'))
+                            <div class="col-sm-5 col-sm-offset-1 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilgj') }}</div>
+                            @endif
                         </div>
-                        @if($errors->first('idgj'))
-                        <div class="col-sm-3 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilgj') }}</div>
-                        @endif
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Nominal Gaji</label>
-                        <div class="col-sm-3 input-group ">
-                            <input type="text" class="form-control" value="" name="nilgj">                                    
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Nominal Gaji</label>
+                            <div class="col-sm-5 input-group ">
+                                <input type="text" class="form-control" value="" name="nilgj">                                    
+                            </div>
+                            @if($errors->first('nilgj'))
+                            <div class="col-sm-5 col-sm-offset-3 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilgj') }}</div>
+                            @endif
                         </div>
-                        @if($errors->first('nilgj'))
-                        <div class="col-sm-3 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilgj') }}</div>
-                        @endif
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label"></label>
-                        <div class="col-sm-4">
-                            <div class="col-sm-8 input-group">
-                                <button class="btn btn-success"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-5">
+                                <div class="col-sm-8 input-group">
+                                    <button class="btn btn-success siku"> <i class="glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                                </div>
                             </div>
                         </div>
+                    </form>
+                    <hr>
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-hover" id="datatable">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Jenis Gaji</th>
+                                    <th class="text-left">Nominal Gaji</th>
+                                    <th class="text-left">Opsi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                @foreach($karyawan->mg02 as $row)
+                                <tr>
+                                    <td>{{ $row->mg01->jenis }}</td>
+                                    <td>Rp.{{ number_format($row->nilgj,0, ',','.') }},-</td>
+                                    <td>
+                                        <a href="{{ action('MasterKaryawanController@deleteKaryawanGaji', [$row->id]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </form>
-                <hr>
-                <div class="col-sm-6">
-                    <table class="table table-bordered table-hover" id="datatable">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Jenis Gaji</th>
-                                <th class="text-left">Nominal Gaji</th>
-                                <th class="text-left">Opsi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center">
-                            @foreach($karyawan->mg02 as $row)
-                            <tr>
-                                <td>{{ $row->mg01->jenis }}</td>
-                                <td>Rp.{{ number_format($row->nilgj,0, ',','.') }},-</td>
-                                <td>
-                                    <a href="{{ action('MasterKaryawanController@deleteKaryawanGaji', [$row->id]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" id="infJamKerja">
+            <div class="panel panel-default">
+                <div class="panel-heading"><big> <i class="fa fa-clock-o"></i> Informasi Jam Kerja </big> </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" action="{{ action("MasterKaryawanController@saveJamKerja", array($idkaryawan)) }}" method="POST">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Jam Kerja</label>
+                            <div class="col-sm-5">
+                                <select class="form-control siku" name="jmkrj" id="jmkrj" onchange="getJenJmKrj(this)">
+                                    <?php
+                                    $jenjmkrj = "";
+                                    if (count($jam_kerjas) > 0) {
+                                        $jenjmkrj = $jam_kerjas[0]->tipe == 1 ? "Jam Kerja" : "Jam Istirahat";
+                                    }
+                                    ?>
+
+                                    @foreach($jam_kerjas as $jam_kerja)
+                                    <option value="{{ $jam_kerja->idjk }}">{{ $jam_kerja->jmmsk." - ".$jam_kerja->jmklr }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="idkar" value="{{ $idkaryawan }}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Jenis Jam Kerja</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="jenjmkrj" class="form-control siku" value="{{ $jenjmkrj }}" name="" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-5">
+                                <button class="btn btn-success siku"> <i class=" glyphicon glyphicon-floppy-disk"></i> Tambah</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-sm-12">
+                        @if(Session::has('mk01_failed'))
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-info-circle"></i> {{ $mk01_failed }}
+                        </div>    
+                        @endif
+                    </div>
+                    <hr>
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-hover" id="datatable3">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Jam Kerja</th>
+                                    <th class="text-left">Jenis</th>
+                                    <th class="text-left">Opsi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                @foreach($jam_kerja_karyawans as $jam_kerja_karyawan)
+                                <tr>
+                                    <td>{{ $jam_kerja_karyawan->jmmsk." - ".$jam_kerja_karyawan->jmklr }}</td>
+                                    <td>{{ $jam_kerja_karyawan->tipe == 1 ? "Jam Kerja" : "Jam Istirahat" }}</td>
+                                    <td>
+                                        <a href="{{ action('MasterKaryawanController@deleteJamKerja', [$jam_kerja_karyawan->id, $jam_kerja_karyawan->mk01_id]) }}" class="btn btn-danger delete siku" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -400,6 +430,8 @@
 
         $('#datatable2').DataTable();
 
+        $('#datatable3').DataTable();
+
         $("#tglaktif").datepicker({
             inline: true,
             dateFormat: "dd-mm-yy",
@@ -422,10 +454,19 @@
             'slow');
         });
     }
-    
+
     function setPassword(noreg) {
         $("#passwd").val(noreg.value);
         $("#passwd2").val(noreg.value);
+    }
+
+    function getJenJmKrj(jmkrj) {
+        var id = jmkrj.value;
+        var url = "<?php echo url("/master/karyawan/get_jenis_jam_kerja") ?>" + "/" + id;
+
+        $.get(url, function (data) {
+            $("#jenjmkrj").val(data);
+        });
     }
 </script> 
 @stop

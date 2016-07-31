@@ -14,7 +14,7 @@ class MasterJamKerjaController extends \BaseController {
         }
 
         $mj02 = new mj02();
-        $jam_kerja = mj02::all();
+        $jam_kerja = mj02::orderBy("status", "DESC")->get();
         $success = Session::get('mj02_success');
         $danger = Session::get('mj02_danger');
         $data = array(
@@ -176,9 +176,27 @@ class MasterJamKerjaController extends \BaseController {
             return Redirect::to($var["url"]);
         }
         $jam_kerja = mj02::find($id);
-        $jam_kerja->delete();
-        Session::flash('mj02_success', 'Data Telah Di-hapus!');
+        $jam_kerja->status = "N";
+        $jam_kerja->save();
+//        $jam_kerja->delete();
+        
+        
+        Session::flash('mj02_success', 'Data Telah Di-nonaktifkan!');
         return Redirect::to('master/jamkerja');
     }
 
+    public function active($id) {
+        $var = User::loginCheck([0, 1], 1);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
+        $jam_kerja = mj02::find($id);
+        $jam_kerja->status = "Y";
+        $jam_kerja->save();
+//        $jam_kerja->delete();
+        
+        
+        Session::flash('mj02_success', 'Data Telah Di-Aktifkan!');
+        return Redirect::to('master/jamkerja');
+    }
 }

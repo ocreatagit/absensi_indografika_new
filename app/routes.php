@@ -27,6 +27,7 @@ Route::post('master/jamkerja/create', 'MasterJamKerjaController@create');
 Route::get('master/jamkerja/edit/{id}', 'MasterJamKerjaController@edit');
 Route::post('master/jamkerja/update/{id}', 'MasterJamKerjaController@update');
 Route::get('master/jamkerja/delete/{id}', 'MasterJamKerjaController@destroy');
+Route::get('master/jamkerja/active/{id}', 'MasterJamKerjaController@active');
 
 // Master Jabatan
 Route::get('master/jabatan', 'MasterJabatanController@index');
@@ -53,10 +54,19 @@ Route::get('master/karyawan/change_status/{id}', 'MasterKaryawanController@chang
 Route::get('master/karyawan/add_gaji/{id}', 'MasterKaryawanController@addGaji');
 Route::post('master/karyawan/insert_item_gaji/{id}', 'MasterKaryawanController@saveItemGaji');
 Route::get('master/karyawan/delete_item_gaji/{rowid}/{id}', 'MasterKaryawanController@deleteItemGaji');
-Route::get('master/karyawan/save_gaji', 'MasterKaryawanController@saveGaji');
+Route::get('master/karyawan/save_gaji/{id}', 'MasterKaryawanController@saveGaji');
 Route::post('master/karyawan/save_karyawan_gaji', 'MasterKaryawanController@saveKaryawanGaji');
 Route::get('master/karyawan/delete_karyawan_gaji/{id}', 'MasterKaryawanController@deleteKaryawanGaji');
+
+Route::get('master/karyawan/add_jam_kerja/{id}', 'MasterKaryawanController@addJamKerja');
+Route::post('master/karyawan/save_item_jam_kerja_karyawan/{id}', 'MasterKaryawanController@saveItemJamKerja');
+Route::get('master/karyawan/delete_item_jam_kerja_karyawan/{rowid}/{id}', 'MasterKaryawanController@deleteItemJamKerja');
+
+Route::post('master/karyawan/save_jam_kerja_karyawan/{id}', 'MasterKaryawanController@saveJamKerja');
+Route::get('master/karyawan/delete_jam_kerja_karyawan/{rowid}/{id}', 'MasterKaryawanController@deleteJamKerja');
+
 Route::get('master/karyawan/get_karyawan/{id}', 'MasterKaryawanController@getKaryawan');
+Route::get('master/karyawan/get_jenis_jam_kerja/{id}', 'MasterKaryawanController@getJenisJamKerja');
 Route::post('master/karyawan/save_referral_karyawan', 'MasterKaryawanController@saveReferral');
 Route::get('master/karyawan/delete_referral_karyawan/{id}/{idkar}', 'MasterKaryawanController@deleteReferral');
 Route::get('master/karyawan/set_jam_kerja/{id}', 'MasterKaryawanController@setJamKerja');

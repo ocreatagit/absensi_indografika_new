@@ -116,7 +116,16 @@
                             <td>{{ $jam_kerja->status == 'N' ? 'Tidak Aktif' : 'Aktif'; $no++; }}</td>
                             <td class="text-center">
                                 <a href="{{ action('MasterJamKerjaController@edit', $jam_kerja->idjk) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>
-                                <a href="{{ action('MasterJamKerjaController@destroy', $jam_kerja->idjk) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                <?php
+                                if ($jam_kerja->status == 'N') {
+                                    ?>
+                                    <a href="{{ action('MasterJamKerjaController@active', $jam_kerja->idjk) }}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Aktifkan Data?"><i class="fa fa-check"></i></a>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <a href="{{ action('MasterJamKerjaController@destroy', $jam_kerja->idjk) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="NonAktifkan Data?"><i class="fa fa-times"></i></a>
+                                    <?php }
+                                    ?>
                             </td>
                         </tr>
                         @endforeach
@@ -188,7 +197,7 @@
     $(".delete").click(function (e) {
         e.preventDefault();
         var a = this.href;
-        alertify.confirm('Hapus Master Jam Kerja?', function (e) {
+        alertify.confirm('Non-Aktifkan Master Jam Kerja?', function (e) {
             if (e) {
                 window.location.assign(a);
             } else {
