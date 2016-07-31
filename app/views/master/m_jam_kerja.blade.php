@@ -71,6 +71,19 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label">Hari</label>
+            <div class="col-sm-2">
+                <div class="col-sm-10 input-group">
+                    <select class="form-control" name="day">
+                        <option value="mon-fri" {{ $jam_kerja["day"] == "mon-fri" ? "selected" : "" }}>Senin - Jumat</option>
+                        <option value="sat" {{ $jam_kerja["day"] == "sat" ? "selected" : "" }}>Sabtu</option>
+                        <option value="sun" {{ $jam_kerja["day"] == "sun" ? "selected" : "" }}>Minggu</option>
+                        <option value="all" {{ $jam_kerja["day"] == "all" ? "selected" : "" }}>Semua Hari</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label">Status Aktif</label>
             <div class="col-sm-4">
                 <div class="col-sm-10 input-group">
@@ -101,6 +114,7 @@
                             <th class="text-center">Tipe</th>
                             <th class="text-center">Jam Masuk</th>
                             <th class="text-center">Jam Keluar</th>
+                            <th class="text-center">Hari</th>
                             <th class="text-center">Status Aktif</th>
                             <th class="text-center">Opsi</th>
                         </tr>
@@ -109,11 +123,12 @@
                         <?php $no = 1; ?>
                         @foreach($jam_kerjas as $jam_kerja)
                         <tr>
-                            <td>{{ $no }}</td>
+                            <td>{{ $no++ }}</td>
                             <td>{{ $jam_kerja->tipe == 1 ? "Jam Kerja" : ($jam_kerja->tipe == 2 ? "Istirahat" : "Lembur") }}</td>
                             <td>{{ $jam_kerja->jmmsk }}</td>
                             <td>{{ $jam_kerja->jmklr; }}</td>
-                            <td>{{ $jam_kerja->status == 'N' ? 'Tidak Aktif' : 'Aktif'; $no++; }}</td>
+                            <td>{{ $jam_kerja->day == 'mon-fri' ? 'Senin - Jumat' : ($jam_kerja->day == "sat" ? "Sabtu" : ($jam_kerja->day == "sun" ? "Minggu" : "Semua Hari")); }}</td>
+                            <td>{{ $jam_kerja->status == 'N' ? 'Tidak Aktif' : 'Aktif'; }}</td>
                             <td class="text-center">
                                 <a href="{{ action('MasterJamKerjaController@edit', $jam_kerja->idjk) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>
                                 <?php

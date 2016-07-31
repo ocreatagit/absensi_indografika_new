@@ -16,8 +16,12 @@ class mj02 extends Eloquent {
 //        return $this->belongsToMany("Karyawan", "mj03");
 //    }
 
+    function getAllJamWithoutSat() {
+        return $this->where('status', '=', 'Y')->whereRaw('day IN ("mon-fri", "all")')->orderBy('day', 'ASC')->orderBy('idjk', 'ASC')->get();
+    }
+    
     function getAllJam() {
-        return $this->where('status', '=', 'Y')->where("day", "=", "mon-fri")->orderBy('idjk', 'ASC')->get();
+        return $this->where('status', '=', 'Y')->orderBy('idjk', 'ASC')->get();
     }
     
     function getJamKerjaAktif() {

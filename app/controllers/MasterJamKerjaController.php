@@ -60,6 +60,7 @@ class MasterJamKerjaController extends \BaseController {
                     $jam_kerja->tipe = Input::get('tipe');
                     $jam_kerja->jmmsk = Input::get('jmmsk');
                     $jam_kerja->jmklr = Input::get('jmklr');
+                    $jam_kerja->day = Input::get('day');
                     $jam_kerja->status = Input::get('status') == "Y" ? "Y" : "N";
                     $jam_kerja->save();
                     Session::flash('mj02_success', 'Data Telah Ditambahkan!');
@@ -151,6 +152,7 @@ class MasterJamKerjaController extends \BaseController {
             $jam_kerja->tipe = Input::get('tipe');
             $jam_kerja->jmmsk = Input::get('jmmsk');
             $jam_kerja->jmklr = Input::get('jmklr');
+            $jam_kerja->day = Input::get('day');
             $jam_kerja->status = Input::get('status') == "Y" ? "Y" : "N";
             $jam_kerja->save();
             Session::flash('mj02_success', 'Data Telah Di-ubah!');

@@ -138,39 +138,7 @@ class MasterKaryawanController extends \BaseController {
             $karyawan->kmindv = Input::get('kmindv');
             $karyawan->kmtim = Input::get('kmtim');
             $karyawan->jnsusr = Input::get("jnsusr");
-            $karyawan->save();
-
-//            // Jam Kerja 1
-//            $jam_kerja = new mj03();
-//            $jam_kerja->mj02_id = Input::get('idjk1');
-//            $jam_kerja->mk01_id = $idkaryawan;
-//            $jam_kerja->alt = 1;
-//            $jam_kerja->selected = "Y";
-//            $jam_kerja->save();
-//
-//            // Jam Kerja 2
-//            $jam_kerja = new mj03();
-//            $jam_kerja->mj02_id = Input::get('idjk_alt1');
-//            $jam_kerja->mk01_id = $idkaryawan;
-//            $jam_kerja->alt = 2;
-//            $jam_kerja->selected = "N";
-//            $jam_kerja->save();
-//
-//            // Jam Kerja 3
-//            $jam_kerja = new mj03();
-//            $jam_kerja->mj02_id = Input::get('idjk_alt2');
-//            $jam_kerja->mk01_id = $idkaryawan;
-//            $jam_kerja->alt = 3;
-//            $jam_kerja->selected = "N";
-//            $jam_kerja->save();
-//
-//            // Jam Istirahat
-//            $jam_kerja = new mj03();
-//            $jam_kerja->mj02_id = Input::get('idjk2');
-//            $jam_kerja->mk01_id = $idkaryawan;
-//            $jam_kerja->alt = 1;
-//            $jam_kerja->selected = "Y";
-//            $jam_kerja->save();
+            $karyawan->save(); 
 
             $mk02 = new mk02();
             $mk02->mk01_id_parent = $idkaryawan;
@@ -538,6 +506,17 @@ class MasterKaryawanController extends \BaseController {
             Session::flash('mk01_failed', 'Karyawan Harus Memiliki Setidaknya <b>1 (Satu) Jam Istirahat</b>!');
             return Redirect::to('master/karyawan/add_jam_kerja/' . $id);
         }
+        
+        $mj02 = DB::table('mj02')
+                ->where('day', "sat")
+                ->where('tipe', 1)
+                ->first();
+        $mj03 = new mj03();
+        $mj03->mj02_id = $mj02->idjk;
+        $mj03->mk01_id = $id;
+        $mj03->alt = 1;        
+        $mj03->selected = "N";
+        $mj03->save();
 
         $cart = Cart::content();
         foreach ($cart as $row) {
@@ -793,7 +772,7 @@ class MasterKaryawanController extends \BaseController {
             $data = array(
                 "karyawan" => $mk01::find($id),
                 "idkaryawan" => $karyawan->idkar,
-                "jam_kerjas" => $mj02->getAllJam(),
+                "jam_kerjas" => $mj02->getAllJamWithoutSat(),
                 "gajis" => $mg01->getJenisGajiAktif(),
                 "mk01_failed" => $failed,
                 "cart" => Cart::content(),
@@ -959,6 +938,11 @@ class MasterKaryawanController extends \BaseController {
     function getJenisJamKerja($id = FALSE) {
         $mj02 = mj02::find($id);
         echo ($mj02->tipe == 1 ? "Jam Kerja" : "Jam Istirahat");
+    }
+
+    function getHariJamKerja($id = FALSE) {
+        $mj02 = mj02::find($id);
+        echo $mj02->day == "mon-fri" ? "Senin - Jumat" : ($mj02->day == "sat" ? "Sabtu" : ($mj02->day == "sun" ? "Minggu" : "Semua Hari"));
     }
 
 }

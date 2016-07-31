@@ -67,6 +67,7 @@ Route::get('master/karyawan/delete_jam_kerja_karyawan/{rowid}/{id}', 'MasterKary
 
 Route::get('master/karyawan/get_karyawan/{id}', 'MasterKaryawanController@getKaryawan');
 Route::get('master/karyawan/get_jenis_jam_kerja/{id}', 'MasterKaryawanController@getJenisJamKerja');
+Route::get('master/karyawan/get_hari_jam_kerja/{id}', 'MasterKaryawanController@getHariJamKerja');
 Route::post('master/karyawan/save_referral_karyawan', 'MasterKaryawanController@saveReferral');
 Route::get('master/karyawan/delete_referral_karyawan/{id}/{idkar}', 'MasterKaryawanController@deleteReferral');
 Route::get('master/karyawan/set_jam_kerja/{id}', 'MasterKaryawanController@setJamKerja');

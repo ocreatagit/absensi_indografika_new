@@ -31,8 +31,10 @@
                             <select class="form-control siku" name="jmkrj" id="jmkrj" onchange="getJenJmKrj(this)">
                                 <?php
                                 $jenjmkrj = "";
+                                $harijmkrj = "";
                                 if (count($jam_kerjas) > 0) {
                                     $jenjmkrj = $jam_kerjas[0]->tipe == 1 ? "Jam Kerja" : "Jam Istirahat";
+                                    $harijmkrj = $jam_kerjas[0]->day == "mon-fri" ? "Senin - Jumat" : ($jam_kerjas[0]->day == "sat" ? "Sabtu" : ($jam_kerjas[0]->day == "sun" ? "Minggu" : "Semua Hari"));
                                 }
                                 ?>
 
@@ -45,8 +47,11 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Jenis Jam Kerja</label>
-                        <div class="col-sm-5">
+                        <div class="col-sm-4">
                             <input type="text" id="jenjmkrj" class="form-control siku" value="{{ $jenjmkrj }}" name="" disabled="">
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" id="harijmkrj" class="form-control siku" value="{{ $harijmkrj }}" name="" disabled="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -63,6 +68,7 @@
                             <tr>
                                 <th class="text-left">Jam Kerja</th>
                                 <th class="text-left">Jenis</th>
+                                <th class="text-left">Hari</th>
                                 <th class="text-left">Opsi</th>
                             </tr>
                         </thead>
@@ -71,6 +77,7 @@
                             <tr>
                                 <td>{{ $jam_kerja_karyawan->jmmsk." - ".$jam_kerja_karyawan->jmklr }}</td>
                                 <td>{{ $jam_kerja_karyawan->tipe == 1 ? "Jam Kerja" : "Jam Istirahat" }}</td>
+                                <td>{{ $jam_kerja_karyawan->day == "mon-fri" ? "Senin - Sabtu" : ($jam_kerja_karyawan->day == "sat" ? "Sabtu" : ($jam_kerja_karyawan->day == "sun" ? "Minggu" : "Semua Hari")) }}</td>
                                 <td>
                                     <a href="{{ action('MasterKaryawanController@deleteItemJamKerja', [$jam_kerja_karyawan->id, $jam_kerja_karyawan->mk01_id]) }}" class="btn btn-danger delete siku" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
                                 </td>
@@ -184,9 +191,14 @@
     function getJenJmKrj(jmkrj) {
         var id = jmkrj.value;
         var url = "<?php echo url("/master/karyawan/get_jenis_jam_kerja") ?>" + "/" + id;
+        var url2 = "<?php echo url("/master/karyawan/get_hari_jam_kerja") ?>" + "/" + id;
 
         $.get(url, function (data) {
             $("#jenjmkrj").val(data);
+        });
+        
+        $.get(url2, function (data) {
+            $("#harijmkrj").val(data);
         });
     }
 </script> 
