@@ -77,7 +77,7 @@
                             <tr>
                                 <td>{{ $jam_kerja_karyawan->jmmsk." - ".$jam_kerja_karyawan->jmklr }}</td>
                                 <td>{{ $jam_kerja_karyawan->tipe == 1 ? "Jam Kerja" : "Jam Istirahat" }}</td>
-                                <td>{{ $jam_kerja_karyawan->day == "mon-fri" ? "Senin - Sabtu" : ($jam_kerja_karyawan->day == "sat" ? "Sabtu" : ($jam_kerja_karyawan->day == "sun" ? "Minggu" : "Semua Hari")) }}</td>
+                                <td>{{ $jam_kerja_karyawan->day == "mon-fri" ? "Senin - Jumat" : ($jam_kerja_karyawan->day == "sat" ? "Sabtu" : ($jam_kerja_karyawan->day == "sun" ? "Minggu" : "Semua Hari")) }}</td>
                                 <td>
                                     <a href="{{ action('MasterKaryawanController@deleteItemJamKerja', [$jam_kerja_karyawan->id, $jam_kerja_karyawan->mk01_id]) }}" class="btn btn-danger delete siku" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
                                 </td>

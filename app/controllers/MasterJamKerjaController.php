@@ -54,7 +54,8 @@ class MasterJamKerjaController extends \BaseController {
         if ($validator->passes()) {
             if (Input::get('jmmsk') != Input::get('jmklr')) {
                 $jam_kerja = new mj02();
-                if ($jam_kerja->checkJamKerja(Input::get('tipe'), Input::get('jmmsk'), Input::get('jmklr'))) {
+                if ($jam_kerja->checkJamKerja(Input::get('tipe'), Input::get('jmmsk'), Input::get('jmklr'), Input::get('day')
+                        )) {
                     Session::flash('mj02_danger', 'Jam Kerja Sudah Pernah Ditambahkan!');
                 } else {
                     $jam_kerja->tipe = Input::get('tipe');

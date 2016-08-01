@@ -32,8 +32,8 @@ class mj02 extends Eloquent {
         return $this->where('status', '=', 'Y')->where('tipe', '=', 2)->orderBy('idjk', 'ASC')->get();
     }
 
-    function checkJamKerja($tipe, $jmmsk, $jmklr) {
-        $sql = "SELECT COUNT(*) as count FROM mj02 WHERE tipe = $tipe AND jmmsk = '$jmmsk' AND jmklr = '$jmklr';";
+    function checkJamKerja($tipe, $jmmsk, $jmklr, $day) {
+        $sql = "SELECT COUNT(*) as count FROM mj02 WHERE tipe = $tipe AND jmmsk = '$jmmsk' AND jmklr = '$jmklr' AND day = '$day';";
         $count = DB::select(DB::raw($sql));
         $count = $count[0]->count;
         if($count > 0){
