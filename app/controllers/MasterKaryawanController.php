@@ -87,12 +87,8 @@ class MasterKaryawanController extends \BaseController {
                     "email" => "required",
                     "passwd" => "required",
                     "passwd2" => "same:passwd",
-                    "norek1" => "required|numeric",
-                    "norek2" => "required|numeric",
                     "ttl" => "required",
                     "tglaktif" => "required",
-                    "addr1" => "required",
-                    "notelp" => "required|numeric",
                     "kmindv" => "required|numeric",
                     "kmtim" => "required|numeric"
                         ), $messages
@@ -138,7 +134,7 @@ class MasterKaryawanController extends \BaseController {
             $karyawan->kmindv = Input::get('kmindv');
             $karyawan->kmtim = Input::get('kmtim');
             $karyawan->jnsusr = Input::get("jnsusr");
-            $karyawan->save(); 
+            $karyawan->save();
 
             $mk02 = new mk02();
             $mk02->mk01_id_parent = $idkaryawan;
@@ -264,12 +260,8 @@ class MasterKaryawanController extends \BaseController {
                     "nama" => "required",
                     "passwd2" => "same:passwd",
                     "usernm" => "required",
-                    "norek1" => "required|numeric",
-                    "norek2" => "required|numeric",
                     "ttl" => "required",
                     "tglaktif" => "required",
-                    "addr1" => "required",
-                    "notelp" => "required|numeric",
                     "kmindv" => "required|numeric",
                     "kmtim" => "required|numeric"
                         ), $messages
@@ -341,7 +333,7 @@ class MasterKaryawanController extends \BaseController {
         }
 
         $this->delete_user($id);
-                
+
         Session::flash('mk01_success', 'Karyawan Telah Di-nonaktifkan!');
 
         return Redirect::to('master/karyawan');
@@ -506,7 +498,7 @@ class MasterKaryawanController extends \BaseController {
             Session::flash('mk01_failed', 'Karyawan Harus Memiliki Setidaknya <b>1 (Satu) Jam Istirahat</b>!');
             return Redirect::to('master/karyawan/add_jam_kerja/' . $id);
         }
-        
+
         $mj02 = DB::table('mj02')
                 ->where('day', "sat")
                 ->where('tipe', 1)
@@ -514,7 +506,7 @@ class MasterKaryawanController extends \BaseController {
         $mj03 = new mj03();
         $mj03->mj02_id = $mj02->idjk;
         $mj03->mk01_id = $id;
-        $mj03->alt = 1;        
+        $mj03->alt = 1;
         $mj03->selected = "N";
         $mj03->save();
 
@@ -811,23 +803,13 @@ class MasterKaryawanController extends \BaseController {
             if ($mj02->tipe == 2) {
                 $val_mj03 += 1;
             }
-            if ($val_mj03 > 1) {
-                Session::flash('mk01_failed', 'Karyawan Hanya Boleh Memiliki 1 (Satu) Jam Istirahat!');
-            } else {
-                $mj03->mj02_id = $idjk;
-                $mj03->mk01_id = $idkar;
-                $mj03->alt = 1;
-                $mj03->selected = "N";
-                $mj03->save();
-            }
+            $mj03->mj02_id = $idjk;
+            $mj03->mk01_id = $idkar;
+            $mj03->alt = 1;
+            $mj03->selected = "N";
+            $mj03->save();
         } else {
             Session::flash('mk01_failed', 'Jam Kerja Telah Terdaftar!');
-            if ($mj03_id->tipe == 2) {
-                $val_mj03 += 1;
-            }
-            if ($val_mj03 > 1) {
-                Session::flash('mk01_failed', 'Karyawan Hanya Boleh Memiliki 1 (Satu) Jam Istirahat!');
-            }
         }
 
         $url = URL::action("MasterKaryawanController@addJamKerja", ['id' => $idkar]);
@@ -858,7 +840,7 @@ class MasterKaryawanController extends \BaseController {
             if ($mj02->tipe == 2) {
                 $val_mj03 += 1;
             }
-            if ($val_mj03 > 1) {
+            if ($val_mj03 > 2) {
                 Session::flash('mk01_failed', 'Karyawan Hanya Boleh Memiliki 1 (Satu) Jam Istirahat!');
             } else {
                 $mj03->mj02_id = $idjk;
@@ -868,12 +850,15 @@ class MasterKaryawanController extends \BaseController {
                 $mj03->save();
             }
         } else {
-            Session::flash('mk01_failed', 'Jam Kerja Telah Terdaftar!');
-            if ($mj03_id->tipe == 2) {
-                $val_mj03 += 1;
-            }
-            if ($val_mj03 > 1) {
-                Session::flash('mk01_failed', 'Karyawan Hanya Boleh Memiliki 1 (Satu) Jam Istirahat!');
+            if (count($mj03_id) == 1) {
+                Session::flash('mk01_failed', 'Jam Kerja Telah Terdaftar!');
+            } else {
+                if ($mj03_id->tipe == 2) {
+                    $val_mj03 += 1;
+                }
+                if ($val_mj03 > 1) {
+                    Session::flash('mk01_failed', 'Karyawan Hanya Boleh Memiliki 1 (Satu) Jam Istirahat!');
+                }
             }
         }
 
