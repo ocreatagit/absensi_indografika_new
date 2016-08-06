@@ -9,5 +9,6 @@ class ta02 extends Eloquent {
         $sql = "SELECT DISTINCT ta01_id, DATE(tglmsk) as tgl FROM `ta02` WHERE mk01_id = " . $id;
         return DB::select(DB::raw($sql));        
     }
+    
 
 }

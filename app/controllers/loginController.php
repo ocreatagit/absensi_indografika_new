@@ -25,20 +25,24 @@ class loginController extends \BaseController {
             $usernm = Input::get('usernm');
             $passwd = Input::get('password');
 
-            $sql = "SELECT * FROM mk01 WHERE usernm = '" . $usernm."'";
+            $sql = "SELECT * FROM mk01 WHERE usernm = '" . $usernm . "'";
             $kar = DB::select(DB::raw($sql));
             if (!empty($kar)) {
                 if ($kar[0]->passwd == $passwd) {
-                    Session::put('user.idkar', $kar[0]->idkar);
-                    Session::put('user.nama', $kar[0]->nama);
-                    Session::put('user.tipe', $kar[0]->jnsusr);
+                    if ($kar[0]->status == "Y") {
+                        Session::put('user.idkar', $kar[0]->idkar);
+                        Session::put('user.nama', $kar[0]->nama);
+                        Session::put('user.tipe', $kar[0]->jnsusr);
 
-                    if ($kar[0]->jnsusr == 2) {
-                        return Redirect::to('myindografika/presensikaryawan');
-                    } else if ($kar[0]->jnsusr == 2) {
-                        return Redirect::to('myindografika/gajikaryawan');
-                    } else {
-                        return Redirect::to('master/jamkerja');
+                        if ($kar[0]->jnsusr == 2) {
+                            return Redirect::to('myindografika/presensikaryawan');
+                        } else if ($kar[0]->jnsusr == 2) {
+                            return Redirect::to('myindografika/gajikaryawan');
+                        } else {
+                            return Redirect::to('master/jamkerja');
+                        }
+                    }else{
+                        Session::flash('login_failed', 'Account anda tidak aktif!');
                     }
                 } else {
                     Session::flash('login_failed', 'Password yang diinputkan Salah!');
