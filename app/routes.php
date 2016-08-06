@@ -148,6 +148,7 @@ Route::get('inputdata/trans_gaji_karyawan/{id}', "TransaksiGajiController@create
 Route::get('inputdata/gaji_karyawan_detail/{id}', "TransaksiGajiController@detail");
 Route::post('inputdata/save_trans_gaji_karyawan', "TransaksiGajiController@store");
 Route::get('inputdata/delete_trans_gaji_karyawan/{id}', "TransaksiGajiController@destroy");
+Route::post('inputdata/save_all_trans_gaji', "TransaksiGajiController@saveall");
 
 // Transaksi Transfer Gaji
 Route::get('inputdata/transfer', "TransaksiTransferController@index");
