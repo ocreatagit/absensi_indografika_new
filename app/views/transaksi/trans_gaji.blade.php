@@ -63,7 +63,7 @@
                                 }
                                 ?>
                                 <td class="text-center" width="15%">
-                                    <a href="{{ action('TransaksiGajiController@destroy', [$gaji->idtg]) }}" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Hapus Transaksi?"><i class="fa fa-trash"></i></a>
+                                    <a href="{{ action('TransaksiGajiController@destroy', [$gaji->idtg]) }}" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Hapus Transaksi?"><i class="fa fa-times"></i></a>
                                         <?php $no++; ?>
                                 </td>
                             </tr>
@@ -88,7 +88,8 @@
         $('#datatable').DataTable({
             "paging": true, // next page
             "ordering": true, // order by at header 
-            "info": false
+            "info": false,
+            "order": [[ 1, "DESC" ]]
         });
     });
 </script> 
