@@ -64,19 +64,21 @@
                             <th class="text-center">Jam Pulang </th>
                             <th class="text-center">Jam Lembur Masuk </th>
                             <th class="text-center">Jam Lembur Pulang </th>
+                            <th class="text-center">Keterlambatan </th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
                         <?php foreach ($presensies as $pres) { ?>
                             <tr>
-                                <td><?= $pres[1] ?></td>
-                                <td><?= date("d-m-Y", strtotime( $pres[2])) ?></td>
-                                <td><?= $pres[3] ?></td>
-                                <td><?= $pres[5] ?></td>
-                                <td><?= $pres[6] ?></td>
-                                <td><?= $pres[4] ?></td>
-                                <td><?= $pres[7] ?></td>
-                                <td><?= $pres[8] ?></td>
+                                <td><?= $pres->nama ?></td>
+                                <td><?= date("d-m-Y", strtotime( $pres->tglabs)) ?></td>
+                                <td><?= $pres->jammasuk ?></td>
+                                <td><?= $pres->jamkeluar ?></td>
+                                <td><?= $pres->jamkembali ?></td>
+                                <td><?= $pres->jampulang ?></td>
+                                <td><?= $pres->jamlemburmasuk ?></td>
+                                <td><?= $pres->jamlemburpulang ?></td>
+                                <td><?= $pres->lbt ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>
