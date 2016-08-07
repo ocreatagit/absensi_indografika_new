@@ -12,7 +12,7 @@ class TransaksiTransferController extends \BaseController {
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
         }
-        
+
         $success = Session::get('tg01_success');
         $danger = Session::get('tg01_danger');
         $tg01 = new tg01();
@@ -54,7 +54,7 @@ class TransaksiTransferController extends \BaseController {
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
         }
-        
+
         $success = Session::get('tg01_success');
         $danger = Session::get('tg01_danger');
         $tg01 = tg01::find($id);
@@ -122,7 +122,7 @@ class TransaksiTransferController extends \BaseController {
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
         }
-        
+
         $tg01 = tg01::find($id);
         $check = new tg01();
 
@@ -133,20 +133,20 @@ class TransaksiTransferController extends \BaseController {
             $th02->idtg = $id;
             $th02->status = 'Y';
             $th02->save();
-            
+
             $mk01 = mk01::find($tg01->idkar);
             $mk01->htsld = $mk01->htsld + $th02->nilhut;
             $mk01->save();
 //            echo "- ada hutang <br>";
         }
-        
+
         // update tabungan
         $idtb = $check->checkExistTabunganKaryawan($tg01->tgltg, $tg01->idkar);
         if ($idtb != -1) {
             $tt01 = tt01::find($idtb);
             $tt01->idtg = $id;
             $tt01->save();
-            
+
             $mk01 = mk01::find($tt01->idkar);
             $mk01->tbsld = $mk01->tbsld + $tt01->niltb;
             $mk01->save();
@@ -170,7 +170,7 @@ class TransaksiTransferController extends \BaseController {
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
         }
-        
+
         $success = Session::get('tg01_success');
         $danger = Session::get('tg01_danger');
         $tg01 = tg01::find($id);
@@ -208,7 +208,7 @@ class TransaksiTransferController extends \BaseController {
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
         }
-        
+
         //Input POST
         $idtg = Input::get("idtg");
         $ttlbns = Input::get("ttlbns");
@@ -243,6 +243,64 @@ class TransaksiTransferController extends \BaseController {
                             ->withErrors($validator)
                             ->withInput();
         }
+    }
+
+    public function saveall() {
+        $var = User::loginCheck([0, 1], 8);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
+
+        $chkitem = Input::get("chkitem");
+
+        if (count($chkitem) > 0) {
+            DB::transaction(function() {
+                $chkitem = Input::get("chkitem");
+
+                foreach ($chkitem as $idtg) {
+                    $tg01 = tg01::find($idtg);
+                    $check = new tg01();
+
+                    // update hutang
+                    $idph = $check->checkExistHutangKaryawan($tg01->tgltg, $tg01->idkar);
+                    if ($idph != -1) {
+                        $th02 = th02::find($idph);
+                        $th02->idtg = $idtg;
+                        $th02->status = 'Y';
+                        $th02->save();
+
+                        $mk01 = mk01::find($tg01->idkar);
+                        $mk01->htsld = $mk01->htsld + $th02->nilhut;
+                        $mk01->save();
+//                        echo "- ada hutang <br>";
+                    }
+
+                    // update tabungan
+                    $idtb = $check->checkExistTabunganKaryawan($tg01->tgltg, $tg01->idkar);
+                    if ($idtb != -1) {
+                        $tt01 = tt01::find($idtb);
+                        $tt01->idtg = $idtg;
+                        $tt01->save();
+
+                        $mk01 = mk01::find($tt01->idkar);
+                        $mk01->tbsld = $mk01->tbsld + $tt01->niltb;
+                        $mk01->save();
+//                        echo "- ada tabungan <br>";
+                    }
+
+                    // Update hutang, kasbon dan tabungan sesuai pembayaran gaji
+                    $check->updateHutangTabunganLunas($idph, $idtb);
+
+                    // update status gaji
+                    $check->updateStatusGaji($idtg, "Y");
+                }
+//                echo "berhasil"; exit;
+            });
+            Session::flash('tg01_success', 'Gaji Telah Di Transfer!');
+        } else {
+            Session::flash('tg01_danger', "Tidak Terdapat Gaji yang ditransfer!");
+        }
+        return Redirect::to('inputdata/transfer');
     }
 
 }

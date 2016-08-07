@@ -156,6 +156,7 @@ Route::get('inputdata/detail/{id}', "TransaksiTransferController@show");
 Route::post('inputdata/simpan_gaji_bonus', "TransaksiTransferController@savebonus");
 Route::get('inputdata/bayar_gaji/{id}', "TransaksiTransferController@payment");
 Route::get('inputdata/print_gaji/{id}', "TransaksiTransferController@printgaji");
+Route::post('inputdata/saveall', "TransaksiTransferController@saveall");
 
 // Transaksi Omzet
 Route::get('inputdata/omzet', "TransaksiOmzetController@index");

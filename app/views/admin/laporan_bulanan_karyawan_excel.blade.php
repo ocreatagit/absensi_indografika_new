@@ -4,10 +4,16 @@
         <thead>
             <tr>
                 <th class="text-center cell"></th>
-                <?php if (in_array(26, $usermatrik)) { ?>
-                    <th class="text-center cell">Gaji Bersih</th>
-                    <th class="text-center cell">Gaji Kotor</th>
-                <?php } ?>
+                <?php
+                if (in_array(26, $usermatrik)) {
+                    if (Session::get("user.tipe") == 0) {
+                        ?>
+                        <th class="text-center cell">Gaji Bersih</th>
+                        <th class="text-center cell">Gaji Kotor</th>
+                        <?php
+                    }
+                }
+                ?>
                 <th class="text-center cell">Msk</th>
                 <th class="text-center cell">Lbr</th>
                 <th class="text-center cell">Aph</th>
@@ -21,7 +27,7 @@
         </thead>
         <tbody class="text-center">
             <tr>
-                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? 12 : 9) ?>" class="cell">&nbsp;</td>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 12 : 9) : 9) ?>" class="cell">&nbsp;</td>
             </tr>
             <?php
             $totalOmzet = 0;
@@ -31,10 +37,16 @@
             @foreach($laporans as $laporan)
             <tr>
                 <td class="cell">{{ $laporan["nama"] }}</td>
-                <?php if (in_array(26, $usermatrik)) { ?>
-                    <td class="cell">{{ $laporan["gajibersih"] }}</td>
-                    <td class="cell">{{ $laporan["gajikotor"] }}</td>
-                <?php } ?>
+                <?php
+                if (in_array(26, $usermatrik)) {
+                    if (Session::get("user.tipe") == 0) {
+                        ?>
+                        <td class="cell">{{ $laporan["gajibersih"] }}</td>
+                        <td class="cell">{{ $laporan["gajikotor"] }}</td>
+                        <?php
+                    }
+                }
+                ?>
                 <td class="cell">{{ $laporan["msk"] }}</td>
                 <td class="cell">
                     <?php
@@ -57,15 +69,21 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? 12 : 9) ?>" class="cell">&nbsp;</td>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 12 : 9) : 9) ?>" class="cell">&nbsp;</td>
             </tr>
             <tr>
-                <?php if (in_array(26, $usermatrik)) { ?>
-                    <td>Total</td>
-                    <td>{{ $totalGajiBersih }}</td>
-                    <td>{{ $totalGajiKotor }}</td>
-                <?php } ?>
-                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? 7 : 8) ?>" align="right" class="">Total Omzet</td>
+                <?php
+                if (in_array(26, $usermatrik)) {
+                    if (Session::get("user.tipe") == 0) {
+                        ?>
+                        <td>Total</td>
+                        <td>{{ $totalGajiBersih }}</td>
+                        <td>{{ $totalGajiKotor }}</td>
+                    <?php
+                    }
+                }
+                ?>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 7 : 8) : 8) ?>" align="right" class="">Total Omzet</td>
                 <td align="right" class="cell">{{ $totalOmzet }}</td>
                 <td class="cell"></td>
             </tr>

@@ -30,7 +30,7 @@
                             @endif
                             <div class="form-group">
                                 <div class="col-lg-12">
-                                    {{ Form::text('usernm','',array('placeholder' => 'Username', "required"=>"required", "class" => "form-control siku")) }}
+                                    {{ Form::text('usernm','',array('placeholder' => 'Username', "required"=>"required", "class" => "form-control siku", "autofocus" => "")) }}
                                 </div>
                             </div>
                             <div class="form-group">
