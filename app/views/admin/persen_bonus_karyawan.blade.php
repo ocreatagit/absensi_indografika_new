@@ -36,7 +36,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-3 input-group">                                        
-                            <button class="btn btn-primary siku"><i class="fa fa-save"></i> Simpan</button>
+                            <button class="btn btn-primary siku"><i class="fa fa-save"></i> Simpan</button> &nbsp;
                         </div>
                     </div>
                 </form>

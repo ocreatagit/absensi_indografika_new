@@ -200,6 +200,7 @@ class TransaksiTransferController extends \BaseController {
             "tg01_danger" => $danger,
             "usermatrik" => User::getUserMatrix()
         );
+        
         return View::make('transaksi.trans_print_gaji', $data);
     }
 

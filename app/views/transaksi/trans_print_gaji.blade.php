@@ -121,16 +121,16 @@
                         <tr style="">
                             <td style="text-align: right; padding-left: 10px; width: 40%;">{{ $infogaji->jenis }} : </td>
                             <td style="width: 60%; padding-left: 10px;">
-                                <?php
+                                <?php                                
                                 if ($infogaji->jntgh == "Hari" || $infogaji->jntgh == "Jam") {
                                     $jam = floor($infogaji->jmtgh / 3600);
-                                    $menit = $jam % 3600;
-                                    $menit = floor(($menit / 60));
+                                    $menit = ($infogaji->jmtgh / 60) % 60;
                                 } else {
-                                    $jam = $gaji->jmtgh;
+                                    $jam = $infogaji->jmtgh;
                                 }
-                                if ($infogaji->jmtgh == null) {
-                                    $totalTagih = 0;
+                                if ($infogaji->hari == 0) {
+                                    $jam = ($menit < 30 ? $jam : ($jam + 0.5));
+                                    $totalTagih = $jam * $infogaji->nilgj;
                                 } else {
                                     $totalTagih = $infogaji->hari * $infogaji->nilgj;
                                 }
@@ -253,24 +253,26 @@
         <?php
         if ($infogaji->jntgh == "Hari" || $infogaji->jntgh == "Jam") {
             $jam = floor($infogaji->jmtgh / 3600);
-            $menit = $jam % 3600;
-            $menit = floor(($menit / 60));
+            $menit = ($infogaji->jmtgh / 60) % 60;
         } else {
-            $jam = $gaji->jmtgh;
+            $jam = $infogaji->jmtgh;
         }
-        if ($infogaji->jmtgh == null) {
-            $totalTagih = 0;
+        if ($infogaji->hari == 0) {
+            $jam = ($menit < 30 ? $jam : ($jam + 0.5));
+            $totalTagih = $jam * $infogaji->nilgj;
         } else {
             $totalTagih = $infogaji->hari * $infogaji->nilgj;
         }
         $totalgaji += $totalTagih;
-
+        
+        ?>
+        @endforeach
+        <?php
         $omtim = (($karyawan->kmtim * $omzetTim) / 100);
         if (count($referrals) < 1) {
             $omtim = 0;
         }
         ?>
-        @endforeach
         <tr>
             <td colspan="2" align='right' style="padding-right: 10px">
                 Total Gaji Kotor :

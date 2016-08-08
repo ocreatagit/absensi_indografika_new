@@ -151,24 +151,24 @@ class LaporanAdminController extends \BaseController {
             setlocale(LC_ALL, 'IND');
             $monthname = strftime('%B', strtotime("2016-" . $month . "-01"));
             $monthname2 = strftime('%B', strtotime("2016-" . $month2 . "-01"));
-            
-            $flash = 'Pencarian Gaji <b>' . $nama . '</b> dengan status <b>'.
+
+            $flash = 'Pencarian Gaji <b>' . $nama . '</b> dengan status <b>' .
                     ($status == "Y" ? "Terbayar" : "Belum Terbayar") . '</b> Pada ';
-            
-            if($month == $month2) {
-                $flash .= "Pada Bulan <b>".$monthname."</b>";
+
+            if ($month == $month2) {
+                $flash .= "Pada Bulan <b>" . $monthname . "</b>";
             } else {
-                $flash .= "Pada Bulan <b>".$monthname." - ".$monthname2."</b>";
+                $flash .= "Pada Bulan <b>" . $monthname . " - " . $monthname2 . "</b>";
             }
             $flash .= ' <b>' . ' ' . $year . '</b>';
 
-            if($month > $month2) {
+            if ($month > $month2) {
                 $flash = "Filter Pencarian Tidak Valid!";
                 Session::flash('filter2', $flash);
             } else {
                 Session::flash('filter', $flash);
             }
-            
+
             $data['filter'] = Session::get('filter');
             $data['filter2'] = Session::get('filter2');
             $data['usermatrik'] = User::getUserMatrix();
@@ -697,4 +697,11 @@ class LaporanAdminController extends \BaseController {
     }
 
     // ------------------- END Ubah Persen Bonus ------------------- //
+
+    function testpdf() {
+        $data["test"] = "Test";
+        $pdf = PDF::loadView('pdf.laporan_pembayaran_gaji', $data);
+        return $pdf->stream();
+    }
+
 }

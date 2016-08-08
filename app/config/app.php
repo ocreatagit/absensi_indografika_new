@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
                 'Gloudemans\Shoppingcart\ShoppingcartServiceProvider',
                 'Maatwebsite\Excel\ExcelServiceProvider',
+                'Barryvdh\DomPDF\ServiceProvider',
 	),
 
 	/*
@@ -191,6 +192,7 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
                 'Cart'            => 'Gloudemans\Shoppingcart\Facades\Cart',
                 'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
+                'PDF'             => 'Barryvdh\DomPDF\Facade',
 	),
 
 );

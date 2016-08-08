@@ -25,11 +25,11 @@ class tg01 extends Eloquent {
         $sql = "SELECT mg01.*, mg02.mk01_id, mg02.mg01_id, mg02.nilgj, 
                 CASE WHEN mg01.jntgh = 'Bulan' 
                 THEN 
-                        period_diff(date_format(DATE_ADD('$date', INTERVAL 1 MONTH), '%Y%m'), date_format('$date', '%Y%m'))
+                        COALESCE(period_diff(date_format(DATE_ADD('$date', INTERVAL 1 MONTH), '%Y%m'), date_format('$date', '%Y%m')), 0)
                 ELSE 
                         CASE WHEN mg01.jntgh = 'Hari' 
                         THEN 
-                                (SELECT                                  
+                                COALESCE((SELECT                                  
                                 SUM(ifnull(CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(tabel_terluar.goHome, '%H:%i'), DATE_FORMAT(tabel_terluar.goWork, '%H:%i'))) as integer),0)) + SUM(ifnull(CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(tabel_terluar.breakIn, '%H:%i'), DATE_FORMAT(tabel_terluar.breakOut, '%H:%i'))) as integer),3600)) 
                                 FROM ( 
                                     SELECT DISTINCT 
@@ -42,9 +42,9 @@ class tg01 extends Eloquent {
                                         WHERE MONTH(tabel_luar.tglmsk) = MONTH('$date') AND YEAR(tabel_luar.tglmsk) = YEAR('$date')
                                     ) as tabel_terluar
                                     WHERE mk01_id = karyawan.idkar
-                                GROUP BY mk01_id)
+                                GROUP BY mk01_id), 0)
                         ELSE 
-                (SELECT 
+                COALESCE((SELECT 
                 COALESCE((SUM(ifnull(CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(tabel_terluar.overWorkOut, '%H:%i'), DATE_FORMAT(tabel_terluar.overWorkIn, '%H:%i'))) as integer),0))), 0) as nilai
                 FROM ( 
                     SELECT DISTINCT         
@@ -55,7 +55,7 @@ class tg01 extends Eloquent {
                         WHERE MONTH(tabel_luar.tglmsk) = MONTH('$date') AND YEAR(tabel_luar.tglmsk) = YEAR('$date')
                     ) as tabel_terluar
                     WHERE mk01_id = karyawan.idkar
-                GROUP BY mk01_id)
+                GROUP BY mk01_id), 0)
                         END 
                 END as jmtgh,
                 CASE WHEN mg01.jntgh = 'Hari' THEN
