@@ -1,56 +1,62 @@
-@extends('template.master')
-
-@section('title')
+<?php $__env->startSection('title'); ?>
 <title>ABSENSI - Input Omzet Karyawan</title>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('header')
+<?php $__env->startSection('header'); ?>
 <h1 class="page-header">Input Data
     <small>Omzet Karyawan</small>
 </h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('main')
+<?php $__env->startSection('main'); ?>
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a id="" href="{{ action('TransaksiOmzetController@index') }}" class="btn btn-primary"><i class="fa fa-backward"></i> Kembali </a>
+            <!--<a id="tambah" href="<?php echo action('TransaksiOmzetController@create'); ?>" class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Omzet</a>-->
         </div>
-        @if(Session::has('tz01_success'))
+        <?php if(Session::has('tz01_success')): ?>
         <div class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-info-circle"></i> {{ $tz01_success }}
+            <i class="fa fa-info-circle"></i> <?php echo $tz01_success; ?>
+
         </div>    
-        @endif        
+        <?php endif; ?>
+        <?php if(Session::has('tz01_danger')): ?>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <i class="fa fa-warning"></i> <?php echo $tz01_danger; ?>
+
+        </div>    
+        <?php endif; ?>
         <div class="panel-body">
             <div class="col-sm-12">
-                <form class="form-horizontal" action="{{ action("TransaksiOmzetController@store") }}" method="POST">
+                <form class="form-horizontal" action="<?php echo action("TransaksiOmzetController@store"); ?>" method="POST">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Nama Karyawan : </label>
                         <div class="col-sm-2 input-group ">
                             <select class="form-control" name="idkar">
-                                @foreach($karyawanalls as $karyawanall)
-                                <option value="{{ $karyawanall->idkar }}">{{ $karyawanall->nama }}</option>
-                                @endforeach
+                                <?php foreach($karyawanalls as $karyawanall): ?>
+                                <option value="<?php echo $karyawanall->idkar; ?>"><?php echo $karyawanall->nama; ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Tanggal Transaksi :</label>
                         <div class="col-sm-3 input-group ">
-                            <input type="text" name="tglomz" id="tglomz" value="{{ Input::old("tglomz", date('d-m-Y')) }}" class="form-control"/>
-                            @if($errors->first('tglomz'))
-                            <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tglomz') }}</div>
-                            @endif
+                            <input type="text" name="tglomz" id="tglomz" value="<?php echo Input::old("tglomz", date('d-m-Y')); ?>" class="form-control"/>
+                            <?php if($errors->first('tglomz')): ?>
+                            <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('tglomz'); ?></div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Jumlah Omzet : </label>
                         <div class="col-sm-4 input-group ">
                             <input type="text" name="nilomz" value="" class="form-control"/>
-                            @if($errors->first('nilomz'))
-                            <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilomz') }}</div>
-                            @endif
+                            <?php if($errors->first('nilomz')): ?>
+                            <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('nilomz'); ?></div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="form-group">
@@ -66,13 +72,40 @@
                         </div>
                     </div>
                 </form>
+                <hr>
+                <table class="table table-bordered table-hover" id="datatable">
+                    <thead>
+                        <tr>
+                            <th class="text-left">No</th>
+                            <th class="text-left">Tanggal Transaksi</th>
+                            <th class="text-left">Nama</th>
+                            <th class="text-left">Nilai Omzet</th>
+                            <th class="text-center">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-left">
+                        <?php $no = 1; ?>
+                        <?php foreach($omzets as $omzet): ?>
+                        <tr>
+                            <td><?php echo $no; ?></td>
+                            <td><?php echo strftime("%d-%b-%Y", strtotime($omzet->tglomz)); ?></td>
+                            <td><?php echo $omzet->nama; ?></td>
+                            <td>Rp.<?php echo number_format($omzet->nilomz,0,',','.'); ?>,-</td>
+                            <td class="text-center">
+                                <a href="<?php echo action('TransaksiOmzetController@destroy', $omzet->id); ?>" class="btn btn-danger delete" data-toggle="tooltip" data-placement="left" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                            </td>
+                            <?php $no++; ?>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.clockpicker').clockpicker({
@@ -138,7 +171,7 @@
     $(".delete").click(function (e) {
         e.preventDefault();
         var a = this.href;
-        alertify.confirm('Hapus Master Karyawan?', function (e) {
+        alertify.confirm('Hapus Omzet Bulanan Karyawan?', function (e) {
             if (e) {
                 window.location.assign(a);
             } else {
@@ -147,7 +180,9 @@
         });
     });
 </script> 
-@stop
+<?php $__env->stopSection(); ?>
 
 
 
+
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

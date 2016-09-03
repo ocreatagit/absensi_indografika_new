@@ -47,10 +47,9 @@ class TransaksiGajiController extends \BaseController {
             $data = array(
                 "karyawan" => $karyawan,
                 "gajis" => $tg01->getJamKerjaInSec($id, $karyawan->tglgj),
-                "tglgaji" => date('Y-m-t', strtotime("+1 months", strtotime($karyawan->tglgj))),
+                "tglgaji" => date('Y-m-01', strtotime("+1 months", strtotime(date('Y-m', strtotime($karyawan->tglgj)) . "-01"))),
                 "usermatrik" => User::getUserMatrix()
             );
-            //dd($data["gajis"]);
             return View::make('transaksi.trans_gaji_karyawan', $data);
         }
     }
@@ -73,6 +72,7 @@ class TransaksiGajiController extends \BaseController {
                 $idkar = Input::get("idkar");
                 $mk01 = mk01::find($idkar);
                 $tgltg = Input::get("tgltg");
+                $tglgjsblm = $mk01->tglgj;
 
 //                dd($nominalgj);
 
@@ -108,12 +108,13 @@ class TransaksiGajiController extends \BaseController {
                 $tz01 = new tz01();
                 $mk03 = new mk03();
 
-                $infohutang = $th01->getHutangBulan($tg01->idkar, $tg01->tgltg);
-                $infokasbon = $th01->getKasBonBulan($tg01->idkar, $tg01->tgltg);
-                $infotabungan = $tt01->getTabunganGaji($tg01->idkar, $tg01->tgltg);
-                $omzetIndividu = $tz01->getOmzetIndividu($tg01->idkar, $tg01->tgltg);
-                $omzetTim = $tz01->getOmzetTim($tg01->idkar, $tg01->tgltg);
+                $infohutang = $th01->getHutangBulan($tg01->idkar, $tglgjsblm);
+                $infokasbon = $th01->getKasBonBulan($tg01->idkar, $tglgjsblm);
+                $infotabungan = $tt01->getTabunganGaji($tg01->idkar, $tglgjsblm);
+                $omzetIndividu = $tz01->getOmzetIndividu($tg01->idkar, $tglgjsblm);
+                $omzetTim = $tz01->getOmzetTim($tg01->idkar, $tglgjsblm);
                 $referrals = $mk01->getReferralKar($tg01->idkar);
+//                echo $omzetTim; exit;
 
                 $tg01->ttlgj += (($mk01->kmindv * $omzetIndividu) / 100);
                 $tg01->save();
@@ -198,22 +199,29 @@ class TransaksiGajiController extends \BaseController {
         }
 
         $tg01 = tg01::find($id);
-        if ($tg01->status == "N") {
-            $tg02 = new tg02();
-            $detgajis = $tg02->getDetailGajiKaryawan($id);
-            foreach ($detgajis as $detgaji) {
-                $tg02 = tg02::find($detgaji->id);
-                $tg02->delete();
-            }
-            $tg01->delete();
+        $tgltg = date('Y-m-d', strtotime("+1 months", strtotime(date('Y-m', strtotime($tg01->tgltg)) . "-01")));
 
-            $mk01 = mk01::find($tg01->idkar);
-            $mk01->tglgj = $tg01->tglgjsblm;
-            $mk01->save();
-
-            Session::flash('tg01_success', 'Slip Gaji Karyawan tersebut Telah DiHapus!');
+        $check = new tg01();
+        if ($check->checkExistTglgj($tgltg, $tg01->idkar)) {
+            Session::flash('tg01_danger', 'Slip Gaji Karyawan tidak dapat dihapus dikarenakan terdapat Slip Gaji pada tanggal <b>'.date("d-m-Y", strtotime($tgltg)).'</b>');
         } else {
-            Session::flash('tg01_danger', 'Slip Gaji Karyawan tersebut Telah Dibayarkan!');
+            if ($tg01->status == "N") {
+                $tg02 = new tg02();
+                $detgajis = $tg02->getDetailGajiKaryawan($id);
+                foreach ($detgajis as $detgaji) {
+                    $tg02 = tg02::find($detgaji->id);
+                    $tg02->delete();
+                }
+                $tg01->delete();
+
+                $mk01 = mk01::find($tg01->idkar);
+                $mk01->tglgj = $tg01->tglgjsblm;
+                $mk01->save();
+
+                Session::flash('tg01_success', 'Slip Gaji Karyawan tersebut Telah DiHapus!');
+            } else {
+                Session::flash('tg01_danger', 'Slip Gaji Karyawan tersebut Telah Dibayarkan!');
+            }
         }
 
         return Redirect::to('inputdata/gaji');
@@ -258,7 +266,7 @@ class TransaksiGajiController extends \BaseController {
                 $tg01 = new tg01();
                 foreach ($chkitem as $idkar) {
                     $karyawan = mk01::find($idkar);
-                    $tglgj = date('Y-m-d', strtotime("+1 months", strtotime($karyawan->tglgj)));
+                    $tglgj = date('Y-m-d', strtotime("+1 months", strtotime(date('Y-m', strtotime($karyawan->tglgj)) . "-01")));
                     $gajis = $tg01->getJamKerjaInSec($idkar, $karyawan->tglgj);
 
                     $tg01 = new tg01();

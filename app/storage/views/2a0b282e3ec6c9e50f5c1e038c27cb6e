@@ -1,0 +1,101 @@
+<?php $__env->startSection('title'); ?>
+<title>ABSENSI - Input Data</title>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('header'); ?>
+<h1 class="page-header">Input Data
+    <small>Gaji</small>
+</h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('main'); ?>
+<div class="row">
+    <div class="col-sm-12" style="">
+        <div class="panel panel-default">
+            <?php if(Session::has('tg01_success')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-info-circle"></i> <?php echo $tg01_success; ?>
+
+            </div>    
+            <?php endif; ?>
+
+            <?php if(Session::has('tg01_danger')): ?>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-info-circle"></i> <?php echo $tg01_danger; ?>
+
+            </div>    
+            <?php endif; ?>
+            <div class="panel-heading">
+                <a id="tambah" href="<?php echo action('TransaksiGajiController@show'); ?>" class="btn btn-primary"><i class="fa fa-plus-square"></i> Pembayaran Gaji Karyawan</a>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-hover" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="text-left">No</th>
+                                <th class="text-left">Tanggal</th>
+                                <th class="text-left">Karyawan</th>
+                                <th class="text-left">Status <br> Pembayaran</th>
+                                <th class="text-left">Opsi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-left">
+                            <?php $no = 1; ?>
+                            <?php foreach($gajis as $gaji): ?>
+                            <tr>
+                                <td>
+                                    <a href="<?php echo action('TransaksiGajiController@detail', [$gaji->idtg]); ?>" class="" data-toggle="tooltip" data-placement="left" title="Detail"><?php echo $gaji->nortg; ?></a>
+                                </td>
+                                <td><?php echo strftime("%d-%b-%Y", strtotime($gaji->tgltg)); ?></td>
+                                <td><?php echo $gaji->nama; ?></td>
+                                <?php
+                                if ($gaji->status == "N") {
+                                    ?>
+                                    <td class="red"><i class='fa fa-exclamation-circle'></i> Belum Terbayar</td>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <td class="green"><i class='fa fa-check-circle green'></i> Gaji Telah Dibayarkan</td>
+                                    <?php
+                                }
+                                ?>
+                                <td class="text-center" width="15%">
+                                    <a href="<?php echo action('TransaksiGajiController@destroy', [$gaji->idtg]); ?>" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Hapus Transaksi?"><i class="fa fa-times"></i></a>
+                                        <?php $no++; ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.clockpicker').clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            donetext: 'Done'
+        });
+        $('#datatable').DataTable({
+            "paging": true, // next page
+            "ordering": true, // order by at header 
+            "info": false,
+            "order": [[ 1, "DESC" ]]
+        });
+    });
+</script> 
+<?php $__env->stopSection(); ?>
+
+
+
+
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

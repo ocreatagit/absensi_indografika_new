@@ -1,33 +1,32 @@
-@extends('template.master')
-
-@section('title')
+<?php $__env->startSection('title'); ?>
 <title>ABSENSI - Master Karyawan</title>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('header')
+<?php $__env->startSection('header'); ?>
 <h1 class="page-header">Master Data
     <small>DAFTAR KARYAWAN</small>
 </h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('main')
+<?php $__env->startSection('main'); ?>
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
             <?php if (Session::get("user.tipe") == 0) { ?>
-                <a id="tambah" href="{{ action('MasterKaryawanController@create') }}" class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Karyawan</a>
+                <a id="tambah" href="<?php echo action('MasterKaryawanController@create'); ?>" class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Karyawan</a>
             <?php } else {
                 ?>
                 &nbsp;
                 <?php
             } ?>
         </div>
-        @if(Session::has('mk01_success'))
+        <?php if(Session::has('mk01_success')): ?>
         <div class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-info-circle"></i> {{ $mk01_success }}
+            <i class="fa fa-info-circle"></i> <?php echo $mk01_success; ?>
+
         </div>    
-        @endif
+        <?php endif; ?>
         <div class="panel-body">
             <div class="col-sm-12">
                 <table class="table table-bordered table-hover" id="datatable">
@@ -45,45 +44,45 @@
                     </thead>
                     <tbody class="text-left">
                         <?php $no = 1; ?>
-                        @foreach($karyawans as $karyawan)
+                        <?php foreach($karyawans as $karyawan): ?>
                         <?php if ($karyawan->jnsusr != 0) { ?>
                             <tr>
-                                <td>{{ $no++ }}</td>
-                                <td><a href="{{ url("uploads/".$karyawan->pic) }}" data-lightbox="roadtrip"> {{ $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 180)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)) }} </a> </td>
-                                <td>{{ $karyawan->nama }}</td>
-                                <td>{{ $karyawan->usernm }}</td>
-                                <td>{{ $karyawan->mj01->nama }}</td>
-                                <td>{{ strftime("%d-%b-%Y", strtotime($karyawan->ttl)) }}</td>
+                                <td><?php echo $no++; ?></td>
+                                <td><a href="<?php echo url("uploads/".$karyawan->pic); ?>" data-lightbox="roadtrip"> <?php echo $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 180)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)); ?> </a> </td>
+                                <td><?php echo $karyawan->nama; ?></td>
+                                <td><?php echo $karyawan->usernm; ?></td>
+                                <td><?php echo $karyawan->mj01->nama; ?></td>
+                                <td><?php echo strftime("%d-%b-%Y", strtotime($karyawan->ttl)); ?></td>
                                 <td class="text-center" width="15%">
-                                    {{ $karyawan->status == 'N' ? '<font color="red">Tidak Aktif</font>' : '<font color="green">Aktif</font>'; }} 
+                                    <?php echo $karyawan->status == 'N' ? '<font color="red">Tidak Aktif</font>' : '<font color="green">Aktif</font>';; ?> 
                                     <!--<br>-->
-                                    <!--<a href="{{ action('MasterKaryawanController@changeStatus', $karyawan->idkar) }}" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Change Status?">{{ $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>' }}</a>-->
+                                    <!--<a href="<?php echo action('MasterKaryawanController@changeStatus', $karyawan->idkar); ?>" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Change Status?"><?php echo $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>'; ?></a>-->
                                 </td>
                                 <td class="text-center" width="5%">
                                     <?php if ($karyawan->jnsusr == 0) {
                                         ?>
-                                        <a href="{{ action('MasterKaryawanController@edit', $karyawan->idkar) }}" class="btn btn-info disabled" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
+                                        <a href="<?php echo action('MasterKaryawanController@edit', $karyawan->idkar); ?>" class="btn btn-info disabled" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
                                         <?php
                                     } else {
                                         ?>
-                                        <a href="{{ action('MasterKaryawanController@edit', $karyawan->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
+                                        <a href="<?php echo action('MasterKaryawanController@edit', $karyawan->idkar); ?>" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
                                     <?php }
                                     ?>
-                                    <a href="{{ action('MasterKaryawanController@usermatrix', $karyawan->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="center" title="User Matrix?"><i class="fa fa-user"></i></a> <br><br>
-                                    <a href="{{ action('MasterKaryawanController@changeStatus', $karyawan->idkar) }}" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Change Status?">{{ $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>' }}</a>
+                                    <a href="<?php echo action('MasterKaryawanController@usermatrix', $karyawan->idkar); ?>" class="btn btn-info" data-toggle="tooltip" data-placement="center" title="User Matrix?"><i class="fa fa-user"></i></a> <br><br>
+                                    <a href="<?php echo action('MasterKaryawanController@changeStatus', $karyawan->idkar); ?>" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Change Status?"><?php echo $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>'; ?></a>
                                 </td>
                             </tr>
                         <?php } ?>
-                        @endforeach
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.clockpicker').clockpicker({
@@ -158,7 +157,9 @@
         });
     });
 </script> 
-@stop
+<?php $__env->stopSection(); ?>
 
 
 
+
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

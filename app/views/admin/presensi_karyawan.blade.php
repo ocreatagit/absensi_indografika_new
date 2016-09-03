@@ -71,7 +71,7 @@
                         <?php foreach ($presensies as $pres) { ?>
                             <tr>
                                 <td><?= $pres->nama ?></td>
-                                <td><?= date("d-m-Y", strtotime( $pres->tglabs)) ?></td>
+                                <td><?= date("d-m-Y", strtotime($pres->tglabs)) ?></td>
                                 <td><?= $pres->jammasuk ?></td>
                                 <td><?= $pres->jamkeluar ?></td>
                                 <td><?= $pres->jamkembali ?></td>

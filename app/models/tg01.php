@@ -266,7 +266,6 @@ SELECT
         //dd($sqlmasuk."<br><br>".$sqlpulang."<br><br>".$sqlistirahat);
         return $count + $count1 + $count2;
     }
-    
 
     function checkExistHutangKaryawan($date, $idkar) {
         $th02 = DB::table('th02')
@@ -324,7 +323,7 @@ SELECT
     }
 
     function getGajiKaryawanBersih($date, $idkar) {
-        $SQL = "SELECT COALESCE(ttlgj, 0) as ttlgj FROM tg01 WHERE MONTH(tgltg) = '" . date("m", strtotime($date)) . "' AND YEAR(tgltg) = '" . date("Y", strtotime($date)) . "' AND idkar = " . $idkar . ";";
+        $SQL = "SELECT COALESCE(ttlgj, 0) as ttlgj FROM tg01 WHERE MONTH(tglgjsblm) = '" . date("m", strtotime($date)) . "' AND YEAR(tglgjsblm) = '" . date("Y", strtotime($date)) . "' AND idkar = " . $idkar . ";";
         $tg01 = DB::select(DB::raw($SQL));
         if (count($tg01) > 0) {
             $tg01 = $tg01[0];
@@ -335,13 +334,28 @@ SELECT
     }
 
     function getGajiKaryawanKotor($date, $idkar) {
-        $SQL = "SELECT COALESCE((ttlgj + ttlbns), 0) as ttlgjktr FROM tg01 WHERE MONTH(tgltg) = '" . date("m", strtotime($date)) . "' AND YEAR(tgltg) = '" . date("Y", strtotime($date)) . "' AND idkar = " . $idkar . ";";
+        $SQL = "SELECT COALESCE((ttlgj + ttlbns), 0) as ttlgjktr FROM tg01 WHERE MONTH(tglgjsblm) = '" . date("m", strtotime($date)) . "' AND YEAR(tglgjsblm) = '" . date("Y", strtotime($date)) . "' AND idkar = " . $idkar . ";";
         $tg01 = DB::select(DB::raw($SQL));
         if (count($tg01) > 0) {
             $tg01 = $tg01[0];
             return $tg01->ttlgjktr;
         } else {
             return 0;
+        }
+    }
+
+    function checkExistTglgj($date, $idkar) {
+        $SQL = "SELECT count(idtg) as idtg FROM tg01 WHERE MONTH(tgltg) = '" . date("m", strtotime($date)) . "' AND YEAR(tgltg) = '" . date("Y", strtotime($date)) . "' AND idkar = " . $idkar . ";";
+        $tg01 = DB::select(DB::raw($SQL));
+        if (count($tg01) > 0) {
+            $tg01 = $tg01[0];
+            if ($tg01->idtg == 0) {
+                return FALSE;
+            } else {
+                return TRUE;
+            }
+        } else {
+            return FALSE;
         }
     }
 

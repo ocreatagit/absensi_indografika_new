@@ -1,74 +1,72 @@
-@extends('template.master')
-
-@section('title')
+<?php $__env->startSection('title'); ?>
 <title>ABSENSI - Master Karyawan</title>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('header')
+<?php $__env->startSection('header'); ?>
 <h1 class="page-header">Master Data
     <small>KARYAWAN</small>
 </h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('main')
+<?php $__env->startSection('main'); ?>
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">Informasi Karyawan</div>
         <div class="panel-body">
-            <form class="form-horizontal" action="{{ $action }}" method="POST" id="form1" enctype="multipart/form-data">
+            <form class="form-horizontal" action="<?php echo $action; ?>" method="POST" id="form1" enctype="multipart/form-data">
                 <div class="col-sm-6">
                     <h2 class="page-header" style="margin-top: 0px;"><i class="fa fa-user"></i> Informasi Pribadi</h2>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Nama</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="text" class="form-control" value="{{ Input::old('nama', $karyawan["nama"]) }}" name="nama">
+                            <input type="text" class="form-control" value="<?php echo Input::old('nama', $karyawan["nama"]); ?>" name="nama">
                         </div>
-                        @if($errors->first('nama'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nama') }}</div>
-                        @endif
+                        <?php if($errors->first('nama')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('nama'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Email</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="text" class="form-control" value="{{ Input::old('email', $karyawan["email"]) }}" name="email">
+                            <input type="text" class="form-control" value="<?php echo Input::old('email', $karyawan["email"]); ?>" name="email">
                         </div>
-                        @if($errors->first('email'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('email') }}</div>
-                        @endif
+                        <?php if($errors->first('email')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('email'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">No Reg. Karyawan</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="text" class="form-control" id="usernm" value="{{ Input::old('usernm', $karyawan["usernm"]) }}" name="usernm" onkeyup="setPassword(this)" onmouseup="setPassword(this)" onmouseout="setPassword(this)" onmousedown="setPassword(this)">
+                            <input type="text" class="form-control" id="usernm" value="<?php echo Input::old('usernm', $karyawan["usernm"]); ?>" name="usernm" onkeyup="setPassword(this)" onmouseup="setPassword(this)" onmouseout="setPassword(this)" onmousedown="setPassword(this)">
                         </div>
-                        @if($errors->first('usernm'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('usernm') }}</div>
-                        @endif
+                        <?php if($errors->first('usernm')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('usernm'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Password</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="password" class="form-control" id="passwd" value="{{ Input::old('passwd') }}" name="passwd">
+                            <input type="password" class="form-control" id="passwd" value="<?php echo Input::old('passwd'); ?>" name="passwd">
                         </div>
-                        @if($errors->first('passwd'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('passwd') }}</div>
-                        @endif
+                        <?php if($errors->first('passwd')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('passwd'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Ulangi Password</label>
                         <div class="col-sm-6 input-group ">
-                            <input type="password" class="form-control" id="passwd2" name="passwd2" value="{{ Input::old('passwd2') }}">
+                            <input type="password" class="form-control" id="passwd2" name="passwd2" value="<?php echo Input::old('passwd2'); ?>">
                         </div>
-                        @if($errors->first('passwd2'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('passwd2') }}</div>
-                        @endif
+                        <?php if($errors->first('passwd2')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('passwd2'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Tipe User</label>
                         <div class="col-sm-6 input-group ">
                             <select class="form-control" name="jnsusr">
-                                <option value="2" {{ $karyawan["jnsusr"] == 2 ? "selected" : "" }}>Karyawan</option>
-                                <option value="1" {{ $karyawan["jnsusr"] == 1 ? "selected" : "" }}>Admin</option>
+                                <option value="2" <?php echo $karyawan["jnsusr"] == 2 ? "selected" : ""; ?>>Karyawan</option>
+                                <option value="1" <?php echo $karyawan["jnsusr"] == 1 ? "selected" : ""; ?>>Admin</option>
                             </select>
                         </div>
                     </div>
@@ -88,80 +86,80 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Tanggal Lahir</label>
                         <div class="col-sm-6 input-group ">
-                            <input id="ttl" type="text" class="form-control" value="{{ Input::old('ttl', strftime("%d-%m-%Y", strtotime($karyawan["ttl"] == '' ? date('d-m-1988') : $karyawan["ttl"]))) }}" name="ttl">
+                            <input id="ttl" type="text" class="form-control" value="<?php echo Input::old('ttl', strftime("%d-%m-%Y", strtotime($karyawan["ttl"] == '' ? date('d-m-1988') : $karyawan["ttl"]))); ?>" name="ttl">
                         </div>
-                        @if($errors->first('ttl'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('ttl') }}</div>
-                        @endif
+                        <?php if($errors->first('ttl')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('ttl'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Tanggal Aktif</label>
                         <div class="col-sm-6 input-group ">
-                            <input id="tglaktif" type="text" class="form-control" value="{{ Input::old('tglaktif', strftime("%d-%m-%Y", strtotime($karyawan["tglaktif"] == '' ? date('d-m-Y') : $karyawan["tglaktif"]))) }}" name="tglaktif">
+                            <input id="tglaktif" type="text" class="form-control" value="<?php echo Input::old('tglaktif', strftime("%d-%m-%Y", strtotime($karyawan["tglaktif"] == '' ? date('d-m-Y') : $karyawan["tglaktif"]))); ?>" name="tglaktif">
                         </div>
-                        @if($errors->first('tglaktif'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tglaktif') }}</div>
-                        @endif
+                        <?php if($errors->first('tglaktif')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('tglaktif'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">No Telepon</label>
                         <div class="col-sm-6 input-group ">
-                            <input id="notelp" type="text" class="form-control" value="{{ Input::old('notelp', $karyawan["notelp"]) }}" name="notelp">
+                            <input id="notelp" type="text" class="form-control" value="<?php echo Input::old('notelp', $karyawan["notelp"]); ?>" name="notelp">
                         </div>
-                        @if($errors->first('notelp'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('notelp') }}</div>
-                        @endif
+                        <?php if($errors->first('notelp')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('notelp'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">No Rekening 1 </label>
                         <div class="col-sm-6 input-group ">
-                            <input id="ttl" type="text" class="form-control" value="{{ Input::old('norek1', $karyawan["norek1"]) }}" name="norek1">
+                            <input id="ttl" type="text" class="form-control" value="<?php echo Input::old('norek1', $karyawan["norek1"]); ?>" name="norek1">
                         </div>
-                        @if($errors->first('norek1'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('norek1') }}</div>
-                        @endif
+                        <?php if($errors->first('norek1')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('norek1'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">No Rekening 2 </label>
                         <div class="col-sm-6 input-group ">
-                            <input id="ttl" type="text" class="form-control" value="{{ Input::old('norek2', $karyawan["norek2"]) }}" name="norek2">
+                            <input id="ttl" type="text" class="form-control" value="<?php echo Input::old('norek2', $karyawan["norek2"]); ?>" name="norek2">
                         </div>
-                        @if($errors->first('norek2'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('norek2') }}</div>
-                        @endif
+                        <?php if($errors->first('norek2')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('norek2'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Alamat</label>
                         <div class="col-sm-6 input-group ">
-                            <textarea style="width: 83.333%" name="addr1" class="form-control">{{ Input::old('addr1', $karyawan["addr1"]) }}</textarea>
+                            <textarea style="width: 83.333%" name="addr1" class="form-control"><?php echo Input::old('addr1', $karyawan["addr1"]); ?></textarea>
                         </div>
-                        @if($errors->first('addr1'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('addr1') }}</div>
-                        @endif
+                        <?php if($errors->first('addr1')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('addr1'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Komisi Individu</label>
                         <div class="col-sm-3 input-group">                            
                             <div class="input-group">
-                                <input type="number" name="kmindv" class="form-control text-right" value="{{ Input::old('kmindv', $karyawan["kmindv"] == null ? 0 : $karyawan["kmindv"]) }}"/>
+                                <input type="number" name="kmindv" class="form-control text-right" value="<?php echo Input::old('kmindv', $karyawan["kmindv"] == null ? 0 : $karyawan["kmindv"]); ?>"/>
                                 <div class="input-group-addon">%</div>
                             </div>
                         </div>
-                        @if($errors->first('kmindv'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('kmindv') }}</div>
-                        @endif
+                        <?php if($errors->first('kmindv')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('kmindv'); ?></div>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Komisi Tim</label>
                         <div class="col-sm-3 input-group">                            
                             <div class="input-group">
-                                <input type="number" name="kmtim" class="form-control text-right" value="{{ Input::old('kmtim', $karyawan["kmtim"] == null ? 0 : $karyawan["kmtim"]) }}"/>
+                                <input type="number" name="kmtim" class="form-control text-right" value="<?php echo Input::old('kmtim', $karyawan["kmtim"] == null ? 0 : $karyawan["kmtim"]); ?>"/>
                                 <div class="input-group-addon">%</div>
                             </div>
                         </div>
-                        @if($errors->first('kmtim'))
-                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('kmtim') }}</div>
-                        @endif
+                        <?php if($errors->first('kmtim')): ?>
+                        <div class="col-sm-6 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('kmtim'); ?></div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -170,9 +168,9 @@
                         <label class="col-sm-4 control-label">Jabatan</label>
                         <div class="col-sm-6 input-group ">
                             <select class="form-control" name="idjb">
-                                @foreach($jabatans as $jabatan)
-                                <option value="{{ $jabatan->idjb }}" {{ isset($karyawan) == true ? ($karyawan->idjb == $jabatan->idjb ? "selected" : "") : "" }}>{{ $jabatan->nama }}</option>
-                                @endforeach
+                                <?php foreach($jabatans as $jabatan): ?>
+                                <option value="<?php echo $jabatan->idjb; ?>" <?php echo isset($karyawan) == true ? ($karyawan->idjb == $jabatan->idjb ? "selected" : "") : ""; ?>><?php echo $jabatan->nama; ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -187,17 +185,18 @@
                         <label class="col-sm-4 control-label">Foto Lama</label>
                         <div class="col-sm-6 input-group ">
                             <?php if (isset($karyawan)) { ?>
-                                <a href="{{ url("uploads/".$karyawan->pic) }}" data-lightbox="roadtrip"> {{ HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 350)) }} </a>
+                                <a href="<?php echo url("uploads/".$karyawan->pic); ?>" data-lightbox="roadtrip"> <?php echo HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 350)); ?> </a>
                             <?php } else {
                                 ?>
-                                {{ HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 350)) }}
+                                <?php echo HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 350)); ?>
+
                             <?php } ?>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12" style="margin-top: 2%; margin-bottom: 1.5%">
                     <!--<a class="btn btn-info btn-block" id="next" onclick="goToDiv('next','infGaji')"><i class="fa fa-arrow-down"></i> Tambah Informasi Gaji <i class="fa fa-arrow-down"></i></a>-->
-                    <button class="btn btn-info btn-block" type="submit"><h3 style="margin-top: 0px; margin-bottom: 0px;"> <i class="fa fa-save"></i> {{ !isset($karyawan) ? 'Tambah Jam Kerja' : 'Ubah Data Karyawan' }} </h3> </button>
+                    <button class="btn btn-info btn-block" type="submit"><h3 style="margin-top: 0px; margin-bottom: 0px;"> <i class="fa fa-save"></i> <?php echo !isset($karyawan) ? 'Tambah Jam Kerja' : 'Ubah Data Karyawan'; ?> </h3> </button>
                 </div>
             </form>
         </div>
@@ -210,29 +209,29 @@
                 <div class="panel-heading"><i class="fa fa-money"></i> Informasi Gaji</div>
                 <div class="panel-body">
                     <?php if (Session::get("user.tipe") == 0) { ?>
-                        <form class="form-horizontal" action="{{ action("MasterKaryawanController@saveKaryawanGaji", array($idkaryawan)) }}" method="POST">
+                        <form class="form-horizontal" action="<?php echo action("MasterKaryawanController@saveKaryawanGaji", array($idkaryawan)); ?>" method="POST">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Jenis Gaji</label>
                                 <div class="col-sm-5 input-group ">
                                     <select class="form-control" name="idgj">
-                                        @foreach($gajis as $gaji)
-                                        <option value="{{ $gaji->idgj }}">{{ $gaji->jenis }}</option>
-                                        @endforeach
+                                        <?php foreach($gajis as $gaji): ?>
+                                        <option value="<?php echo $gaji->idgj; ?>"><?php echo $gaji->jenis; ?></option>
+                                        <?php endforeach; ?>
                                     </select>
-                                    <input type="hidden" name="idkaryawan" value="{{ $idkaryawan }}"/>
+                                    <input type="hidden" name="idkaryawan" value="<?php echo $idkaryawan; ?>"/>
                                 </div>
-                                @if($errors->first('idgj'))
-                                <div class="col-sm-5 col-sm-offset-1 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilgj') }}</div>
-                                @endif
+                                <?php if($errors->first('idgj')): ?>
+                                <div class="col-sm-5 col-sm-offset-1 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('nilgj'); ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Nominal Gaji</label>
                                 <div class="col-sm-5 input-group ">
                                     <input type="text" class="form-control" value="" name="nilgj">                                    
                                 </div>
-                                @if($errors->first('nilgj'))
-                                <div class="col-sm-5 col-sm-offset-3 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilgj') }}</div>
-                                @endif
+                                <?php if($errors->first('nilgj')): ?>
+                                <div class="col-sm-5 col-sm-offset-3 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('nilgj'); ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"></label>
@@ -257,17 +256,17 @@
                                 </tr>
                             </thead>
                             <tbody class="text-center">
-                                @foreach($karyawan->mg02 as $row)
+                                <?php foreach($karyawan->mg02 as $row): ?>
                                 <tr>
-                                    <td>{{ $row->mg01->jenis }}</td>
+                                    <td><?php echo $row->mg01->jenis; ?></td>
                                     <?php if (Session::get("user.tipe") == 0) { ?>
-                                        <td>Rp.{{ number_format($row->nilgj,0, ',','.') }},-</td>
+                                        <td>Rp.<?php echo number_format($row->nilgj,0, ',','.'); ?>,-</td>
                                         <td>
-                                            <a href="{{ action('MasterKaryawanController@deleteKaryawanGaji', [$row->id]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                            <a href="<?php echo action('MasterKaryawanController@deleteKaryawanGaji', [$row->id]); ?>" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
                                         </td>
                                     <?php } ?>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -278,7 +277,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><big> <i class="fa fa-clock-o"></i> Informasi Jam Kerja </big> </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" action="{{ action("MasterKaryawanController@saveJamKerja", array($idkaryawan)) }}" method="POST">
+                    <form class="form-horizontal" action="<?php echo action("MasterKaryawanController@saveJamKerja", array($idkaryawan)); ?>" method="POST">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Jam Kerja</label>
                             <div class="col-sm-5">
@@ -291,20 +290,20 @@
                                     }
                                     ?>
 
-                                    @foreach($jam_kerjas as $jam_kerja)
-                                    <option value="{{ $jam_kerja->idjk }}">{{ $jam_kerja->jmmsk." - ".$jam_kerja->jmklr }}</option>
-                                    @endforeach
+                                    <?php foreach($jam_kerjas as $jam_kerja): ?>
+                                    <option value="<?php echo $jam_kerja->idjk; ?>"><?php echo $jam_kerja->jmmsk." - ".$jam_kerja->jmklr; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
-                                <input type="hidden" name="idkar" value="{{ $idkaryawan }}"/>
+                                <input type="hidden" name="idkar" value="<?php echo $idkaryawan; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Jenis Jam Kerja</label>
                             <div class="col-sm-4">
-                                <input type="text" id="jenjmkrj" class="form-control siku" value="{{ $jenjmkrj }}" name="" disabled="">
+                                <input type="text" id="jenjmkrj" class="form-control siku" value="<?php echo $jenjmkrj; ?>" name="" disabled="">
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" id="harijmkrj" class="form-control siku" value="{{ $harijmkrj }}" name="" disabled="">
+                                <input type="text" id="harijmkrj" class="form-control siku" value="<?php echo $harijmkrj; ?>" name="" disabled="">
                             </div>
                         </div>
                         <div class="form-group">
@@ -315,12 +314,13 @@
                         </div>
                     </form>
                     <div class="col-sm-12">
-                        @if(Session::has('mk01_failed'))
+                        <?php if(Session::has('mk01_failed')): ?>
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <i class="fa fa-info-circle"></i> {{ $mk01_failed }}
+                            <i class="fa fa-info-circle"></i> <?php echo $mk01_failed; ?>
+
                         </div>    
-                        @endif
+                        <?php endif; ?>
                     </div>
                     <hr>
                     <div class="col-sm-12">
@@ -334,16 +334,16 @@
                                 </tr>
                             </thead>
                             <tbody class="text-center">
-                                @foreach($jam_kerja_karyawans as $jam_kerja_karyawan)
+                                <?php foreach($jam_kerja_karyawans as $jam_kerja_karyawan): ?>
                                 <tr>
-                                    <td>{{ $jam_kerja_karyawan->jmmsk." - ".$jam_kerja_karyawan->jmklr }}</td>
-                                    <td>{{ $jam_kerja_karyawan->tipe == 1 ? "Jam Kerja" : "Jam Istirahat" }}</td>
-                                    <td>{{ $jam_kerja_karyawan->day == "mon-fri" ? "Senin - Jumat" : ($jam_kerja_karyawan->day == "sat" ? "Sabtu" : ($jam_kerja_karyawan->day == "sun" ? "Minggu" : "Semua Hari")) }}</td>
+                                    <td><?php echo $jam_kerja_karyawan->jmmsk." - ".$jam_kerja_karyawan->jmklr; ?></td>
+                                    <td><?php echo $jam_kerja_karyawan->tipe == 1 ? "Jam Kerja" : "Jam Istirahat"; ?></td>
+                                    <td><?php echo $jam_kerja_karyawan->day == "mon-fri" ? "Senin - Jumat" : ($jam_kerja_karyawan->day == "sat" ? "Sabtu" : ($jam_kerja_karyawan->day == "sun" ? "Minggu" : "Semua Hari")); ?></td>
                                     <td>
-                                        <a href="{{ action('MasterKaryawanController@deleteJamKerja', [$jam_kerja_karyawan->id, $jam_kerja_karyawan->mk01_id]) }}" class="btn btn-danger delete siku" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                        <a href="<?php echo action('MasterKaryawanController@deleteJamKerja', [$jam_kerja_karyawan->id, $jam_kerja_karyawan->mk01_id]); ?>" class="btn btn-danger delete siku" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -356,22 +356,22 @@
             <div class="panel panel-default" id="infGaji">
                 <div class="panel-heading"><i class="fa fa-users"></i> Informasi Referral</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" action="{{ action("MasterKaryawanController@saveReferral") }}" method="POST">
+                    <form class="form-horizontal" action="<?php echo action("MasterKaryawanController@saveReferral"); ?>" method="POST">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Nama Karyawan</label>
                             <div class="col-sm-3 input-group ">
                                 <select class="form-control" name="mk01_id_referral">
                                     <?php if (count($karyawanalls) > 0) { ?>
-                                        @foreach($karyawanalls as $karyawanall)
-                                        <option value="{{ $karyawanall->idkar }}">{{ $karyawanall->nama }}</option>
-                                        @endforeach
+                                        <?php foreach($karyawanalls as $karyawanall): ?>
+                                        <option value="<?php echo $karyawanall->idkar; ?>"><?php echo $karyawanall->nama; ?></option>
+                                        <?php endforeach; ?>
                                     <?php } else { ?>
                                         <option value="">Tidak Terdapat Karyawan</option>
                                         <?php
                                     }
                                     ?>
                                 </select>
-                                <input type="hidden" name="idkaryawan" value="{{ $idkaryawan }}"/>
+                                <input type="hidden" name="idkaryawan" value="<?php echo $idkaryawan; ?>"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -411,17 +411,17 @@
                             </thead>
                             <tbody class="text-center">
                                 <?php $no = 1; ?>
-                                @foreach($referrals as $referral)
+                                <?php foreach($referrals as $referral): ?>
                                 <tr>
-                                    <td>{{ $no }}</td>
-                                    <td>{{ $referral->child_name }}</td>
-                                    <td>{{ $referral->flglead }}</td>
+                                    <td><?php echo $no; ?></td>
+                                    <td><?php echo $referral->child_name; ?></td>
+                                    <td><?php echo $referral->flglead; ?></td>
                                     <td>
-                                        <a href="{{ action('MasterKaryawanController@deleteReferral', [$referral->id, $referral->mk01_id_parent]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Referral?"><i class="fa fa-trash"></i></a>
+                                        <a href="<?php echo action('MasterKaryawanController@deleteReferral', [$referral->id, $referral->mk01_id_parent]); ?>" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Referral?"><i class="fa fa-trash"></i></a>
                                             <?php $no++; ?>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -432,9 +432,9 @@
     }
 }
 ?>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.clockpicker').clockpicker({
@@ -490,4 +490,5 @@
         });
     }
 </script> 
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

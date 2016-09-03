@@ -74,11 +74,11 @@ class TransaksiTransferController extends \BaseController {
             "gaji" => $tg01,
             "gajis" => $tg02->getDetailGajiKaryawan($id),
             "infogajis" => $tg01->getJamKerjaInSec($tg01->idkar, $tg01->tglgjsblm),
-            "infohutang" => $th01->getHutangBulan($tg01->idkar, $tg01->tgltg),
-            "infokasbon" => $th01->getKasBonBulan($tg01->idkar, $tg01->tgltg),
-            "infotabungan" => $tt01->getTabunganGaji($tg01->idkar, $tg01->tgltg),
-            "omzetIndividu" => $tz01->getOmzetIndividu($tg01->idkar, $tg01->tgltg),
-            "omzetTim" => $tz01->getOmzetTim($tg01->idkar, $tg01->tgltg),
+            "infohutang" => $th01->getHutangBulan($tg01->idkar, $tg01->tglgjsblm),
+            "infokasbon" => $th01->getKasBonBulan($tg01->idkar, $tg01->tglgjsblm),
+            "infotabungan" => $tt01->getTabunganGaji($tg01->idkar, $tg01->tglgjsblm),
+            "omzetIndividu" => $tz01->getOmzetIndividu($tg01->idkar, $tg01->tglgjsblm),
+            "omzetTim" => $tz01->getOmzetTim($tg01->idkar, $tg01->tglgjsblm),
             "referrals" => $mk01->getReferralKar($tg01->idkar),
             "tg01_success" => $success,
             "tg01_danger" => $danger,
@@ -213,6 +213,7 @@ class TransaksiTransferController extends \BaseController {
         //Input POST
         $idtg = Input::get("idtg");
         $ttlbns = Input::get("ttlbns");
+        $kettrn = Input::get("kettrn");
 
         // 1. setting validasi
         $messages = array(
@@ -223,7 +224,7 @@ class TransaksiTransferController extends \BaseController {
 
         $validator = Validator::make(
                         Input::all(), array(
-                    "ttlbns" => "required"
+                    "ttlbns" => "required",
                         ), $messages
         );
 
@@ -231,6 +232,7 @@ class TransaksiTransferController extends \BaseController {
         if ($validator->passes()) {
             $tg01 = tg01::find($idtg);
             $tg01->ttlbns = $ttlbns;
+            $tg01->kettrn = $kettrn;
             $tg01->save();
 
             Session::flash('tg01_success', 'Gaji Bonus Telah Ditambahkan!');

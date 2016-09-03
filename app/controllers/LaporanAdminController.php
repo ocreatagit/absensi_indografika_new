@@ -493,6 +493,10 @@ class LaporanAdminController extends \BaseController {
             $temp["idkar"] = $karyawan->idkar;
             // Nama Karyawan
             $temp["nama"] = $karyawan->nama;
+            // No Rek 1
+            $temp["norek1"] = $karyawan->norek1;
+            // No Rek 2
+            $temp["norek2"] = $karyawan->norek2;
             // Gaji Bersih
             $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
             // Gaji Kotor
@@ -522,7 +526,6 @@ class LaporanAdminController extends \BaseController {
         }
 
         $data['laporans'] = $arrLaporan;
-
         return View::make('admin.laporan_bulanan_karyawan', $data);
     }
 
@@ -546,6 +549,10 @@ class LaporanAdminController extends \BaseController {
             $temp["idkar"] = $karyawan->idkar;
             // Nama Karyawan
             $temp["nama"] = $karyawan->nama;
+            // No Rek 1
+            $temp["norek1"] = $karyawan->norek1;
+            // No Rek 2
+            $temp["norek2"] = $karyawan->norek2;
             // Gaji Bersih
             $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
             // Gaji Kotor
@@ -608,6 +615,10 @@ class LaporanAdminController extends \BaseController {
                         $temp["idkar"] = $karyawan->idkar;
                         // Nama Karyawan
                         $temp["nama"] = $karyawan->nama;
+                        // No Rek 1
+                        $temp["norek1"] = $karyawan->norek1;
+                        // No Rek 2
+                        $temp["norek2"] = $karyawan->norek2;
                         // Gaji Bersih
                         $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
                         // Gaji Kotor

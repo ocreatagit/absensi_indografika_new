@@ -8,6 +8,7 @@
                 if (in_array(26, $usermatrik)) {
                     if (Session::get("user.tipe") == 0) {
                         ?>
+                        <th class="text-right">No Rekening 1</th>
                         <th class="text-center cell">Gaji Bersih</th>
                         <th class="text-center cell">Gaji Kotor</th>
                         <?php
@@ -27,7 +28,7 @@
         </thead>
         <tbody class="text-center">
             <tr>
-                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 12 : 9) : 9) ?>" class="cell">&nbsp;</td>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 13 : 9) : 9) ?>" class="cell">&nbsp;</td>
             </tr>
             <?php
             $totalOmzet = 0;
@@ -41,6 +42,7 @@
                 if (in_array(26, $usermatrik)) {
                     if (Session::get("user.tipe") == 0) {
                         ?>
+                        <td align="right">{{ $laporan["norek1"] }}</td>
                         <td class="cell">{{ $laporan["gajibersih"] }}</td>
                         <td class="cell">{{ $laporan["gajikotor"] }}</td>
                         <?php
@@ -69,22 +71,22 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 12 : 9) : 9) ?>" class="cell">&nbsp;</td>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 13 : 9) : 9) ?>" class="cell">&nbsp;</td>
             </tr>
             <tr>
                 <?php
                 if (in_array(26, $usermatrik)) {
                     if (Session::get("user.tipe") == 0) {
                         ?>
-                        <td>Total</td>
+                        <td colspan="2">Total Keseluruhan</td>
                         <td>{{ $totalGajiBersih }}</td>
                         <td>{{ $totalGajiKotor }}</td>
-                    <?php
+                        <?php
                     }
                 }
                 ?>
                 <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 7 : 8) : 8) ?>" align="right" class="">Total Omzet</td>
-                <td align="right" class="cell">{{ $totalOmzet }}</td>
+                <td align="right" class="cell">Rp.{{ number_format($totalOmzet, 0, ",", ".") }},-</td>
                 <td class="cell"></td>
             </tr>
         </tbody>

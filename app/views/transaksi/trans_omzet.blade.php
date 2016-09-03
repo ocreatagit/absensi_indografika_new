@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Tanggal Transaksi :</label>
                         <div class="col-sm-3 input-group ">
-                            <input type="text" name="tglomz" id="jmlomz" value="{{ Input::old("tglomz", date('d-m-Y')) }}" class="form-control"/>
+                            <input type="text" name="tglomz" id="tglomz" value="{{ Input::old("tglomz", date('d-m-Y')) }}" class="form-control"/>
                             @if($errors->first('tglomz'))
                             <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tglomz') }}</div>
                             @endif
@@ -115,7 +115,7 @@
         });
         $('#datatable').DataTable();
 
-        $("#ttl").datepicker({
+        $("#tglomz").datepicker({
             inline: true,
             dateFormat: "dd-mm-yy",
             changeYear: true,

@@ -1,34 +1,34 @@
-@extends('template.master')
-
-@section('title')
+<?php $__env->startSection('title'); ?>
 <title>ABSENSI - Input Data</title>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('header')
+<?php $__env->startSection('header'); ?>
 <h1 class="page-header">Input Data
     <small>Pembayaran Gaji</small>
 </h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('main')
+<?php $__env->startSection('main'); ?>
 <div class="row">
     <div class="col-sm-12" style="">
         <div class="panel panel-default">
-            @if(Session::has('tg01_success'))
+            <?php if(Session::has('tg01_success')): ?>
             <div class="alert alert-success alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <i class="fa fa-info-circle"></i> {{ $tg01_success }}
-            </div>    
-            @endif
+                <i class="fa fa-info-circle"></i> <?php echo $tg01_success; ?>
 
-            @if(Session::has('tg01_danger'))
+            </div>    
+            <?php endif; ?>
+
+            <?php if(Session::has('tg01_danger')): ?>
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <i class="fa fa-info-circle"></i> {{ $tg01_danger }}
+                <i class="fa fa-info-circle"></i> <?php echo $tg01_danger; ?>
+
             </div>    
-            @endif
+            <?php endif; ?>
             <div class="panel panel-heading">
-                <a href="{{ action('TransaksiTransferController@index') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
+                <a href="<?php echo action('TransaksiTransferController@index'); ?>" class="btn btn-primary" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -36,19 +36,19 @@
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-sm-offset-2">
-                                    <a href="{{ url("uploads/".$karyawan->pic) }}" data-lightbox="roadtrip"> {{ $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 180)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)) }} </a>
+                                    <a href="<?php echo url("uploads/".$karyawan->pic); ?>" data-lightbox="roadtrip"> <?php echo $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 180)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)); ?> </a>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-5 control-label">Nama : </label>
                                 <div class="col-sm-7 marginTop25">
-                                    <label> {{ $karyawan->nama }} </label>
+                                    <label> <?php echo $karyawan->nama; ?> </label>
                                 </div>
                             </div>
                             <?php
                             $totalgaji = 0;
                             ?>
-                            @foreach($infogajis as $infogaji)
+                            <?php foreach($infogajis as $infogaji): ?>
                             <?php
                             if ($infogaji->jntgh == "Hari" || $infogaji->jntgh == "Jam") {
                                 $jam = floor($infogaji->jmtgh / 3600);
@@ -64,7 +64,7 @@
                             }
                             $totalgaji += $totalTagih;
                             ?>
-                            @endforeach
+                            <?php endforeach; ?>
                             <?php
 //                            echo $totalgaji; exit;
                             $totalgaji += (($karyawan->kmindv * $omzetIndividu) / 100);
@@ -88,7 +88,7 @@
                             <div class="form-group blue">
                                 <label class="col-sm-5 control-label">Total Gaji : </label>
                                 <div class="col-sm-2 marginTop25">
-                                    <label> Rp.{{ number_format($totalgaji,0,',','.') }},- </label>
+                                    <label> Rp.<?php echo number_format($totalgaji,0,',','.'); ?>,- </label>
                                 </div>
                             </div>
                             <?php
@@ -110,49 +110,49 @@
                                 <label class="col-sm-5 control-label">Total Gaji Bersih : </label>
                                 <div class="col-sm-2 marginTop25">
 
-                                    <label> Rp.{{ number_format(($totalgaji + $gaji->ttlbns) - $totalpinjaman,0,',','.') }},- </label>
+                                    <label> Rp.<?php echo number_format(($totalgaji + $gaji->ttlbns) - $totalpinjaman,0,',','.'); ?>,- </label>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="col-sm-8">
-                        <form class="form-horizontal" action="{{ action("TransaksiTransferController@savebonus") }}" method="POST">
+                        <form class="form-horizontal" action="<?php echo action("TransaksiTransferController@savebonus"); ?>" method="POST">
                             <h3 class="page-header"><i class="fa fa-info-circle"></i> Informasi Slip Gaji</h3>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Nomor Pembayaran Gaji</label>
                                 <div class="col-sm-3 input-group ">
-                                    <input type="text" class="form-control" value="{{ $gaji->nortg }}" name="nortg" id="nortg" disabled=""/>
+                                    <input type="text" class="form-control" value="<?php echo $gaji->nortg; ?>" name="nortg" id="nortg" disabled=""/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Tanggal Pembayaran Gaji</label>
                                 <div class="col-sm-5 input-group ">
-                                    <input type="text" class="form-control" value="{{ strftime("%d-%m-%Y", strtotime($gaji->tgltg)) }}" name="tgltg" id="tgltg" disabled=""/>
+                                    <input type="text" class="form-control" value="<?php echo strftime("%d-%m-%Y", strtotime($gaji->tgltg)); ?>" name="tgltg" id="tgltg" disabled=""/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Gaji Bonus</label>
                                 <div class="col-sm-5 input-group ">
-                                    <input type="hidden" name="idtg" value="{{ $gaji->idtg }}"/>
-                                    <input type="text" class="form-control" value="{{ Input::old('ttlbns', number_format($gaji->ttlbns, 0, ',', '')) }}" name="ttlbns" {{ $gaji->status == 'Y' ? 'disabled=""' : '' }}/>
+                                    <input type="hidden" name="idtg" value="<?php echo $gaji->idtg; ?>"/>
+                                    <input type="text" class="form-control" value="<?php echo Input::old('ttlbns', number_format($gaji->ttlbns, 0, ',', '')); ?>" name="ttlbns" <?php echo $gaji->status == 'Y' ? 'disabled=""' : ''; ?>/>
                                 </div>
-                                @if($errors->first('ttlbns'))
-                                <div class="col-sm-5 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('ttlbns') }}</div>
-                                @endif
+                                <?php if($errors->first('ttlbns')): ?>
+                                <div class="col-sm-5 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('ttlbns'); ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Keterangan</label>
                                 <div class="col-sm-5 input-group ">
-                                    <textarea class="form-control siku" name="kettrn">{{ Input::old('kettrn', $gaji->kettrn) }}</textarea>
+                                    <textarea class="form-control siku" name="kettrn"><?php echo Input::old('kettrn', $gaji->kettrn); ?></textarea>
                                 </div>
-                                @if($errors->first('ttlbns'))
-                                <div class="col-sm-5 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('ttlbns') }}</div>
-                                @endif
+                                <?php if($errors->first('ttlbns')): ?>
+                                <div class="col-sm-5 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('ttlbns'); ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></label>
                                 <div class="col-sm-5 input-group ">
-                                    <button type="submit" value="btn_submit" name="btn_submit" class="btn btn-primary" {{ $gaji->status == 'Y' ? 'disabled=""' : '' }}> Simpan Gaji</button>
+                                    <button type="submit" value="btn_submit" name="btn_submit" class="btn btn-primary" <?php echo $gaji->status == 'Y' ? 'disabled=""' : ''; ?>> Simpan Gaji</button>
                                 </div>
                             </div>
                         </form> 
@@ -166,7 +166,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Total Kehadiran : </label>
                                         <div class="col-sm-7 marginTop08">
-                                            <label>{{ $kehadiran }} Hari</label>
+                                            <label><?php echo $kehadiran; ?> Hari</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -177,7 +177,7 @@
                                             $durasiBekerjaMenit = $durasiBekerja % 3600;
                                             $durasiBekerjaMenit = floor(($durasiBekerjaMenit / 60));
                                             ?>                                    
-                                            <label>{{ $durasiBekerjaJam }} Jam {{ $durasiBekerjaMenit }} Menit </label>
+                                            <label><?php echo $durasiBekerjaJam; ?> Jam <?php echo $durasiBekerjaMenit; ?> Menit </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -188,19 +188,19 @@
                                             $durasiLemburMenit = $durasiLemburJam % 3600;
                                             $durasiLemburMenit = floor(($durasiLemburMenit / 60));
                                             ?>                                    
-                                            <label>{{ $durasiLemburJam }} Jam {{ $durasiLemburMenit }} Menit </label>
+                                            <label><?php echo $durasiLemburJam; ?> Jam <?php echo $durasiLemburMenit; ?> Menit </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Terlambat : </label>
                                         <div class="col-sm-7 marginTop08">           
-                                            <label>{{ $durasiLambat == '' ? 0 : $durasiLambat }} Menit </label>
+                                            <label><?php echo $durasiLambat == '' ? 0 : $durasiLambat; ?> Menit </label>
                                         </div>
                                     </div>
                                     <div class="form-group blue">
                                         <label class="col-sm-4 control-label">Total Omzet Individu : </label>
                                         <div class="col-sm-7 marginTop08">
-                                            <label>Rp.{{ number_format($omzetIndividu,0,',','.') }},-</label>
+                                            <label>Rp.<?php echo number_format($omzetIndividu,0,',','.'); ?>,-</label>
                                         </div>
                                     </div>
                                     <div class="form-group blue">
@@ -209,10 +209,10 @@
                                             <?php
                                             if (count($referrals) > 1) {
                                                 ?>
-                                                <label>Rp.{{ number_format($omzetTim,0,',','.') }},-</label>
+                                                <label>Rp.<?php echo number_format($omzetTim,0,',','.'); ?>,-</label>
                                             <?php } else {
                                                 ?>
-                                                <label>Rp.{{ number_format(0,0,',','.') }},-</label>
+                                                <label>Rp.<?php echo number_format(0,0,',','.'); ?>,-</label>
                                                 <?php
                                             }
                                             ?>
@@ -229,9 +229,9 @@
                                     // Deklarasi variable GajiKotor
                                     $gajikotor = 0;
                                     ?>
-                                    @foreach($infogajis as $infogaji)
+                                    <?php foreach($infogajis as $infogaji): ?>
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">{{ $infogaji->jenis }} : </label>
+                                        <label class="col-sm-4 control-label"><?php echo $infogaji->jenis; ?> : </label>
                                         <div class="col-sm-7 marginTop08">
                                             <?php
                                             if ($infogaji->jntgh == "Hari" || $infogaji->jntgh == "Jam") {
@@ -250,14 +250,14 @@
                                             // Akumulasi nilai gaji kotor
                                             $gajikotor += $totalTagih;
                                             ?>
-                                            <label>Rp.{{ number_format($totalTagih,0,',','.') }},-</label>
+                                            <label>Rp.<?php echo number_format($totalTagih,0,',','.'); ?>,-</label>
                                         </div>
                                     </div>
-                                    @endforeach
+                                    <?php endforeach; ?>
                                     <div class="form-group blue">
                                         <label class="col-sm-4 control-label">Komisi Individu : </label>
                                         <div class="col-sm-7 marginTop08">           
-                                            <label>Rp.{{ number_format((($karyawan->kmindv * $omzetIndividu) / 100),0,',','.') }},-</label>
+                                            <label>Rp.<?php echo number_format((($karyawan->kmindv * $omzetIndividu) / 100),0,',','.'); ?>,-</label>
                                             <?php
                                             $gajikotor += (($karyawan->kmindv * $omzetIndividu) / 100);
                                             ?>
@@ -279,12 +279,12 @@
                                                     $omzetTim = 0;
                                                 }
                                                 ?>
-                                                <label>Rp.{{ number_format((($karyawan->kmtim * $omzetTim) / 100),0,',','.') }},-</label>
+                                                <label>Rp.<?php echo number_format((($karyawan->kmtim * $omzetTim) / 100),0,',','.'); ?>,-</label>
                                                 <?php
                                                 $gajikotor += (($karyawan->kmtim * $omzetTim) / 100);
                                             } else {
                                                 ?>
-                                                <label>Rp.{{ number_format(0,0,',','.') }},-</label>
+                                                <label>Rp.<?php echo number_format(0,0,',','.'); ?>,-</label>
                                                 <?php
                                             }
                                             ?>
@@ -293,7 +293,7 @@
                                     <div class="form-group blue">
                                         <label class="col-sm-4 control-label">Total Gaji Kotor : </label>
                                         <div class="col-sm-7 marginTop08">           
-                                            <label>Rp.{{ number_format($gajikotor,0,',','.') }},-</label>
+                                            <label>Rp.<?php echo number_format($gajikotor,0,',','.'); ?>,-</label>
                                         </div>
                                     </div>
                                 </div>
@@ -309,25 +309,25 @@
                                             <?php
                                             $total = count($infohutang) != 0 ? $infohutang[0]->nilph : 0;
                                             ?>
-                                            <label>Rp.{{ number_format($total,0,',','.') }},-</label> <?php if (count($infohutang) != 0) { ?>(Angsuran {{ strftime("%d-%b-%Y", strtotime($infohutang[0]->tglph)) }})<?php } ?>
+                                            <label>Rp.<?php echo number_format($total,0,',','.'); ?>,-</label> <?php if (count($infohutang) != 0) { ?>(Angsuran <?php echo strftime("%d-%b-%Y", strtotime($infohutang[0]->tglph)); ?>)<?php } ?>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Kasbon : </label>
                                         <div class="col-sm-7 marginTop08">
-                                            <label>Rp.{{ number_format(($infokasbon != null ? $infokasbon[0]->nilph : 0),0,',','.') }},-</label>
+                                            <label>Rp.<?php echo number_format(($infokasbon != null ? $infokasbon[0]->nilph : 0),0,',','.'); ?>,-</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Tabungan : </label>
                                         <div class="col-sm-7 marginTop08">
-                                            <label>Rp.{{ number_format(($infotabungan != null ? $infotabungan[0]->niltb : 0),0,',','.') }},-</label>
+                                            <label>Rp.<?php echo number_format(($infotabungan != null ? $infotabungan[0]->niltb : 0),0,',','.'); ?>,-</label>
                                         </div>
                                     </div>
                                     <div class="form-group blue">
                                         <label class="col-sm-4 control-label">Total Pinjaman : </label>
                                         <div class="col-sm-7 marginTop08">                                            
-                                            <label>Rp.{{ number_format($totalpinjaman,0,',','.') }},-</label>
+                                            <label>Rp.<?php echo number_format($totalpinjaman,0,',','.'); ?>,-</label>
                                         </div>
                                     </div>
                                 </div>
@@ -339,9 +339,9 @@
         </div>
     </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.clockpicker').clockpicker({
@@ -356,7 +356,9 @@
         });
     });
 </script> 
-@stop
+<?php $__env->stopSection(); ?>
 
 
 
+
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
