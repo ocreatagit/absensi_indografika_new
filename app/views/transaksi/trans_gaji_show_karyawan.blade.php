@@ -28,10 +28,11 @@
             </div>    
             @endif
             <form action="{{ action("TransaksiGajiController@saveall") }}" method="POST">
-                <div class="panel-heading">
-                    <a href="{{ action('TransaksiGajiController@index') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
+                <div class="panel panel-heading">
+                    <a href="{{ action('TransaksiGajiController@index') }}" class="btn btn-primary siku" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
                     <div class="pull-right">
-                        <button class="btn btn-success siku" type="submit" value="bayar" name="btn_submit" data-toggle="tooltip" data-placement="left" title="Buat Transaksi yang Dipilih?"><i class="fa fa-check-circle"></i></button>
+                        <button class="btn btn-success siku" type="submit" value="bayar" name="btn_submit" data-toggle="tooltip" data-placement="left" title="Buat Transaksi yang Dipilih?"><i class="fa fa-check-circle"></i> Buat Slip Gaji</button>
+                        <a href="{{ action('LaporanAdminController@laporan_karyawan') }}" data-toggle="tooltip" data-placement="left" title="Lihat Laporan Bulanan Karyawan" class="btn btn-primary siku"><i class="fa fa-info-circle"></i> Laporan Karyawan</a>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -39,53 +40,51 @@
                         <b><span id="text_selected"></span> </b>
                     </div>
 
-                    <div class="col-sm-12">
-                        <div style="height: 400px; overflow-y: scroll;">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr style="">
-                                        <th class="text-left">No</th>
-                                        <th class="text-left">Foto</th>
-                                        <th class="text-left">Nama</th>
-                                        <th class="text-left">Username</th>
-                                        <th class="text-left">Tgl Pembayaran <br> Gaji Terakhir </th>
-                                        <th class="text-center">Opsi</th>
-                                        <th class="text-center">Pilih <input type="checkbox" name="chk" id="chk"/> </th>
-                                    </tr>  
-                                </thead>
-                                <tbody>
-                                    <?php $no = 1; ?>
-                                    @foreach($karyawans as $karyawan)
-                                    <?php if ($karyawan->jnsusr != 0) { ?>
-                                        <tr>
-                                            <td style="width: 5%;">{{ $no }}</td>
-                                            <td style="width: 10%;">
-                                                <a href="{{ url("uploads/".$karyawan->pic) }}" data-lightbox="roadtrip"> {{ $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 100)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 100)) }} 
-                                                </a> </td>
-                                            <td>{{ $karyawan->nama }}</td>
-                                            <td>{{ $karyawan->usernm }}</td>
-                                            <td>{{ strftime("%d-%b-%Y", strtotime($karyawan->tglgj)) }}</td>
-                                            <td class="text-center">
-                                                <a href="{{ action('TransaksiGajiController@create', $karyawan->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?">Bayar Gaji</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <?php if ((int) date("m") == (int) strftime("%m", strtotime($karyawan->tglgj))) {
-                                                    ?>
-                                                    <input type="checkbox" name="" class="siku" disabled=""/>
-                                                    <?php
-                                                } else {
-                                                    ?>
-                                                    <input type="checkbox" onchange="getSelectedItem()" name="chkitem[]" class="chkitem siku" value="{{ $karyawan->idkar }}"/>
-                                                <?php }
+                    <div class="col-sm-12" style="">
+                        <table class="table table-bordered table-hover" id="datatable">
+                            <thead style="">
+                                <tr style="">
+                                    <th class="text-left">No</th>
+                                    <th class="text-left">Foto</th>
+                                    <th class="text-left">Nama</th>
+                                    <th class="text-left">Username</th>
+                                    <th class="text-left">Tgl Pembayaran <br> Gaji Terakhir </th>
+                                    <th class="text-center">Opsi</th>
+                                    <th class="text-center">Pilih <input type="checkbox" name="chk" id="chk"/> </th>
+                                </tr>  
+                            </thead>
+                            <tbody>
+                                <?php $no = 1; ?>
+                                @foreach($karyawans as $karyawan)
+                                <?php if ($karyawan->jnsusr != 0) { ?>
+                                    <tr>
+                                        <td style="width: 5%;">{{ $no }}</td>
+                                        <td style="width: 10%;">
+                                            <a href="{{ url("uploads/".$karyawan->pic) }}" data-lightbox="roadtrip"> {{ $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 100)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 100)) }} 
+                                            </a> </td>
+                                        <td>{{ $karyawan->nama }}</td>
+                                        <td>{{ $karyawan->usernm }}</td>
+                                        <td>{{ strftime("%d-%b-%Y", strtotime($karyawan->tglgj)) }}</td>
+                                        <td class="text-center">
+                                            <a href="{{ action('TransaksiGajiController@create', $karyawan->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?">Bayar Gaji</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <?php if ((int) date("m") == (int) strftime("%m", strtotime($karyawan->tglgj))) {
                                                 ?>
-                                            </td>
-                                            <?php $no++; ?>
-                                        </tr>
-                                    <?php } ?>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                                <input type="checkbox" name="" class="siku" disabled=""/>
+                                                <?php
+                                            } else {
+                                                ?>
+                                                <input type="checkbox" onchange="getSelectedItem()" name="chkitem[]" class="chkitem siku" value="{{ $karyawan->idkar }}"/>
+                                            <?php }
+                                            ?>
+                                        </td>
+                                        <?php $no++; ?>
+                                    </tr>
+                                <?php } ?>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </form>
@@ -97,18 +96,20 @@
 @section('script')
 <script type="text/javascript">
     $('#datatable').DataTable({
-        "paging": true, // next page
+        "paging": false, // next page
         "ordering": true, // order by at header 
-        "info": false
+        "info": false,
+        "bScrollAutoCss": true,
+        "bScrollCollapse": true,
+        fixedHeader: {
+            headerOffset: $('.navbar').outerHeight()
+        },
     });
-    
+
     $("#lbl_selected").hide();
 
     $("#chk").change(function () {
         if (this.checked) {
-//            $('input:checkbox[class=chkitem]:checked').each(function () {
-//                console.log("1");
-//            });
             $(".chkitem").prop('checked', true);
             $("#lbl_selected").show();
             $("#text_selected").html($(".chkitem:checked").length + " Item Selected");

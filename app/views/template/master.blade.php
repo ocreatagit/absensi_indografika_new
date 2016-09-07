@@ -18,6 +18,10 @@
         {{ HTML::style('alertifyjs/css/alertify.min.css') }}
         {{ HTML::style('jquery-ui/jquery-ui.min.css') }}
         {{ HTML::style('lightbox/css/lightbox.css') }}
+        
+        <link media="all" type="text/css" rel="stylesheet" href="{{ URL::asset('css/fixedHeader.min.css') }}">
+        
+        
         <style type="text/css">
             .ui-datepicker-year, .ui-datepicker-month{
                 color: black;
@@ -243,13 +247,15 @@
 
     </div>
 
-    {{ HTML::script('js/jquery.js') }}
+    {{-- HTML::script('js/jquery.js') --}}
+    {{ HTML::script('js/jquery-1.12.3.js') }}
     {{ HTML::script('js/bootstrap.min.js') }}
     {{ HTML::script('js/clockpicker.js') }}
     {{ HTML::script('js/jquery.dataTables.min.js') }}
     {{ HTML::script('alertifyjs/alertify.min.js') }}
     {{ HTML::script('jquery-ui/jquery-ui.min.js') }}
     {{ HTML::script('lightbox/js/lightbox.js') }}
+    {{ HTML::script('js/fixedHeader.min.js') }}
 
     <script>
         alertify.defaults.transition = "slide";
