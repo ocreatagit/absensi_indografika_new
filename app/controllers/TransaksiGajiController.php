@@ -50,7 +50,7 @@ class TransaksiGajiController extends \BaseController {
                 "tglgaji" => date('Y-m-t', strtotime("+1 months", strtotime($karyawan->tglgj))),
                 "usermatrik" => User::getUserMatrix()
             );
-            dd($data["gajis"]);
+            //dd($data["gajis"]);
             return View::make('transaksi.trans_gaji_karyawan', $data);
         }
     }

@@ -167,7 +167,7 @@ class Presensi {
                                 CASE WHEN
                                         sum(tableAbsen.lbt) = 0 
                                     THEN 
-                                        '-' 
+                                        CONCAT(FLOOR((sum(tableAbsen.lbt)+ (sum(jamkembali) - sum(jamkeluar) - 3600)/60)/60), ' Jam ' , (sum(tableAbsen.lbt)+ floor(sum(jamkembali)/60) - floor(sum(jamkeluar)/60) - 60)%60, ' Menit') 
                                     ELSE 
                                         CONCAT(FLOOR((sum(tableAbsen.lbt)+ (sum(jamkembali) - sum(jamkeluar) - 3600)/60)/60), ' Jam ' , (sum(tableAbsen.lbt)+ floor(sum(jamkembali)/60) - floor(sum(jamkeluar)/60) - 60)%60, ' Menit') 
                                 END

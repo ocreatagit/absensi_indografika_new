@@ -253,30 +253,80 @@ class tg01 extends Eloquent {
     }
 
     function getKeterlambatan($date, $idkar) {
-        $sqlmasuk = "SELECT sum( CASE WHEN (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(mj02.jmmsk, '%H:%i'), DATE_FORMAT(ta02.tglmsk, '%H:%i')))/60 as integer)) < 0 THEN 0 ELSE (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(mj02.jmmsk, '%H:%i'), DATE_FORMAT(ta02.tglmsk, '%H:%i')))/60 as integer)) END ) as lbt  FROM mk01
-                RIGHT JOIN mj03 ON mj03.mk01_id = mk01.idkar
-                RIGHT JOIN mj02 ON mj02.idjk = mj03.mj02_id
-                RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
+        $sqlmasuk = "SELECT sum( 
+                                CASE WHEN (
+                                    CAST(
+                                        TIME_TO_SEC(
+                                            TIMEDIFF(DATE_FORMAT(ta02.tglmsk, '%H:%i'), DATE_FORMAT(mj02.jmmsk, '%H:%i'))
+                                        )/60 as integer)
+                                ) < 0 
+                                THEN 
+                                0 
+                                ELSE (
+                                    CAST(
+                                        TIME_TO_SEC(
+                                            TIMEDIFF(DATE_FORMAT(ta02.tglmsk, '%H:%i'), DATE_FORMAT(mj02.jmmsk, '%H:%i'))
+                                        )/60 as integer)
+                                ) 
+                                END
+                            ) as lbt
+                    FROM mk01
+                    INNER JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                    INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                    INNER JOIN mj02 ON mj02.idjk = ta01.idjk
                 WHERE MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND ta02.abscd = 0 AND mj02.tipe = 1 AND mk01.idkar = $idkar"
         ;
-        $sqlpulang = "SELECT sum( CASE WHEN (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(mj02.jmklr, '%H:%i'), DATE_FORMAT(ta02.tglmsk, '%H:%i')))/60 as integer)) < 0 THEN 0 ELSE (CAST(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(mj02.jmklr, '%H:%i'), DATE_FORMAT(ta02.tglmsk, '%H:%i')))/60 as integer)) END ) as lbt  FROM mk01
-                RIGHT JOIN mj03 ON mj03.mk01_id = mk01.idkar
-                RIGHT JOIN mj02 ON mj02.idjk = mj03.mj02_id
-                RIGHT JOIN ta02 ON ta02.mk01_id = mk01.idkar
-                WHERE MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND ta02.abscd = 0 AND mj02.tipe = 1 AND mk01.idkar = $idkar"
+        $sqlpulang = "SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, 0 as jamkeluar, 0 as jamkembali,  UNIX_TIMESTAMP(ta02.tglmsk) as jampulang, 0 as jamlemburmasuk, 0 as jamlemburpulang,
+                            sum( 
+                                CASE WHEN (
+                                    CAST(
+                                        TIME_TO_SEC(
+                                            TIMEDIFF(DATE_FORMAT(mj02.jmklr, '%H:%i'), DATE_FORMAT( ta02.tglmsk, '%H:%i'))
+                                        )/60 as integer)
+                                    ) < 0 
+                                THEN 
+                                    0 
+                                ELSE (
+                                    CAST(
+                                        TIME_TO_SEC(
+                                            TIMEDIFF(DATE_FORMAT(mj02.jmklr, '%H:%i'), DATE_FORMAT( ta02.tglmsk, '%H:%i'))
+                                        )/60 as integer)
+                                    ) 
+                                END
+                            ) as lbt
+                        FROM mk01
+                        INNER JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        INNER JOIN mj02 ON mj02.idjk = ta01.idjk
+                WHERE MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND ta02.abscd = 1 AND mj02.tipe = 1 AND mk01.idkar = $idkar"
         ;
-        $sqlistirahat = "SELECT IFNULL(SUM(jumlahIstirahat.lbt),0) as lbt
-                FROM( 
-                    SELECT tabel_istirahat.idkar, CAST((ABS(CAST((TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(tabel_istirahat.jamkeluar, '%H:%i'), DATE_FORMAT(tabel_istirahat.jammasuk, '%H:%i')))/60)-60 as integer))+CAST((TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(tabel_istirahat.jamkeluar, '%H:%i'), DATE_FORMAT(tabel_istirahat.jammasuk, '%H:%i')))/60)-60 as integer))/2 as integer) as lbt 
-                    FROM ( 
-                        SELECT mk01.idkar, 
-                                (SELECT a.tglmsk FROM ta02 a WHERE a.mk01_id = mk01.idkar AND a.abscd = 2 AND MONTH(a.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(a.tglmsk) = " . date("Y", strtotime($date)) . ") as jammasuk, 
-                                (SELECT a.tglmsk FROM ta02 a WHERE a.mk01_id = mk01.idkar AND a.abscd = 3 AND MONTH(a.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(a.tglmsk) = " . date("Y", strtotime($date)) . ") as jamkeluar 
-                        FROM mk01 
-                        WHERE mk01.idkar = 2 
-                    ) tabel_istirahat 
-                ) jumlahIstirahat";
-        //dd($sql);
+        $sqlistirahat = "SELECT sum(tabelluar.lbt) as lbt
+from(
+SELECT 
+                        CASE WHEN SUM(jamkeluar) = 0 THEN '-' ELSE from_unixtime(SUM(jamkeluar), '%H:%i') END as jamkeluar, 
+                        CASE WHEN SUM(jamkembali) = 0 THEN '-' ELSE from_unixtime(SUM(jamkembali), '%H:%i') END as jamkembali,
+                        CASE WHEN 
+                                sum(jamkembali) - sum(jamkeluar) > 3600
+                             THEN
+                                (floor(sum(jamkembali)/60) - floor(sum(jamkeluar)/60) - 60)%60
+                             ELSE
+                                0
+                        END as lbt
+                FROM (
+                        SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, UNIX_TIMESTAMP(ta02.tglmsk) as jamkeluar, 0 as jamkembali, 0 as jampulang, 0 as jamlemburmasuk, 0 as jamlemburpulang, 0 as lbt
+                        FROM mk01
+                        INNER JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        WHERE ta02.abscd = 2 AND MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND mk01.idkar = $idkar
+                        UNION
+                        SELECT ta01.idabs, ta01.tglabs, mk01.idkar, mk01.nama, 0 as jammasuk, 0 as jamkeluar, UNIX_TIMESTAMP(ta02.tglmsk) as jamkembali, 0 as jampulang, 0 as jamlemburmasuk, 0 as jamlemburpulang, 0 as lbt
+                        FROM mk01
+                        INNER JOIN ta02 ON ta02.mk01_id = mk01.idkar
+                        INNER JOIN ta01 ON ta01.idabs = ta02.ta01_id
+                        WHERE ta02.abscd = 3 AND MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND mk01.idkar = $idkar
+                         ) as tableAbsen
+                         GROUP by tableAbsen.idabs, tableAbsen.tglabs, tableAbsen.idkar, tableAbsen.nama)as tabelluar";
+
         $count = DB::select(DB::raw($sqlmasuk));
         $count1 = DB::select(DB::raw($sqlpulang));
         $count2 = DB::select(DB::raw($sqlistirahat));
@@ -298,9 +348,10 @@ class tg01 extends Eloquent {
         } else {
             $count2 = 0;
         }
-
+        //dd($sqlmasuk."<br><br>".$sqlpulang."<br><br>".$sqlistirahat);
         return $count + $count1 + $count2;
     }
+    
 
     function checkExistHutangKaryawan($date, $idkar) {
         $th02 = DB::table('th02')

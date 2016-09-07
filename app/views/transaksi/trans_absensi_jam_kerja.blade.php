@@ -115,13 +115,13 @@
                         <tbody class="text-center">
                             <?php foreach ($presensies as $pres) { ?>
                                 <tr>
-                                    <td><?= date("d-m-Y", strtotime($pres[2])) ?></td>
-                                    <td><?= $pres[3] ?></td>
-                                    <td><?= $pres[5] ?></td>
-                                    <td><?= $pres[6] ?></td>
-                                    <td><?= $pres[4] ?></td>
-                                    <td><?= $pres[7] ?></td>
-                                    <td><?= $pres[8] ?></td>
+                                    <td><?= date("d-m-Y", strtotime($pres->tglabs)) ?></td>
+                                    <td><?= $pres->jammasuk ?></td>
+                                    <td><?= $pres->jamkeluar ?></td>
+                                    <td><?= $pres->jamkembali ?></td>
+                                    <td><?= $pres->jampulang ?></td>
+                                    <td><?= $pres->jamlemburmasuk ?></td>
+                                    <td><?= $pres->jamlemburpulang ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
