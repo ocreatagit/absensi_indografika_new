@@ -43,15 +43,16 @@
                     <div class="col-sm-2 input-group pull-left">
                         <input type="hidden" name="idgj[]" value="{{ $gaji->idgj }}" class="form-control"/>
                         <?php
+//                        echo $gaji->jmtgh."<br>";
                         if ($gaji->jntgh == "Hari" || $gaji->jntgh == "Jam") {
                             $jam = floor($gaji->jmtgh / 3600);
-                            $menit = $jam % 3600;
-                            $menit = floor(($menit / 60));
+                            $menit = ($gaji->jmtgh / 60) % 60;
+//                            $menit = floor(($menit / 60));
                         } else {
                             $jam = $gaji->jmtgh;
                         }
                         ?>
-                        <input type="text" name="nominalgaji[]" value="{{ $gaji->jmtgh == null ? 0 : $gaji->hari }}" class="form-control" disabled=""/>
+                        <input type="text" name="nominalgaji[]" value="{{ $gaji->hari == 0 ? ($menit < 30 ? $jam : ($jam + 0.5)) : $gaji->hari }}" class="form-control" readonly=""/>
                         <div class="input-group-addon">{{ $gaji->jntgh }}</div>
                     </div>
                     <label class="col-sm-3" style="margin-top: 0.5%">

@@ -46,7 +46,7 @@ class TransaksiGajiController extends \BaseController {
             $karyawan = mk01::find($id);
             $data = array(
                 "karyawan" => $karyawan,
-                "gajis" => $tg01->getJumlahHariGaji($id, $karyawan->tglgj),
+                "gajis" => $tg01->getJamKerjaInSec($id, $karyawan->tglgj),
                 "tglgaji" => date('Y-m-t', strtotime("+1 months", strtotime($karyawan->tglgj))),
                 "usermatrik" => User::getUserMatrix()
             );
@@ -74,6 +74,8 @@ class TransaksiGajiController extends \BaseController {
                 $mk01 = mk01::find($idkar);
                 $tgltg = Input::get("tgltg");
 
+//                dd($nominalgj);
+
                 $tg01 = new tg01();
                 $idtg = $tg01->getAutoIncrement();
 
@@ -89,7 +91,7 @@ class TransaksiGajiController extends \BaseController {
                     $tg02 = new tg02();
                     $tg02->tg01_id = $idtg;
                     $tg02->mg01_id = $idgj[$i];
-                    $tg02->jmtgh = $nominalgj[$i];
+                    $tg02->jmtgh = $nominalgj[$i] * 1.0;
                     $tg02->nmlgj = $nilgj;
                     $tg02->save();
 
@@ -257,7 +259,7 @@ class TransaksiGajiController extends \BaseController {
                 foreach ($chkitem as $idkar) {
                     $karyawan = mk01::find($idkar);
                     $tglgj = date('Y-m-d', strtotime("+1 months", strtotime($karyawan->tglgj)));
-                    $gajis = $tg01->getJumlahHariGaji($idkar, $karyawan->tglgj);
+                    $gajis = $tg01->getJamKerjaInSec($idkar, $karyawan->tglgj);
 
                     $tg01 = new tg01();
                     $idtg = $tg01->getAutoIncrement();
@@ -271,7 +273,18 @@ class TransaksiGajiController extends \BaseController {
 
                     foreach ($gajis as $gaji) {
                         $idgj = $gaji->idgj;
-                        $jmltgh = $gaji->jmtgh == null ? 0 : $gaji->hari;
+                        if ($gaji->jntgh == "Hari" || $gaji->jntgh == "Jam") {
+                            $jam = floor($gaji->jmtgh / 3600);
+                            $menit = ($gaji->jmtgh / 60) % 60;
+                        } else {
+                            $jam = $gaji->jmtgh;
+                        }
+                        if ($gaji->hari == 0) {
+                            $jam = ($menit < 30 ? $jam : ($jam + 0.5));
+                            $jmltgh = $jam;
+                        } else {
+                            $jmltgh = $gaji->hari;
+                        }
 
                         $nilgj = mg02::whereRaw('mk01_id = ? and mg01_id = ?', array($idkar, $idgj))->first()->nilgj;
                         $tg02 = new tg02();
@@ -328,7 +341,7 @@ class TransaksiGajiController extends \BaseController {
         } else {
             Session::flash('tg01_danger', "There is no Available Payment!)");
         }
-        return Redirect::to('inputdata/index');
+        return Redirect::to('inputdata/gaji');
     }
 
 }

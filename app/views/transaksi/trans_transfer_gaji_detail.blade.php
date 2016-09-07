@@ -52,17 +52,17 @@
                             <?php
                             if ($infogaji->jntgh == "Hari" || $infogaji->jntgh == "Jam") {
                                 $jam = floor($infogaji->jmtgh / 3600);
-                                $menit = $infogaji->jmtgh % 3600;
-                                $menit = floor(($menit / 60));
+                                $menit = ($infogaji->jmtgh / 60) % 60;
                             } else {
-                                $jam = $gaji->jmtgh;
+                                $jam = $infogaji->jmtgh;
                             }
-                            if ($infogaji->jmtgh == null) {
-                                $totalTagih = 0;
+                            if ($infogaji->hari == 0) {
+                                $jam = ($menit < 30 ? $jam : ($jam + 0.5));
+                                $totalTagih = $jam * $infogaji->nilgj;
                             } else {
                                 $totalTagih = $infogaji->hari * $infogaji->nilgj;
                             }
-                            $totalgaji += $totalTagih;                            
+                            $totalgaji += $totalTagih;
                             ?>
                             @endforeach
                             <?php
@@ -227,13 +227,13 @@
                                             <?php
                                             if ($infogaji->jntgh == "Hari" || $infogaji->jntgh == "Jam") {
                                                 $jam = floor($infogaji->jmtgh / 3600);
-                                                $menit = $infogaji->jmtgh % 3600;
-                                                $menit = floor(($menit / 60));
+                                                $menit = ($infogaji->jmtgh / 60) % 60;
                                             } else {
-                                                $jam = $gaji->jmtgh;
+                                                $jam = $infogaji->jmtgh;
                                             }
-                                            if ($infogaji->jmtgh == null) {
-                                                $totalTagih = 0;
+                                            if ($infogaji->hari == 0) {
+                                                $jam = ($menit < 30 ? $jam : ($jam + 0.5));
+                                                $totalTagih = $jam * $infogaji->nilgj;
                                             } else {
                                                 $totalTagih = $infogaji->hari * $infogaji->nilgj;
                                             }

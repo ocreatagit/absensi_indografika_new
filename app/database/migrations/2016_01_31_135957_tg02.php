@@ -17,7 +17,7 @@ class Tg02 extends Migration {
             $table->foreign('tg01_id')->references('idtg')->on('tg01');
             $table->integer("mg01_id")->unsigned();
             $table->foreign('mg01_id')->references('idgj')->on('mg01');
-            $table->integer('jmtgh');
+            $table->float('jmtgh');
             $table->integer('nmlgj');
             $table->timestamps();
         });

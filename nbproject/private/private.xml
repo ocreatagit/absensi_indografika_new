@@ -5,10 +5,7 @@
         <group>
             <file>file:/C:/xampp/htdocs/absensi_indografika/app/models/tg01.php</file>
             <file>file:/C:/xampp/htdocs/absensi_indografika/app/controllers/TransaksiTransferController.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/controllers/TransaksiGajiController.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/models/mj03.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/controllers/MasterKaryawanController.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/routes.php</file>
+            <file>file:/C:/xampp/htdocs/absensi_indografika/app/models/presensi.php</file>
         </group>
     </open-files>
 </project-private>
