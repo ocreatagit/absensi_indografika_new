@@ -85,7 +85,7 @@ class tg01 extends Eloquent {
         } else if ($startdate == '' && $idkar != 0) {
             $sql .= " WHERE tg01.idkar = $idkar";
         }
-        $sql.= " AND tg01.status LIKE '$statusBayar';";
+        $sql.= " AND tg01.status LIKE '$statusBayar' ORDER BY tgltg ASC, `status` ASC;";
 //        dd($sql);
         $tg01 = DB::select(DB::raw($sql));
         return $tg01;

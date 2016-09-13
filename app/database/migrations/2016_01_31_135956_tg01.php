@@ -19,6 +19,7 @@ class Tg01 extends Migration {
             $table->string('status');
             $table->integer('ttlgj');
             $table->integer('ttlbns');
+            $table->text('kettrn');
             $table->integer("idkar")->unsigned();
             $table->foreign('idkar')->references('idkar')->on('mk01');
             $table->timestamps();

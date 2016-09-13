@@ -3,14 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/models/tz01.php</file>
             <file>file:/C:/xampp/htdocs/absensi_indografika/app/controllers/TransaksiGajiController.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/views/admin/presensi_karyawan.blade.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/views/myindografika/my_presensi.blade.php</file>
+            <file>file:/C:/xampp/htdocs/absensi_indografika/app/views/absen.blade.php</file>
             <file>file:/C:/xampp/htdocs/absensi_indografika/app/controllers/LaporanAdminController.php</file>
             <file>file:/C:/xampp/htdocs/absensi_indografika/app/routes.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/views/admin/laporan_bulanan_karyawan.blade.php</file>
-            <file>file:/C:/xampp/htdocs/absensi_indografika/app/controllers/FiturController.php</file>
+            <file>file:/C:/xampp/htdocs/absensi_indografika/app/views/absen1.blade.php</file>
+            <file>file:/C:/xampp/htdocs/absensi_indografika/app/controllers/HomeController.php</file>
+            <file>file:/C:/xampp/htdocs/absensi_indografika/app/models/presensi.php</file>
         </group>
     </open-files>
 </project-private>

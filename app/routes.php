@@ -215,7 +215,7 @@ Route::get('daftarlembur', function() {
 });
 
 Route::get('absen', function() {
-    return View::make('absen');
+    return View::make('absen1');
 });
 
 Route::get('getAbsen', 'HomeController@getAbsen');

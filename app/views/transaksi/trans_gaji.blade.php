@@ -89,7 +89,7 @@
             "paging": true, // next page
             "ordering": true, // order by at header 
             "info": false,
-            "order": [[ 1, "DESC" ]]
+            "order": [[2, 0]]
         });
     });
 </script> 
