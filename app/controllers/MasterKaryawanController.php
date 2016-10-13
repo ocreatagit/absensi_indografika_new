@@ -16,10 +16,12 @@ class MasterKaryawanController extends \BaseController {
         $success = Session::get('mk01_success');
         $mk01 = new mk01();
         $karyawans = mk01::all();
+        $sql = "select * from mm01";
         $data = array(
             "karyawans" => $karyawans,
             "mk01_success" => $success,
-            "usermatrik" => User::getUserMatrix()
+            "usermatrik" => User::getUserMatrix(),
+            'usermatrixs' => DB::select(DB::raw($sql))
         );
         return View::make('master.m_list_karyawan', $data);
     }
@@ -665,6 +667,14 @@ class MasterKaryawanController extends \BaseController {
         DB::table('mm02')->insert($insert);
 
         return Redirect::to('master/karyawan');
+    }
+    
+    public function getUserMatrixKar(){
+        $id = Input::get('idkar');
+        $sql = "SELECT mm01_id FROM `mm02` WHERE `mk01_id` = " . $id . " ORDER BY mm01_id ASC";
+        $data = DB::select(DB::raw($sql));
+        
+        return json_encode($data);
     }
 
     public function myaccount() {

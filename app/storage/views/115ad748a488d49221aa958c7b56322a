@@ -17,8 +17,8 @@
             <?php } else {
                 ?>
                 &nbsp;
-                <?php
-            } ?>
+            <?php }
+            ?>
         </div>
         <?php if(Session::has('mk01_success')): ?>
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -28,134 +28,171 @@
         </div>    
         <?php endif; ?>
         <div class="panel-body">
-            <div class="col-sm-12">
-                <table class="table table-bordered table-hover" id="datatable">
-                    <thead>
-                        <tr>
-                            <th class="text-left">No</th>
-                            <th class="text-left">Foto</th>
-                            <th class="text-left">Nama</th>
-                            <th class="text-left">Username</th>
-                            <th class="text-left">Jabatan</th>
-                            <th class="text-left">Tanggal Lahir</th>                        
-                            <th class="text-center">Status</th>                            
-                            <th class="text-left">Opsi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-left">
-                        <?php $no = 1; ?>
-                        <?php foreach($karyawans as $karyawan): ?>
-                        <?php if ($karyawan->jnsusr != 0) { ?>
-                            <tr>
-                                <td><?php echo $no++; ?></td>
-                                <td><a href="<?php echo url("uploads/".$karyawan->pic); ?>" data-lightbox="roadtrip"> <?php echo $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 180)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)); ?> </a> </td>
-                                <td><?php echo $karyawan->nama; ?></td>
-                                <td><?php echo $karyawan->usernm; ?></td>
-                                <td><?php echo $karyawan->mj01->nama; ?></td>
-                                <td><?php echo strftime("%d-%b-%Y", strtotime($karyawan->ttl)); ?></td>
-                                <td class="text-center" width="15%">
-                                    <?php echo $karyawan->status == 'N' ? '<font color="red">Tidak Aktif</font>' : '<font color="green">Aktif</font>';; ?> 
-                                    <!--<br>-->
-                                    <!--<a href="<?php echo action('MasterKaryawanController@changeStatus', $karyawan->idkar); ?>" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Change Status?"><?php echo $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>'; ?></a>-->
-                                </td>
-                                <td class="text-center" width="5%">
+            <div class="col-sm-12"> 
+                <?php foreach ($karyawans as $karyawan) { ?>
+                    <div class="col-sm-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <?php echo $karyawan->nama; ?>
+
+                            </div>
+                            <div class="panel-body">
+                                <div class="text-center">                            
+                                    <a href="<?php echo url("uploads/".$karyawan->pic); ?>" data-lightbox="roadtrip"> <?php echo $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 200, "height" => 200)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)); ?> </a> 
+                                </div>
+                                <div class="text-left">
+                                    <p><strong>Status : </strong><?php echo $karyawan->status == 'N' ? '<font color="red">Tidak Aktif</font>' : '<font color="green">Aktif</font>';; ?></p>
+                                    <p><strong>No. Karyawan : </strong><?php echo $karyawan->usernm; ?></p>
+                                    <p><strong>Jabatan : </strong><?php echo $karyawan->mj01->nama; ?></p>    
+                                </div>
+                                <div class="text-center">
                                     <?php if ($karyawan->jnsusr == 0) {
                                         ?>
-                                        <a href="<?php echo action('MasterKaryawanController@edit', $karyawan->idkar); ?>" class="btn btn-info disabled" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
+                                        <a href="<?php echo action('MasterKaryawanController@edit', $karyawan->idkar); ?>" class="btn btn-info disabled" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
                                         <?php
                                     } else {
                                         ?>
-                                        <a href="<?php echo action('MasterKaryawanController@edit', $karyawan->idkar); ?>" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a> <br><br>
+                                        <a href="<?php echo action('MasterKaryawanController@edit', $karyawan->idkar); ?>" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
                                     <?php }
                                     ?>
-                                    <a href="<?php echo action('MasterKaryawanController@usermatrix', $karyawan->idkar); ?>" class="btn btn-info" data-toggle="tooltip" data-placement="center" title="User Matrix?"><i class="fa fa-user"></i></a> <br><br>
+                                    <a href="#" class="btn btn-info" data-toggle="modal" data-placement="center" title="User Matrix?" data-target="#myModal" onclick="UserMatrixModal(<?php echo $karyawan->idkar ?>,'<?php echo $karyawan->nama; ?>')"><i class="fa fa-user"></i></a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
                                     <a href="<?php echo action('MasterKaryawanController@changeStatus', $karyawan->idkar); ?>" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Change Status?"><?php echo $karyawan->status == 'N' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>'; ?></a>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">USER MATRIX - <span id="nama_kar"></span></h4>
+                </div>
+                <div class="modal-body">
+
+                    <form id="formUM" action="<?php echo action("MasterKaryawanController@usermatrixsave") ?>" method="POST" class="form-horizontal">
+                        <div class="form-group">        
+                            <?php foreach($usermatrixs as $um): ?>
+                            <div class="checkbox col-md-4">
+                                <label><input type="checkbox" class="jsUM" id="matrix<?php echo $um->idmnu; ?>" name="matrix<?php echo $um->idmnu; ?>" value="<?php echo $um->idmnu; ?>" ><?php echo $um->nama; ?></label>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="form-group">
+                            &nbsp;&nbsp;&nbsp;<?php echo Form::submit('Simpan', array('class'=>'btn btn-primary btn-large center siku')); ?>
+
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- END MODAL -->
+
+
 </div>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.clockpicker').clockpicker({
-            placement: 'bottom',
+            $(document).ready(function () {
+    $('.clockpicker').clockpicker({
+    placement: 'bottom',
             align: 'left',
             donetext: 'Done'
-        });
-        $('#datatable').DataTable();
-
-        $("#ttl").datepicker({
-            inline: true,
+    });
+            $('#datatable').DataTable();
+            $("#ttl").datepicker({
+    inline: true,
             dateFormat: "dd-mm-yy",
             changeYear: true,
             changeMonth: true
-        });
     });
-
-    alertify.defaults = {
-        // dialogs defaults
-        modal: true,
-        basic: false,
-        frameless: false,
-        movable: true,
-        resizable: true,
-        closable: true,
-        closableByDimmer: true,
-        maximizable: true,
-        startMaximized: false,
-        pinnable: true,
-        pinned: true,
-        padding: true,
-        overflow: true,
-        maintainFocus: true,
-        transition: 'pulse',
-        autoReset: true,
-        // notifier defaults
-        notifier: {
-            // auto-dismiss wait time (in seconds)  
-            delay: 5,
-            // default position
-            position: 'bottom-right'
-        },
-        // language resources 
-        glossary: {
-            // dialogs default title
-            title: 'Konfirmasi',
-            // ok button text
-            ok: 'OK',
-            // cancel button text
-            cancel: 'Batal'
-        },
-        // theme settings
-        theme: {
-            // class name attached to prompt dialog input textbox.
-            input: 'ajs-input',
-            // class name attached to ok button
-            ok: 'ajs-ok',
-            // class name attached to cancel button 
-            cancel: 'ajs-cancel'
-        }
-    };
-
-    $(".delete").click(function (e) {
-        e.preventDefault();
-        var a = this.href;
-        alertify.confirm('Hapus Master Karyawan?', function (e) {
+    });
+            alertify.defaults = {
+            // dialogs defaults
+            modal: true,
+                    basic: false,
+                    frameless: false,
+                    movable: true,
+                    resizable: true,
+                    closable: true,
+                    closableByDimmer: true,
+                    maximizable: true,
+                    startMaximized: false,
+                    pinnable: true,
+                    pinned: true,
+                    padding: true,
+                    overflow: true,
+                    maintainFocus: true,
+                    transition: 'pulse',
+                    autoReset: true,
+                    // notifier defaults
+                    notifier: {
+                    // auto-dismiss wait time (in seconds)  
+                    delay: 5,
+                            // default position
+                            position: 'bottom-right'
+                    },
+                    // language resources 
+                    glossary: {
+                    // dialogs default title
+                    title: 'Konfirmasi',
+                            // ok button text
+                            ok: 'OK',
+                            // cancel button text
+                            cancel: 'Batal'
+                    },
+                    // theme settings
+                    theme: {
+                    // class name attached to prompt dialog input textbox.
+                    input: 'ajs-input',
+                            // class name attached to ok button
+                            ok: 'ajs-ok',
+                            // class name attached to cancel button 
+                            cancel: 'ajs-cancel'
+                    }
+            };
+            $(".delete").click(function (e) {
+    e.preventDefault();
+            var a = this.href;
+            alertify.confirm('Hapus Master Karyawan?', function (e) {
             if (e) {
-                window.location.assign(a);
+            window.location.assign(a);
             } else {
-                //after clicking Cancel
+            //after clicking Cancel
             }
-        });
+            });
     });
+            function UserMatrixModal(id, nama){
+            $('.jsUM').prop('checked', false);
+                    $('#nama_kar').html(nama);
+                    $.post("<?php echo action("MasterKaryawanController@getUserMatrixKar") ?>",
+                    {
+                    idkar: id
+                    },
+                            function (data, status) {
+                            for (var i = 0; i < data.length; i++){
+                            $('#matrix' + data[i].mm01_id).prop('checked', true);
+                            }
+                            }, "json");
+                    $('#formUM').attr('action', "http://localhost/absensi_indografika/usermatrix/"+id);
+            }
 </script> 
 <?php $__env->stopSection(); ?>
 
