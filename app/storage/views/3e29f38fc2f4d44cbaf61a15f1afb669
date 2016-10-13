@@ -1,30 +1,29 @@
-@extends('template.master')
-
-@section('title')
+<?php $__env->startSection('title'); ?>
 <title>ABSENSI - My Indografika</title>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('header')
+<?php $__env->startSection('header'); ?>
 <h1 class="page-header">Laporan Bulanan Karyawan</h1>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('main')
+<?php $__env->startSection('main'); ?>
 <div class="row">
     <div class="panel panel-default siku">
         <div class="panel-heading">Laporan Bulanan Karyawan</div>
         <div class="panel-body">
-            @if(Session::has('filter'))
+            <?php if(Session::has('filter')): ?>
             <div class="alert alert-success alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <i class="fa fa-info-circle"></i> {{ $filter }}
+                <i class="fa fa-info-circle"></i> <?php echo $filter; ?>
+
             </div>    
-            @endif
+            <?php endif; ?>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="panel panel-primary siku">
                         <div class="panel-heading siku">Filter Laporan</div>
                         <div class="panel-body">
-                            <form class="form-horizontal" action="{{ action("LaporanAdminController@laporan_karyawan_query") }}" method="POST">
+                            <form class="form-horizontal" action="<?php echo action("LaporanAdminController@laporan_karyawan_query"); ?>" method="POST">
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label">Bulan</label>
                                     <div class="col-sm-3">
@@ -44,7 +43,7 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-2" style="margin-left: -20px;">
-                                        <input class="form-control siku" name="thn_start" value="{{ date("Y") }}" required=""/>
+                                        <input class="form-control siku" name="thn_start" value="<?php echo date("Y"); ?>" required=""/>
                                     </div>
                                     <label class="col-sm-1 control-label">Sampai</label>
                                     <div class="col-sm-3" style="margin-left: 10px;">
@@ -64,7 +63,7 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-2" style="margin-left: -20px;">
-                                        <input class="form-control siku" name="thn_end" value="{{ date("Y") }}" required=""/>
+                                        <input class="form-control siku" name="thn_end" value="<?php echo date("Y"); ?>" required=""/>
                                     </div>
                                 </div>                            
                                 <div class="form-group">
@@ -113,7 +112,7 @@
                 <table class="table table-bordered table-hover table-striped" id="">
                     <thead>
                         <tr>
-                            <th class="text-center"><a href="{{ action('MasterKaryawanController@create') }}" class="btn btn-primary siku">Tambah Karyawan <i class="fa fa-user-plus"></i></a></th>
+                            <th class="text-center"><a href="<?php echo action('MasterKaryawanController@create'); ?>" class="btn btn-primary siku">Tambah Karyawan <i class="fa fa-user-plus"></i></a></th>
                             <th class="text-right">Pembayaran</th>
                             <?php
                             if (in_array(26, $usermatrik)) {
@@ -146,39 +145,39 @@
                         $totalGajiBersih = 0;
                         $totalGajiKotor = 0;
                         ?>
-                        @foreach($laporans as $laporan)
-                        @if($laporan['jnsusr'] != 0)
+                        <?php foreach($laporans as $laporan): ?>
+                        <?php if($laporan['jnsusr'] != 0): ?>
                         <tr>
-                            <td align="left">{{ $laporan["nama"] }}</td>
-                            <td align="left">{{ $laporan["bln_pembayaran"] }}</td>
+                            <td align="left"><?php echo $laporan["nama"]; ?></td>
+                            <td align="left"><?php echo $laporan["bln_pembayaran"]; ?></td>
                             <?php
                             if (in_array(26, $usermatrik)) {
                                 if (Session::get("user.tipe") == 0) {
                                     ?>
-                                    <td align="right">{{ $laporan["norek1"] }}</td>
-                                    <td align="right">Rp.{{ number_format($laporan["gajibersih"], 0, ",", ".") }},-</td>
-                                    <td align="right">Rp.{{ number_format($laporan["gajikotor"], 0, ",", ".") }},-</td>
+                                    <td align="right"><?php echo $laporan["norek1"]; ?></td>
+                                    <td align="right">Rp.<?php echo number_format($laporan["gajibersih"], 0, ",", "."); ?>,-</td>
+                                    <td align="right">Rp.<?php echo number_format($laporan["gajikotor"], 0, ",", "."); ?>,-</td>
                                     <?php
                                 }
                             }
                             ?>
-                            <td align="right">{{ $laporan["msk"] }}</td>
+                            <td align="right"><?php echo $laporan["msk"]; ?></td>
                             <td align="right">
                                 <?php
                                 echo floor(($laporan["lbr"] / 3600));
                                 ?>
                             </td>
-                            <td align="right">{{ $laporan["aph"] }}</td>
-                            <td align="right">{{ $laporan["cuti"] }}</td>
-                            <td align="right">{{ $laporan["telat"] }}</td>
-                            <td align="right">Rp.{{ number_format($laporan["kasbon"], 0, ",", ".") }},-</td>
-                            <td align="right">Rp.{{ number_format($laporan["hutang"], 0, ",", ".") }},-</td>
-                            <td align="right">Rp.{{ number_format($laporan["omzet"], 0, ",", ".") }},-</td>
+                            <td align="right"><?php echo $laporan["aph"]; ?></td>
+                            <td align="right"><?php echo $laporan["cuti"]; ?></td>
+                            <td align="right"><?php echo $laporan["telat"]; ?></td>
+                            <td align="right">Rp.<?php echo number_format($laporan["kasbon"], 0, ",", "."); ?>,-</td>
+                            <td align="right">Rp.<?php echo number_format($laporan["hutang"], 0, ",", "."); ?>,-</td>
+                            <td align="right">Rp.<?php echo number_format($laporan["omzet"], 0, ",", "."); ?>,-</td>
                             <td class="text-center" width="10%">
                                 <button class="btn btn-info siku" type="button" class="btn btn-primary" data-toggle="modal" data-target=".detail_modal">
                                     <i class="fa fa-info-circle"></i>
                                 </button>
-                                <a target="_blank" href="{{ action('TransaksiTransferController@printgaji', [$laporan["idtg"]]) }}" class="btn btn-default siku {{ $laporan["idtg"] == -1 ? "disabled" : "" }}" data-toggle="tooltip" data-placement="left" title="Cetak Slip Gaji?"><i class="fa fa-print"></i></a>
+                                <a target="_blank" href="<?php echo action('TransaksiTransferController@printgaji', [$laporan["idtg"]]); ?>" class="btn btn-default siku <?php echo $laporan["idtg"] == -1 ? "disabled" : ""; ?>" data-toggle="tooltip" data-placement="left" title="Cetak Slip Gaji?"><i class="fa fa-print"></i></a>
                             </td>
                             <?php
                             $totalOmzet += $laporan["omzet"];
@@ -186,8 +185,8 @@
                             $totalGajiKotor += $laporan["gajikotor"];
                             ?>
                         </tr>
-                        @endif
-                        @endforeach
+                        <?php endif; ?>
+                        <?php endforeach; ?>
                         <tr>
                             <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 14 : 10) : 10) ?>" class="cell">&nbsp;</td>
                         </tr>
@@ -197,14 +196,14 @@
                                 if (Session::get("user.tipe") == 0) {
                                     ?>
                                     <td align="right" colspan="3">Total Keseluruhan</td>
-                                    <td align="right">Rp.{{ number_format($totalGajiBersih, 0, ",", ".") }},-</td>
-                                    <td align="right">Rp.{{ number_format($totalGajiKotor, 0, ",", ".") }},-</td>
+                                    <td align="right">Rp.<?php echo number_format($totalGajiBersih, 0, ",", "."); ?>,-</td>
+                                    <td align="right">Rp.<?php echo number_format($totalGajiKotor, 0, ",", "."); ?>,-</td>
                                     <?php
                                 }
                             }
                             ?>
                             <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 7 : 9) : 9) ?>" align="right" class="">Total Omzet</td>
-                            <td align="right" class="cell">Rp.{{ number_format($totalOmzet, 0, ",", ".") }},-</td>
+                            <td align="right" class="cell">Rp.<?php echo number_format($totalOmzet, 0, ",", "."); ?>,-</td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -238,7 +237,7 @@
             <div class="modal-content siku">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel"><i class="fa fa-table"></i> Daftar Masuk Karyawan
-                        <span id="timeServer" class="pull-right">{{ date('H:i:s') }}</span>
+                        <span id="timeServer" class="pull-right"><?php echo date('H:i:s'); ?></span>
                     </h4>
                 </div>
                 <div class="modal-body">
@@ -311,18 +310,18 @@
                 </div>
                 <div class="modal-body">
                     <div class="row" style="padding: 20px;">
-                        <form class="form-horizontal" action="{{ action("LaporanAdminController@persen_bonus_karyawan_admin_save") }}" method="POST" id="persen_bonus_form">
+                        <form class="form-horizontal" action="<?php echo action("LaporanAdminController@persen_bonus_karyawan_admin_save"); ?>" method="POST" id="persen_bonus_form">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Persen Bonus</label>
                                 <div class="col-sm-4 input-group">                            
                                     <div class="input-group">
-                                        <input type="text" class="form-control siku" value="{{ Input::old('prsbns', $prsbns) }}" name="prsbns">
+                                        <input type="text" class="form-control siku" value="<?php echo Input::old('prsbns', $prsbns); ?>" name="prsbns">
                                         <div class="input-group-addon">%</div>
                                     </div>
                                 </div>
-                                @if($errors->first('prsbns'))
-                                <div class="col-sm-5 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('prsbns') }}</div>
-                                @endif
+                                <?php if($errors->first('prsbns')): ?>
+                                <div class="col-sm-5 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('prsbns'); ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></label>
@@ -351,18 +350,18 @@
                 </div>
                 <div class="modal-body">
                     <div class="row" style="padding: 20px;">
-                        <form class="form-horizontal" action="{{ action("LaporanAdminController@persen_bonus_karyawan_admin_save") }}" method="POST" id="persen_bonus_form">
+                        <form class="form-horizontal" action="<?php echo action("LaporanAdminController@persen_bonus_karyawan_admin_save"); ?>" method="POST" id="persen_bonus_form">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Persen Bonus</label>
                                 <div class="col-sm-4 input-group">                            
                                     <div class="input-group">
-                                        <input type="text" class="form-control siku" value="{{ Input::old('prsbns', $prsbns) }}" name="prsbns">
+                                        <input type="text" class="form-control siku" value="<?php echo Input::old('prsbns', $prsbns); ?>" name="prsbns">
                                         <div class="input-group-addon">%</div>
                                     </div>
                                 </div>
-                                @if($errors->first('prsbns'))
-                                <div class="col-sm-5 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('prsbns') }}</div>
-                                @endif
+                                <?php if($errors->first('prsbns')): ?>
+                                <div class="col-sm-5 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('prsbns'); ?></div>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></label>
@@ -380,9 +379,9 @@
         </div>
     </div>
     <!-- End Saldo Tabungan Karyawan Modal -->
-    @stop
+    <?php $__env->stopSection(); ?>
 
-    @section('script')
+    <?php $__env->startSection('script'); ?>
     <script type="text/javascript">
         $(document).ready(function () {
             $('.clockpicker').clockpicker({
@@ -427,4 +426,5 @@
 
 
     </script> 
-    @stop
+    <?php $__env->stopSection(); ?>
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

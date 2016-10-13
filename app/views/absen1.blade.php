@@ -133,7 +133,7 @@
                             Developer Note
                         </div>
                         <div class="panel-body">
-                             belum di commit, dan belum di update ke indografika
+                             belum di update ke indografika
                         </div>
                     </div>
                 </div>

@@ -123,6 +123,7 @@ Route::post('admin/exportadminlaporankaryawan', "LaporanAdminController@laporan_
 
 Route::get('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan");
 Route::post('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan_save");
+Route::post('admin/persenbonus_admin', "LaporanAdminController@persen_bonus_karyawan_admin_save");
 
 // end Admin
 

@@ -133,7 +133,7 @@
                             Developer Note
                         </div>
                         <div class="panel-body">
-                             belum di commit, dan belum di update ke indografika
+                             belum di update ke indografika
                         </div>
                     </div>
                 </div>
@@ -235,6 +235,7 @@ $(document).ready(function () {
                 $('#nama').html("-");
                 $('#status').html('-');
                 $('#jenis').html('-');
+                $('#jenis').css('color','black');
                 $('#jam').html("<tr style='font-size: large'>" +
                         "<td class='text-left'>Waktu Absen</td><td>:</td>" +
                         "<td>&nbsp; -</td>" +
@@ -256,7 +257,7 @@ $(document).ready(function () {
 
     setInterval(function () {
         console.log("Refresh!!!");
-//        location.reload();
+       location.reload();
     }, 5000);
 
 

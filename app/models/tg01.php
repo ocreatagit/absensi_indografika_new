@@ -216,8 +216,8 @@ class tg01 extends Eloquent {
                 WHERE MONTH(ta02.tglmsk) = " . date("n", strtotime($date)) . " AND YEAR(ta02.tglmsk) = " . date("Y", strtotime($date)) . " AND ta02.abscd = 1 AND mj02.tipe = 1 AND mk01.idkar = $idkar"
         ;
         $sqlistirahat = "SELECT sum(tabelluar.lbt) as lbt
-from(
-SELECT 
+                from(
+                SELECT 
                         CASE WHEN SUM(jamkeluar) = 0 THEN '-' ELSE from_unixtime(SUM(jamkeluar), '%H:%i') END as jamkeluar, 
                         CASE WHEN SUM(jamkembali) = 0 THEN '-' ELSE from_unixtime(SUM(jamkembali), '%H:%i') END as jamkembali,
                         CASE WHEN 
@@ -358,5 +358,18 @@ SELECT
             return FALSE;
         }
     }
-
+    function getSlipGaji($date, $idkar) {
+        $SQL = "SELECT idtg, status FROM tg01 WHERE idkar = $idkar AND MONTH(tgltg) = MONTH('$date') AND YEAR(tgltg) = YEAR('$date');";
+        $tg01 = DB::select(DB::raw($SQL));
+        if (count($tg01) > 0) {
+            $tg01 = $tg01[0];
+            if($tg01->status == 'Y')
+                return $tg01->idtg;
+            else
+                return -1;
+        } else {
+            return -1;
+        }
+    }
+    
 }

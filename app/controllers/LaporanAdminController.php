@@ -478,12 +478,14 @@ class LaporanAdminController extends \BaseController {
         $ta03 = new ta03();
         $tz01 = new tz01();
         $th01 = new th01();
+        $mk03 = new mk03();
 
         $data = array();
         $data['karyawans'] = $mk01->getKaryawanAktif();
         $data["gajis"] = $tg01->getGajiStatusN('', '', 0);
         $data['filter'] = Session::get('filter');
         $data['usermatrik'] = User::getUserMatrix();
+        $data['prsbns'] = $mk03->getNilKeterangan("prsbns");
 
         $date = date("Y-m-d");
 
@@ -491,6 +493,8 @@ class LaporanAdminController extends \BaseController {
         foreach ($data['karyawans'] as $karyawan) {
             // ID Karyawan
             $temp["idkar"] = $karyawan->idkar;
+            // Bulan Pembayaran
+            $temp["bln_pembayaran"] = strftime("%B %Y", strtotime($date));
             // Nama Karyawan
             $temp["nama"] = $karyawan->nama;
             // No Rek 1
@@ -519,8 +523,11 @@ class LaporanAdminController extends \BaseController {
             $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date);
             $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date);
             $referrals = $mk01->getReferralKar($karyawan->idkar);
-
             $temp["omzet"] = $omzetIndividu;
+            // Jenis User
+            $temp["jnsusr"] = $karyawan->jnsusr;
+            
+            $temp["idtg"] = $tg01->getSlipGaji($date, $karyawan->idkar);
 
             array_push($arrLaporan, $temp);
         }
@@ -531,67 +538,98 @@ class LaporanAdminController extends \BaseController {
 
     public function laporan_karyawan_query() {
         $mk01 = new mk01();
+        $mk03 = new mk03();
         $tg01 = new tg01();
         $ta03 = new ta03();
         $tz01 = new tz01();
         $th01 = new th01();
 
-        $date = Input::get("thn") . "-" . Input::get("bln") . "-01";
+        $bulan_start = Input::get("bln_start");
+        $tahun_start = Input::get("thn_start");
+        $bulan_end = Input::get("bln_end");
+        $tahun_end = Input::get("thn_end");
+
+        $date_start = $tahun_start . "-" . $bulan_start . "-01";
+        $date_end = $tahun_end . "-" . $bulan_end . "-01";
+
+        $d1 = new DateTime($date_start);
+        $d2 = new DateTime($date_end);
+
+        $month_diff = ($d1->diff($d2)->m);
+//        dd($d1->diff($d2)->m + ($d1->diff($d2)->y * 12)); // int(8)
+        $count = 1;
+        if ($month_diff != 0) {
+            $count = $month_diff + 1;
+        }
 
         $data = array();
         $data['karyawans'] = $mk01->getKaryawanAktif();
         $data["gajis"] = $tg01->getGajiStatusN('', '', 0);
         $data['usermatrik'] = User::getUserMatrix();
+        $data['prsbns'] = $mk03->getNilKeterangan("prsbns");
 
         $arrLaporan = array();
-        foreach ($data['karyawans'] as $karyawan) {
-            // ID Karyawan
-            $temp["idkar"] = $karyawan->idkar;
-            // Nama Karyawan
-            $temp["nama"] = $karyawan->nama;
-            // No Rek 1
-            $temp["norek1"] = $karyawan->norek1;
-            // No Rek 2
-            $temp["norek2"] = $karyawan->norek2;
-            // Gaji Bersih
-            $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
-            // Gaji Kotor
-            $temp["gajikotor"] = $tg01->getGajiKaryawanKotor($date, $karyawan->idkar);
-            // Jam Masuk (Kehadiran) Karyawan
-            $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
-            // Jam Lembur Karyawan (in second)
-            $temp["lbr"] = $tg01->getDurasiLemburGaji($date, $karyawan->idkar);
-            // Total Alpha
-            $temp["aph"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Alpha");
-            // Total Cuti
-            $temp["cuti"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Cuti");
-            // Telat
-            $temp["telat"] = $tg01->getKeterlambatan($date, $karyawan->idkar);
-            // Kasbon
-            $temp["kasbon"] = $th01->getTotalHutangBulan($karyawan->idkar, $date);
-            // Hutang
-            $temp["hutang"] = $th01->getTotalKasBonBulan($karyawan->idkar, $date);
-            // Omzet Karyawan
-            $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date);
-            $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date);
-            $referrals = $mk01->getReferralKar($karyawan->idkar);
+        for ($i = 0; $i < $count; $i++) {
+            if ($i == 0) {
+                $date = $date_start;
+            } else {
+                $date = date('Y-m-d', strtotime("+1 months", strtotime($date)));
+            }
+            foreach ($data['karyawans'] as $karyawan) {
+                // ID Karyawan
+                $temp["idkar"] = $karyawan->idkar;
+                // Bulan Pembayaran
+                $temp["bln_pembayaran"] = strftime("%B %Y", strtotime($date));
+                // Nama Karyawan
+                $temp["nama"] = $karyawan->nama;
+                // No Rek 1
+                $temp["norek1"] = $karyawan->norek1;
+                // No Rek 2
+                $temp["norek2"] = $karyawan->norek2;
+                // Gaji Bersih
+                $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
+                // Gaji Kotor
+                $temp["gajikotor"] = $tg01->getGajiKaryawanKotor($date, $karyawan->idkar);
+                // Jam Masuk (Kehadiran) Karyawan
+                $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
+                // Jam Lembur Karyawan (in second)
+                $temp["lbr"] = $tg01->getDurasiLemburGaji($date, $karyawan->idkar);
+                // Total Alpha
+                $temp["aph"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Alpha");
+                // Total Cuti
+                $temp["cuti"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Cuti");
+                // Telat
+                $temp["telat"] = $tg01->getKeterlambatan($date, $karyawan->idkar);
+                // Kasbon
+                $temp["kasbon"] = $th01->getTotalHutangBulan($karyawan->idkar, $date);
+                // Hutang
+                $temp["hutang"] = $th01->getTotalKasBonBulan($karyawan->idkar, $date);
+                // Omzet Karyawan
+                $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date);
+                $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date);
+                $referrals = $mk01->getReferralKar($karyawan->idkar);
 
-            $temp["omzet"] = $omzetIndividu;
+                $temp["omzet"] = $omzetIndividu;
 
-            array_push($arrLaporan, $temp);
+                $temp["jnsusr"] = $karyawan->jnsusr;
+
+                $temp["idtg"] = $tg01->getSlipGaji($date, $karyawan->idkar);
+
+                array_push($arrLaporan, $temp);
+            }
         }
-
+        
         $data['laporans'] = $arrLaporan;
 
         if (Input::get("btn_filter")) {
-            Session::flash('filter', "Pencarian Laporan Karyawan pada Bulan " . strftime("%B", strtotime($date)) . " - " . Input::get("thn")) . "";
+            Session::flash('filter', "Pencarian Laporan Karyawan pada Bulan " . strftime("%B", strtotime($date_start)) . " " . $tahun_start. " s/d ".strftime("%B", strtotime($date_end)). " ".$tahun_end);
             $data['filter'] = Session::get('filter');
             return View::make('admin.laporan_bulanan_karyawan', $data);
         } else if (Input::get("btn_export")) {
-            $filename = 'Absensi ' . strftime("%B %Y", strtotime($date));
+            $filename = 'Absensi ' . strftime("%B %Y", strtotime($date_start));
             Excel::create($filename, function($excel) {
-                $date = Input::get("thn") . "-" . Input::get("bln") . "-01";
-                $sheetname = strftime("%B-%Y", strtotime($date));
+                $date_start = Input::get("thn_start") . "-" . Input::get("bln_start") . "-01";
+                $sheetname = strftime("%B-%Y", strtotime($date_start));
 
                 $excel->sheet($sheetname, function($sheet) {
 
@@ -601,7 +639,7 @@ class LaporanAdminController extends \BaseController {
                     $tz01 = new tz01();
                     $th01 = new th01();
 
-                    $date = Input::get("thn") . "-" . Input::get("bln") . "-01";
+                    $date_start = Input::get("thn_start") . "-" . Input::get("bln_start") . "-01";
 
                     $data = array();
                     $data['karyawans'] = $mk01->getKaryawanAktif();
@@ -620,26 +658,26 @@ class LaporanAdminController extends \BaseController {
                         // No Rek 2
                         $temp["norek2"] = $karyawan->norek2;
                         // Gaji Bersih
-                        $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date, $karyawan->idkar);
+                        $temp["gajibersih"] = $tg01->getGajiKaryawanBersih($date_start, $karyawan->idkar);
                         // Gaji Kotor
-                        $temp["gajikotor"] = $tg01->getGajiKaryawanKotor($date, $karyawan->idkar);
+                        $temp["gajikotor"] = $tg01->getGajiKaryawanKotor($date_start, $karyawan->idkar);
                         // Jam Masuk (Kehadiran) Karyawan
-                        $temp["msk"] = $tg01->getKehadiranGaji($date, $karyawan->idkar);
+                        $temp["msk"] = $tg01->getKehadiranGaji($date_start, $karyawan->idkar);
                         // Jam Lembur Karyawan (in second)
-                        $temp["lbr"] = $tg01->getDurasiLemburGaji($date, $karyawan->idkar);
+                        $temp["lbr"] = $tg01->getDurasiLemburGaji($date_start, $karyawan->idkar);
                         // Total Alpha
-                        $temp["aph"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Alpha");
+                        $temp["aph"] = $ta03->getTotalAlpha($karyawan->idkar, $date_start, "Alpha");
                         // Total Cuti
-                        $temp["cuti"] = $ta03->getTotalAlpha($karyawan->idkar, $date, "Cuti");
+                        $temp["cuti"] = $ta03->getTotalAlpha($karyawan->idkar, $date_start, "Cuti");
                         // Telat
-                        $temp["telat"] = $tg01->getKeterlambatan($date, $karyawan->idkar);
+                        $temp["telat"] = $tg01->getKeterlambatan($date_start, $karyawan->idkar);
                         // Kasbon
-                        $temp["kasbon"] = $th01->getTotalHutangBulan($karyawan->idkar, $date);
+                        $temp["kasbon"] = $th01->getTotalHutangBulan($karyawan->idkar, $date_start);
                         // Hutang
-                        $temp["hutang"] = $th01->getTotalKasBonBulan($karyawan->idkar, $date);
+                        $temp["hutang"] = $th01->getTotalKasBonBulan($karyawan->idkar, $date_start);
                         // Omzet Karyawan
-                        $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date);
-                        $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date);
+                        $omzetIndividu = $tz01->getOmzetIndividu($karyawan->idkar, $date_start);
+                        $omzetTim = $tz01->getOmzetTim($karyawan->idkar, $date_start);
                         $referrals = $mk01->getReferralKar($karyawan->idkar);
 
                         $temp["omzet"] = $omzetIndividu;
@@ -705,6 +743,17 @@ class LaporanAdminController extends \BaseController {
                             ->withErrors($validator)
                             ->withInput();
         }
+    }
+
+    function persen_bonus_karyawan_admin_save() {
+        $prsbns = Input::get("prsbns");
+
+        $temp_mk03 = new mk03();
+        $idket = $temp_mk03->getIDKeterangan("prsbns");
+        $mk03 = mk03::find($idket);
+        $mk03->nilket = $prsbns;
+        $mk03->save();
+        echo "true";
     }
 
     // ------------------- END Ubah Persen Bonus ------------------- //

@@ -166,6 +166,7 @@ class TransaksiTransferController extends \BaseController {
     }
 
     public function printgaji($id) {
+        
         $var = User::loginCheck([0, 1], 8);
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);

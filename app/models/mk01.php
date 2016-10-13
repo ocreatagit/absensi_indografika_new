@@ -73,8 +73,12 @@ class mk01 extends Eloquent {
                         ->where("idkar", $idkar)->first();
     }
 
-    function getKaryawanAktif() {
+    function getAdminKaryawanAktif() {
         return $this->where('status', '=', 'Y')->orderBy('idkar', 'ASC')->get();
+    }
+    
+    function getKaryawanAktif() {
+        return $this->where('status', '=', 'Y')->where('jnsusr', '=', '2')->orderBy('idkar', 'ASC')->get();
     }
 
     function getAutoIncrement() {
