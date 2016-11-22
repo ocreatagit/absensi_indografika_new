@@ -90,14 +90,14 @@ class mk01 extends Eloquent {
 
     function getReferral($idkar) {
         // Ambil Referral yang belum ada sesuai ID yang dipassing
-        $sql = "SELECT * FROM mk01 WHERE mk01.idkar NOT IN (SELECT mk01_id_child FROM mk02 WHERE mk01_id_parent = $idkar);";
+        $sql = "SELECT * FROM mk01 WHERE mk01.idkar NOT IN (SELECT mk01_id_child FROM mk02 WHERE mk01_id_parent = $idkar) AND mk01.jnsusr = 2;";
         $mk01 = DB::select(DB::raw($sql));
         return $mk01;
     }
 
     function getReferralKar($idkar) {
         // Ambil Referral yang sudah ditambahkan
-        $sql = "SELECT mk02.id, mk02.mk01_id_parent, parent.nama as parent_name, mk02.mk01_id_child, child.nama as child_name, mk02.flglead FROM mk02 INNER JOIN mk01 parent ON parent.idkar = mk02.mk01_id_parent INNER JOIN mk01 child ON child.idkar = mk02.mk01_id_child WHERE mk02.mk01_id_parent = $idkar;";
+        $sql = "SELECT mk02.id, mk02.mk01_id_parent, parent.nama as parent_name, mk02.mk01_id_child, child.nama as child_name, mk02.flglead FROM mk02 INNER JOIN mk01 parent ON parent.idkar = mk02.mk01_id_parent INNER JOIN mk01 child ON child.idkar = mk02.mk01_id_child WHERE mk02.mk01_id_parent = $idkar AND parent.jnsusr = 2;";
 //        echo $sql; exit;
         $mk01 = DB::select(DB::raw($sql));
         return $mk01;

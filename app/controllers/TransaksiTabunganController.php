@@ -17,7 +17,7 @@ class TransaksiTabunganController extends \BaseController {
         $danger = Session::get('tt01_danger');
         $tt01 = new tt01();
         $data = array(
-            "karyawans" => mk01::where("status", "=", "Y")->get(),
+            "karyawans" => mk01::where("status", "=", "Y")->where("jnsusr", "=", 2)->get(),
             "tabungans" => $tt01->getTabungan(),
             "tt01_success" => $success,
             "tt01_danger" => $danger,

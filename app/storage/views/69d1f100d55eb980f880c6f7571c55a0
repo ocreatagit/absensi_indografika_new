@@ -60,7 +60,7 @@
                                 $jam = ($menit < 30 ? $jam : ($jam + 0.5));
                                 $totalTagih = $jam * $infogaji->nilgj;
                             } else {
-                                $totalTagih = $infogaji->hari * $infogaji->nilgj;
+                                $totalTagih = ($infogaji->hari + ($infogaji->jntgh == "Hari" ? $cuti : 0)) * $infogaji->nilgj;
                             }
                             $totalgaji += $totalTagih;
                             ?>
@@ -166,7 +166,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Total Kehadiran : </label>
                                         <div class="col-sm-7 marginTop08">
-                                            <label><?php echo $kehadiran; ?> Hari</label>
+                                            <label><?php echo $kehadiran + $cuti; ?> Hari</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -244,7 +244,7 @@
                                                 $jam = ($menit < 30 ? $jam : ($jam + 0.5));
                                                 $totalTagih = $jam * $infogaji->nilgj;
                                             } else {
-                                                $totalTagih = $infogaji->hari * $infogaji->nilgj;
+                                                $totalTagih = ($infogaji->hari + ($infogaji->jntgh == "Hari" ? $cuti : 0)) * $infogaji->nilgj;
                                             }
 
                                             // Akumulasi nilai gaji kotor

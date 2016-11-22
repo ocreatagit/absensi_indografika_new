@@ -17,7 +17,7 @@ class tt01 extends Eloquent {
     }
 
     function getTabungan() {
-        $sql = "SELECT tt01.*, mk01.nama FROM tt01 INNER JOIN mk01 ON mk01.idkar = tt01.idkar;";
+        $sql = "SELECT tt01.*, mk01.nama FROM tt01 INNER JOIN mk01 ON mk01.idkar = tt01.idkar WHERE mk01.jnsusr = 2 ORDER BY idtb DESC;";
         $tt01 = DB::select(DB::raw($sql));
         return $tt01;
     }
@@ -29,13 +29,13 @@ class tt01 extends Eloquent {
     }
 
     function getKarTabungan($id) {
-        $sql = "SELECT tt01.*, mk01.nama FROM tt01 INNER JOIN mk01 ON mk01.idkar = tt01.idkar WHERE tt01.idtb = $id";
+        $sql = "SELECT tt01.*, mk01.nama, mk01.pic FROM tt01 INNER JOIN mk01 ON mk01.idkar = tt01.idkar WHERE tt01.idtb = $id AND mk01.jnsusr = 2;";
         $tt01 = DB::select(DB::raw($sql));
         return $tt01;
     }
 
     function getLatestTabungan($idkar, $date) {
-        $sql = "SELECT * FROM tt01 WHERE idkar = $idkar AND MONTH(tgltb) = " . date("n", strtotime($date)) . ";";
+        $sql = "SELECT * FROM tt01 WHERE idkar = $idkar AND MONTH(tgltb) = " . date("n", strtotime($date)) . "";
         $tt01 = DB::select(DB::raw($sql));
         return $tt01;
     }
@@ -50,6 +50,7 @@ class tt01 extends Eloquent {
         } else if ($tglfrom == '' && $idkar != 0) {
             $sql .= " WHERE tt01.idkar = $idkar ";
         }
+        $sql .= " AND mk01.jnsusr = 2";
 //        dd($sql);
         $sql.= " UNION 
                 SELECT tt02.idtt, tt02.nortt, tt02.tgltt, -1 * tt02.niltt, tt02.idkar, mk01.nama
@@ -62,16 +63,16 @@ class tt01 extends Eloquent {
         } else if ($tglfrom == '' && $idkar != 0) {
             $sql .= " WHERE tt02.idkar = $idkar ";
         }
+        $sql .= " AND mk01.jnsusr = 2";
 //        dd($sql);
         $tt01 = DB::select(DB::raw($sql));
         return $tt01;
     }
 
     public function getAllTabunganKaryawan() {
-        $sql = "SELECT mk01.idkar, mk01.nama, (SELECT SUM(niltb) FROM tt01 WHERE tt01.idkar = mk01.idkar) as tbmsk, (SELECT SUM(niltt) FROM tt02 WHERE tt02.idkar = mk01.idkar) as tbklr, mk01.tbsld FROM mk01;";
+        $sql = "SELECT mk01.idkar, mk01.nama, (SELECT SUM(niltb) FROM tt01 WHERE tt01.idkar = mk01.idkar) as tbmsk, (SELECT SUM(niltt) FROM tt02 WHERE tt02.idkar = mk01.idkar) as tbklr, mk01.tbsld FROM mk01 WHERE mk01.jnsusr = 2;";
 //        echo $sql; exit;
         $tt01 = DB::select(DB::raw($sql));
         return $tt01;
     }
-
 }

@@ -96,7 +96,6 @@ Route::post('myindografika/presensikaryawan', "FiturController@presensi_karyawan
 // end fitur
 
 // Admin
-
 Route::get('admin/allgajikaryawan', "LaporanAdminController@histori_pembayaran_gaji");
 Route::post('admin/allgajikaryawan', "LaporanAdminController@histori_pembayaran_gaji_query");
 Route::get('admin/detail_gaji_karyawan/{id}', "LaporanAdminController@show_gaji");
@@ -115,12 +114,23 @@ Route::post('admin/allomzetkaryawan', "LaporanAdminController@histori_omzet_quer
 Route::get('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan");
 Route::post('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan_query");
 
-Route::get('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan");
-Route::post('admin/allpresensikaryawan', "LaporanAdminController@presensi_karyawan_query");
-
 Route::get('admin/adminlaporankaryawan', "LaporanAdminController@laporan_karyawan");
 Route::post('admin/adminlaporankaryawan', "LaporanAdminController@laporan_karyawan_query");
 Route::post('admin/exportadminlaporankaryawan', "LaporanAdminController@laporan_karyawan_export");
+//Route::post('admin/adminlaporankaryawan/laporan_gaji', "LaporanAdminController@get_laporan_gaji");
+Route::post('admin/adminlaporankaryawan/laporan_gaji', "LaporanAdminController@get_laporan_gaji");
+Route::post('admin/adminlaporankaryawan/laporan_omzet', "LaporanAdminController@get_laporan_omzet");
+Route::post('admin/adminlaporankaryawan/get_saldo_tabungan_karyawan', "LaporanAdminController@get_saldo_tabungan_karyawan");
+Route::post('admin/adminlaporankaryawan/add_saldo_tabungan_karyawan', "LaporanAdminController@add_saldo_tabungan_karyawan");
+Route::post('admin/adminlaporankaryawan/get_tabungan_karyawan', "LaporanAdminController@get_tabungan_karyawan");
+Route::post('admin/adminlaporankaryawan/add_tabungan_karyawan', "LaporanAdminController@add_tabungan_karyawan");
+Route::post('admin/adminlaporankaryawan/delete_tabungan_karyawan', "LaporanAdminController@delete_tabungan_karyawan");
+Route::post('admin/adminlaporankaryawan/get_detail_gaji', "LaporanAdminController@get_detail_gaji");
+
+Route::post('admin/adminlaporankaryawan/get_gaji_karyawan', "LaporanAdminController@get_gaji_karyawan");
+//Route::get('admin/adminlaporankaryawan/get_gaji_karyawan', "LaporanAdminController@get_gaji_karyawan");
+Route::post('admin/adminlaporankaryawan/transfer_all_gaji_karyawan', "LaporanAdminController@transfer_all_gaji");
+Route::post('admin/adminlaporankaryawan/save_bonus', "LaporanAdminController@save_bonus");
 
 Route::get('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan");
 Route::post('admin/persenbonus', "LaporanAdminController@persen_bonus_karyawan_save");

@@ -12,7 +12,7 @@
 
 @section('main')
 <div class="panel panel-default">
-    <div class="panel-heading">Laporan Omzet</div>
+    <div class="panel-heading">Status Omzet Terakhir</div>
     <div class="panel-body">
         @if(Session::has('filter'))
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -20,6 +20,7 @@
             <i class="fa fa-info-circle"></i> {{ $filter }}
         </div>    
         @endif
+        <!--
         <form class="form-horizontal" action="{{ action("FiturController@histori_omzet_query") }}" method="POST">
             <div class="form-group">
                 <label class="col-sm-2 control-label">Periode</label>
@@ -41,6 +42,7 @@
             </div>
         </form>    
         <hr>
+        -->
         <table class="table table-bordered table-hover" id="datatable">
             <thead>
                 <tr>

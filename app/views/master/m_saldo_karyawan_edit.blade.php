@@ -12,40 +12,50 @@
 
 @section('main')
 <div class="row">
-    <form class="form-horizontal" action="{{ action("TransaksiSaldoTabunganController@update", ["id" => $karyawan->idkar]) }}" method="POST">
-        @if(Session::has('mk01_success'))
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-info-circle"></i> {{ $mk01_success }}
-        </div>    
-        @endif
-        <div class="col-sm-7">
-            <div class="form-group">
-                <label class="col-sm-4 control-label">Nama Karyawan</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control siku" name="" disabled="" value="{{ $karyawan->nama }}"/>
-                </div>
+    <div class="col-sm-12" style="">
+        <div class="panel panel-default">
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Saldo Tabungan - Edit </h3>
             </div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label">Saldo Tabungan</label>
-                <div class="col-sm-5">
-                    <input type="text" class="form-control siku text-right" name="tbsld" value="{{ Input::old("tbsld", $karyawan->tbsld) }}"/>
-                    @if($errors->first('tbsld'))
-                    <div class="col-sm-12 alert alert-danger siku" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tbsld') }}</div>
+            <div class="panel-body">
+                <form class="form-horizontal" action="{{ action("TransaksiSaldoTabunganController@update", ["id" => $karyawan->idkar]) }}" method="POST">
+                    @if(Session::has('mk01_success'))
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <i class="fa fa-info-circle"></i> {{ $mk01_success }}
+                    </div>    
                     @endif
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label"></label>
-                <div class="col-sm-5">
-                    <div class="col-sm-12 input-group">
-                        <a href="{{ action('TransaksiSaldoTabunganController@index') }}" class="btn btn-primary siku"><i class="fa fa-backward"></i> Kembali</a> &nbsp;
-                        <button class="btn btn-success siku"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                    <div class="col-sm-7">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Nama Karyawan</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control siku" name="" disabled="" value="{{ $karyawan->nama }}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Saldo Tabungan</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control siku text-right" name="tbsld" value="{{ Input::old("tbsld", $karyawan->tbsld) }}"/>
+                                @if($errors->first('tbsld'))
+                                <div class="col-sm-12 alert alert-danger siku" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tbsld') }}</div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-5">
+                                <div class="col-sm-12 input-group">
+                                    <a href="{{ action('TransaksiSaldoTabunganController@index') }}" class="btn btn-primary siku"><i class="fa fa-backward"></i> Kembali</a> &nbsp;
+                                    <button class="btn btn-success siku"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 @stop
 

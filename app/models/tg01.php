@@ -85,24 +85,27 @@ class tg01 extends Eloquent {
         } else if ($startdate == '' && $idkar != 0) {
             $sql .= " WHERE tg01.idkar = $idkar";
         }
-        $sql.= " AND tg01.status LIKE '$statusBayar' ORDER BY tgltg ASC, `status` ASC;";
+        $sql.= " AND tg01.status LIKE '$statusBayar' AND mk01.jnsusr = 2 AND mk01.status = 'Y' ORDER BY `status` ASC, tgltg ASC;";
 //        dd($sql);
         $tg01 = DB::select(DB::raw($sql));
         return $tg01;
     }
 
-    function getGajiStatusNMonthYear($month = '', $month2 = '', $year = '', $idkar = 0, $statusBayar = "%") {
+    function getGajiStatusNMonthYear($month = '', $month2 = '', $year = '', $year2 = '', $idkar = 0, $statusBayar = "%") {
+        $date1 = $year . "-" . $month . "-01";
+        $date2 = $year2 . "-" . $month2 . "-01";
+        
         $sql = "SELECT tg01.*, mk01.nama FROM tg01 INNER JOIN mk01 ON mk01.idkar = tg01.idkar";
         if ($month != '' && $idkar != 0) {
-            $sql .= " WHERE MONTH(tg01.tgltg) >= '$month' AND MONTH(tg01.tgltg) <= '$month2' AND YEAR(tg01.tgltg) = '$year' AND tg01.idkar = $idkar";
+            $sql .= " WHERE DATE(tg01.tgltg) >= '$date1' AND DATE(tg01.tgltg) <= '$date2' AND tg01.idkar = $idkar";
         } else if ($month != '' && $idkar == 0) {
-            $sql .= " WHERE MONTH(tg01.tgltg) >= '$month' AND MONTH(tg01.tgltg) <= '$month2' AND YEAR(tg01.tgltg) = '$year'";
+            $sql .= " WHERE DATE(tg01.tgltg) >= '$date1' AND DATE(tg01.tgltg) <= '$date2'";
         } else if ($month == '' && $idkar != 0) {
-            $sql .= " WHERE YEAR(tg01.tgltg) = '$year' AND tg01.idkar = $idkar";
+            $sql .= " WHERE YEAR(tg01.tgltg) >= '$year' AND YEAR(tg01.tgltg) <= '$year2' AND tg01.idkar = $idkar";
         } else {
-            $sql .= " WHERE YEAR(tg01.tgltg) = '$year'";
+            $sql .= " WHERE YEAR(tg01.tgltg) >= '$year' AND YEAR(tg01.tgltg) <= '$year2'";
         }
-        $sql.= " AND tg01.status LIKE '$statusBayar';";
+        $sql.= " AND tg01.status LIKE '$statusBayar' ORDER BY `status` ASC, tgltg ASC;";
 //        dd($sql);
         $tg01 = DB::select(DB::raw($sql));
         return $tg01;
@@ -358,18 +361,31 @@ class tg01 extends Eloquent {
             return FALSE;
         }
     }
+
     function getSlipGaji($date, $idkar) {
-        $SQL = "SELECT idtg, status FROM tg01 WHERE idkar = $idkar AND MONTH(tgltg) = MONTH('$date') AND YEAR(tgltg) = YEAR('$date');";
+        $SQL = "SELECT idtg, status FROM tg01 WHERE idkar = $idkar AND MONTH(tglgjsblm) = MONTH('$date') AND YEAR(tglgjsblm) = YEAR('$date');";
         $tg01 = DB::select(DB::raw($SQL));
         if (count($tg01) > 0) {
             $tg01 = $tg01[0];
-            if($tg01->status == 'Y')
-                return $tg01->idtg;
-            else
-                return -1;
+//            if($tg01->status == 'Y')
+//                return $tg01->idtg;
+//            else
+//                return -1;
+            return $tg01->idtg;
         } else {
             return -1;
         }
     }
-    
+
+    function getStatusSlipGaji($date, $idkar) {
+        $SQL = "SELECT idtg, status FROM tg01 WHERE idkar = $idkar AND MONTH(tglgjsblm) = MONTH('$date') AND YEAR(tglgjsblm) = YEAR('$date');";
+        $tg01 = DB::select(DB::raw($SQL));
+        if (count($tg01) > 0) {
+            $tg01 = $tg01[0];
+            return $tg01->status;
+        } else {
+            return -1;
+        }
+    }
+
 }

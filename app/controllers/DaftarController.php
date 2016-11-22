@@ -5,7 +5,7 @@ class DaftarController extends \BaseController {
     public function getTimeServer() {
         date_default_timezone_set('Asia/Jakarta');
 //        echo date('H:i:s');
-        echo date('H:i:s');
+        echo date("H:i:s");
     }
 
     public function getDateServer() {

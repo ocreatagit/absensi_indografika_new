@@ -1,0 +1,170 @@
+<?php $__env->startSection('title'); ?>
+<title>ABSENSI - My Indografika</title>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('header'); ?>
+<h1 class="page-header">My Account
+</h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('main'); ?>
+<div class="well well-sm">
+    <div class="row">
+        <div class="col-sm-3 padleft6percent" style="">
+            <label>Profile Picture</label>
+            <a href="<?php echo url("uploads/".$karyawan->pic); ?>" data-lightbox="roadtrip"> <?php echo $karyawan->pic != "" ? HTML::image('uploads/'.$karyawan->pic, $karyawan->nama, array('class' => 'thumbnail', "width" => 200, "height" => 250)) : HTML::image('uploads/no_image.png', "No Image", array('class' => 'thumbnail', "width" => 180)); ?> </a>
+        </div>
+        <div class="col-sm-9" style="padding-left: 35px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">My Account</div>
+                <?php if(Session::has('mk01_success')): ?>
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <i class="fa fa-info-circle"></i> <?php echo $mk01_success; ?>
+
+                </div>    
+                <?php endif; ?>
+                <div class="panel-body">
+                    <form class="form-horizontal" action="<?php echo action("MasterKaryawanController@changepassword"); ?>" method="POST">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Nama</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control siku" value="<?php echo Input::old('nama', $karyawan["nama"]); ?>" name="nama" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Email</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control siku" value="<?php echo Input::old('email', $karyawan["email"]); ?>" name="email" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">No Reg. Karyawan</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control siku" value="<?php echo Input::old('usernm', $karyawan["usernm"]); ?>" name="usernm" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Password</label>
+                            <div class="col-sm-4">
+                                <input id="passwd" type="password" class="form-control siku" value="<?php echo Input::old('passwd', $karyawan->passwd); ?>" name="passwd">
+                            </div>
+                            <div class="col-sm-2">
+                                <button id="show_password" type="button" class="btn btn-primary siku">Show Password</button>
+                            </div>
+                            <?php if($errors->first('passwd')): ?>
+                            <div class="col-sm-4 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('passwd'); ?></div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Ulangi Password</label>
+                            <div class="col-sm-4">
+                                <input id="passwd2" type="password" class="form-control siku" name="passwd2" value="<?php echo Input::old('passwd2', $karyawan->passwd); ?>">
+                            </div>
+                            <?php if($errors->first('passwd2')): ?>
+                            <div class="col-sm-4 col-sm-offset-4 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('passwd2'); ?></div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Gender</label>
+                            <div class="col-sm-6">
+                                <div class="col-sm-10 input-group">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="gndr" id="inlineRadio1" value="L" <?php echo $karyawan->gndr == "L" ? 'checked' : '' ?>> Laki-Laki
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="gndr" id="inlineRadio2" value="P" <?php echo $karyawan->gndr == "Y" ? 'checked' : ''; ?>> Perempuan
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Tanggal Lahir</label>
+                            <div class="col-sm-6">
+                                <input id="ttl" type="text" class="form-control siku" value="<?php echo Input::old('ttl', strftime("%d-%m-%Y", strtotime($karyawan["ttl"] == '' ? date('d-m-1988') : $karyawan["ttl"]))); ?>" name="ttl" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">No Telepon</label>
+                            <div class="col-sm-6">
+                                <input id="notelp" type="text" class="form-control siku" value="<?php echo Input::old('notelp', $karyawan["notelp"]); ?>" name="notelp" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">No Rekening 1 </label>
+                            <div class="col-sm-6">
+                                <input id="ttl" type="text" class="form-control siku" value="<?php echo Input::old('norek1', $karyawan["norek1"]); ?>" name="norek1" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">No Rekening 2 </label>
+                            <div class="col-sm-6">
+                                <input id="ttl" type="text" class="form-control siku" value="<?php echo Input::old('norek2', $karyawan["norek2"]); ?>" name="norek2" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Alamat</label>
+                            <div class="col-sm-6">
+                                <textarea style="width: 83.333%" name="addr1" class="form-control siku" disabled=""><?php echo Input::old('addr1', $karyawan["addr1"]); ?></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary siku" value="submit" name="btn_submit"><i class="fa fa-save"></i> Save Change</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.clockpicker').clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            donetext: 'Done'
+        });
+        $('#datatable').DataTable();
+
+        $("#tglto").datepicker({
+            inline: true,
+            dateFormat: "dd-mm-yy",
+            changeYear: true,
+            changeMonth: true
+        });
+
+        $("#tglfrom").datepicker({
+            inline: true,
+            dateFormat: "dd-mm-yy",
+            changeYear: true,
+            changeMonth: true
+        });
+
+        $("#show_password").click(function () {
+            var type = $("#passwd").attr("type");
+            var type2 = $("#passwd2").attr("type");
+            if (type == "password") {
+                $("#passwd").attr("type", "text");
+            } else {
+                $("#passwd").attr("type", "password");
+            }
+            if (type2 == "password") {
+                $("#passwd2").attr("type", "text");
+            } else {
+                $("#passwd2").attr("type", "password");
+            }
+        });
+    });
+</script> 
+<?php $__env->stopSection(); ?>
+
+
+
+
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

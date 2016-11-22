@@ -43,11 +43,13 @@ class TransaksiGajiController extends \BaseController {
             return Redirect::to('inputdata/show_gaji_karyawan');
         } else {
             $tg01 = new tg01();
+            $ta03 = new ta03();
             $karyawan = mk01::find($id);
             $data = array(
                 "karyawan" => $karyawan,
                 "gajis" => $tg01->getJamKerjaInSec($id, $karyawan->tglgj),
                 "tglgaji" => date('Y-m-01', strtotime("+1 months", strtotime(date('Y-m', strtotime($karyawan->tglgj)) . "-01"))),
+                "cuti" => $ta03->getTotalAlpha($id, $karyawan->tglgj, "Cuti"),
                 "usermatrik" => User::getUserMatrix()
             );
             return View::make('transaksi.trans_gaji_karyawan', $data);
@@ -74,8 +76,6 @@ class TransaksiGajiController extends \BaseController {
                 $tgltg = Input::get("tgltg");
                 $tglgjsblm = $mk01->tglgj;
 
-//                dd($nominalgj);
-
                 $tg01 = new tg01();
                 $idtg = $tg01->getAutoIncrement();
 
@@ -98,7 +98,6 @@ class TransaksiGajiController extends \BaseController {
                     $tg01->ttlgj += ($nominalgj[$i] * $nilgj);
                     $tg01->save();
                 }
-
                 $mk01 = mk01::find($idkar);
                 $mk01->tglgj = $tg01->tgltg;
                 $mk01->save();
@@ -133,7 +132,25 @@ class TransaksiGajiController extends \BaseController {
                     $tg01->ttlgj += (($mk01->kmtim * $omzetTim) / 100);
                     $tg01->save();
                 }
-                $tg01->ttlbns = (($mk03->getNilKeterangan("prsbns") / 100.0) * $tg01->ttlgj);
+                $telat = $tg01->getKeterlambatan($tglgjsblm, $tg01->idkar);
+                
+                if($telat < $mk03->getNilKeterangan("maxtelat")) {
+                    $tg01->ttlbns = (($mk03->getNilKeterangan("prsbns") / 100.0) * $tg01->ttlgj);
+                } else {
+                    $tg01->ttlbns = 0;
+                }
+                
+                $ta03 = new ta03();
+                $alpha = $ta03->getTotalAlpha($tg01->idkar, $tglgjsblm, 'Alpha');
+                if($alpha > 0) {
+                    $tg01->ttlbns = 0;
+                }
+                
+                $cuti = $ta03->getTotalAlpha($tg01->idkar, $tglgjsblm, 'Cuti');
+                if($cuti > 0) {
+                    $tg01->ttlbns = 0;
+                }
+                
                 $tg01->save();
             });
             Session::flash('tg01_success', 'Slip Gaji Karyawan tersebut Telah Dibuat!');
@@ -157,8 +174,9 @@ class TransaksiGajiController extends \BaseController {
 
         $success = Session::get('tg01_success');
         $danger = Session::get('tg01_danger');
+        $mk01 = new mk01();
         $data = array(
-            "karyawans" => mk01::all(),
+            "karyawans" => $mk01->getKaryawanAktif(),
             "tg01_success" => $success,
             "tg01_danger" => $danger,
             "usermatrik" => User::getUserMatrix()

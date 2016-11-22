@@ -1,0 +1,97 @@
+<html>
+    <?php echo HTML::style('css/tableCSS.css'); ?>
+
+    <table class="table table-bordered table-hover" id="" border="1">
+        <thead>
+            <tr>
+                <th class="text-center cell"></th>
+                <th class="text-right">Pembayaran</th>
+                <?php
+                if (in_array(26, $usermatrik)) {
+                    if (Session::get("user.tipe") == 0) {
+                        ?>
+                        <th class="text-right">No Rekening 1</th>
+                        <th class="text-center cell">Gaji Bersih</th>
+                        <th class="text-center cell">Gaji Kotor</th>
+                        <?php
+                    }
+                }
+                ?>
+                <th class="text-center cell">Msk</th>
+                <th class="text-center cell">Lbr</th>
+                <th class="text-center cell">Aph</th>
+                <th class="text-center cell">Cuti</th>
+                <th class="text-center cell">Telat/Menit</th>
+                <th class="text-center cell">Kasbon</th>
+                <th class="text-center cell">Hutang</th>
+                <th class="text-center cell">Omzet</th>
+                <th class="text-center cell">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            <tr>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 14 : 9) : 9) ?>" class="cell">&nbsp;</td>
+            </tr>
+            <?php
+            $totalOmzet = 0;
+            $totalGajiBersih = 0;
+            $totalGajiKotor = 0;
+            ?>
+            <?php foreach($laporans as $laporan): ?>
+            <tr>
+                <td class="cell"><?php echo $laporan["nama"]; ?></td>
+                <td align="cell"><?php echo $laporan["bln_pembayaran"]; ?></td>
+                <?php
+                if (in_array(26, $usermatrik)) {
+                    if (Session::get("user.tipe") == 0) {
+                        ?>
+                        <td align="right"><?php echo $laporan["norek1"]; ?></td>
+                        <td class="cell"><?php echo $laporan["gajibersih"]; ?></td>
+                        <td class="cell"><?php echo $laporan["gajikotor"]; ?></td>
+                        <?php
+                    }
+                }
+                ?>
+                <td class="cell"><?php echo $laporan["msk"]; ?></td>
+                <td class="cell">
+                    <?php
+                    $jam = round(($laporan["lbr"] / 3600) * 2) / 2;
+                    echo ($jam);
+                    ?>
+                </td>
+                <td class="cell"><?php echo $laporan["aph"]; ?></td>
+                <td class="cell"><?php echo $laporan["cuti"]; ?></td>
+                <td class="cell"><?php echo $laporan["telat"]; ?></td>
+                <td align="right" class="cell"><?php echo $laporan["kasbon"]; ?></td>
+                <td align="right" class="cell"><?php echo $laporan["hutang"]; ?></td>
+                <td align="right" class="cell"><?php echo $laporan["omzet"]; ?></td>
+                <td class="cell"></td>
+                <?php
+                $totalOmzet += $laporan["omzet"];
+                $totalGajiBersih += $laporan["gajibersih"];
+                $totalGajiKotor += $laporan["gajikotor"];
+                ?>
+            </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 14 : 9) : 9) ?>" class="cell">&nbsp;</td>
+            </tr>
+            <tr>
+                <?php
+                if (in_array(26, $usermatrik)) {
+                    if (Session::get("user.tipe") == 0) {
+                        ?>
+                        <td colspan="3">Total Keseluruhan</td>
+                        <td><?php echo $totalGajiBersih; ?></td>
+                        <td><?php echo $totalGajiKotor; ?></td>
+                        <?php
+                    }
+                }
+                ?>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 7 : 8) : 8) ?>" align="right" class="">Total Omzet</td>
+                <td align="right" class="cell">Rp.<?php echo number_format($totalOmzet, 0, ",", "."); ?>,-</td>
+                <td class="cell"></td>
+            </tr>
+        </tbody>
+    </table>
+</html>

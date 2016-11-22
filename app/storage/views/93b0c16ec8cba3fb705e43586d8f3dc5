@@ -1,0 +1,231 @@
+<?php $__env->startSection('title'); ?>
+<title>ABSENSI - Tarik Tabungan</title>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('header'); ?>
+<h1 class="page-header">Input Data
+    <small>Tarik Tabungan</small>
+</h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('main'); ?>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--<a id="tambah" href="<?php echo action('TransaksiOmzetController@create'); ?>" class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Omzet</a>-->
+            </div>
+            <?php if(Session::has('tt02_success')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-info-circle"></i> <?php echo $tt02_success; ?>
+
+            </div>    
+            <?php endif; ?>
+            <?php if(Session::has('tt02_danger')): ?>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-warning"></i> <?php echo $tt02_danger; ?>
+
+            </div>    
+            <?php endif; ?>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Penarikan Tabungan</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <form class="form-horizontal" action="<?php echo action("TransaksiTarikTabunganController@update_saldo_tabungan"); ?>" method="POST">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Nama Karyawan : </label>
+                                <div class="col-sm-4 input-group ">
+                                    <select class="form-control" name="idkar" onchange="changeKaryawan('idkar')" id="idkar">
+                                        <?php
+                                        if (count($karyawanalls) > 0) {
+                                            $usernm = $karyawanalls[0]->usernm;
+                                            $img = $karyawanalls[0]->pic;
+                                            $tbsld = $karyawanalls[0]->tbsld;
+                                        }
+                                        ?>
+                                        <?php foreach($karyawanalls as $karyawanall): ?>
+                                        <option value="<?php echo $karyawanall->idkar; ?>"><?php echo $karyawanall->nama; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Kode Absensi</label>
+                                <div class="col-sm-3 input-group">
+                                    <input type="text" class="form-control" id="abscd" name="abscd" value="<?php echo $usernm ?>" disabled=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Tanggal Tarik Tabungan :</label>
+                                <div class="col-sm-3 input-group ">
+                                    <input type="text" name="tgltt" id="tgltt" value="<?php echo Input::old("tgltt", date('d-m-Y')); ?>" class="form-control"/>
+                                    <?php if($errors->first('tgltt')): ?>
+                                    <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('tgltt'); ?></div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Saldo Tabungan: </label>
+                                <div class="col-sm-5 input-group ">
+                                    <input type="text" id="tbsld" name="tbsld" value="<?php echo number_format($tbsld, 0, ",", "."); ?>" class="form-control" disabled=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Jumlah Penarikan : </label>
+                                <div class="col-sm-5 input-group ">
+                                    <input type="text" name="niltt" value="" class="form-control"/>
+                                    <?php if($errors->first('niltt')): ?>
+                                    <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('niltt'); ?></div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-4">
+                                    <div class="col-sm-8 input-group">
+                                        <?php if (count($karyawanalls) > 0) { ?>
+                                            <button class="btn btn-success siku"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                                        <?php } else { ?>
+                                            <button class="btn btn-danger siku" disabled=""> <i class="glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <img src="<?php echo url("/uploads") . "/" . $img ?>" id="img" width="150" class="thumbnail siku">
+                        </div>
+                    </form>
+                    <hr>
+                    <table class="table table-bordered table-hover" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="text-left">No</th>
+                                <th class="text-left">Tanggal Transaksi</th>
+                                <th class="text-left">Nama</th>
+                                <th class="text-left">Nilai Penarikan</th>
+                                <th class="text-center">Opsi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-left">
+                            <?php $no = 1; ?>
+                            <?php foreach($tariks as $tarik): ?>
+                            <tr>
+                                <td><?php echo $no; ?></td>
+                                <td><?php echo strftime("%d-%b-%Y", strtotime($tarik->tgltt)); ?></td>
+                                <td><?php echo $tarik->nama; ?></td>
+                                <td>Rp.<?php echo number_format($tarik->niltt,0,',','.'); ?>,-</td>
+                                <td class="text-center">
+                                    <a href="<?php echo action('TransaksiTarikTabunganController@delete', [$tarik->idtt]); ?>" class="btn btn-danger delete" data-toggle="tooltip" data-placement="left" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                </td>
+                                <?php $no++; ?>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.clockpicker').clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            donetext: 'Done'
+        });
+        $('#datatable').DataTable();
+
+        $("#tgltt").datepicker({
+            inline: true,
+            dateFormat: "dd-mm-yy",
+            changeYear: true,
+            changeMonth: true
+        });
+    });
+
+    alertify.defaults = {
+        // dialogs defaults
+        modal: true,
+        basic: false,
+        frameless: false,
+        movable: true,
+        resizable: true,
+        closable: true,
+        closableByDimmer: true,
+        maximizable: true,
+        startMaximized: false,
+        pinnable: true,
+        pinned: true,
+        padding: true,
+        overflow: true,
+        maintainFocus: true,
+        transition: 'pulse',
+        autoReset: true,
+        // notifier defaults
+        notifier: {
+            // auto-dismiss wait time (in seconds)  
+            delay: 5,
+            // default position
+            position: 'bottom-right'
+        },
+        // language resources 
+        glossary: {
+            // dialogs default title
+            title: 'Konfirmasi',
+            // ok button text
+            ok: 'OK',
+            // cancel button text
+            cancel: 'Batal'
+        },
+        // theme settings
+        theme: {
+            // class name attached to prompt dialog input textbox.
+            input: 'ajs-input',
+            // class name attached to ok button
+            ok: 'ajs-ok',
+            // class name attached to cancel button 
+            cancel: 'ajs-cancel'
+        }
+    };
+
+    $(".delete").click(function (e) {
+        e.preventDefault();
+        var a = this.href;
+        alertify.confirm('Batal Penarikan Tabungan Karyawan?', function (e) {
+            if (e) {
+                window.location.assign(a);
+            } else {
+                //after clicking Cancel
+            }
+        });
+    });
+
+    function changeKaryawan(idkar) {
+        var id = document.getElementById(idkar).value;
+        var url = "<?php echo url("/master/karyawan/get_karyawan") ?>" + "/" + id;
+
+        $.get(url, function (data) {
+            var mk01 = JSON.parse(data);
+            console.log(mk01);
+            $("#abscd").val(mk01.usernm);
+            var img = "<?php echo url("/uploads") ?>" + "/" + mk01.pic;
+            $("#img").attr("src", img);
+            $("#tbsld").val(mk01.tbsld.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        });
+    }
+</script> 
+<?php $__env->stopSection(); ?>
+
+
+
+
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

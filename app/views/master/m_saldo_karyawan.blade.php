@@ -12,86 +12,95 @@
 
 @section('main')
 <div class="row">
-    <form class="form-horizontal" action="{{ action("TransaksiSaldoTabunganController@store") }}" method="POST">
-        @if(Session::has('mk01_success'))
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-info-circle"></i> {{ $mk01_success }}
-        </div>    
-        @endif
-        <div class="col-sm-7">
-            <div class="form-group">
-                <label class="col-sm-4 control-label">Nama Karyawan</label>
-                <div class="col-sm-4">
-                    <select id="idkar" class="form-control siku" name="idkar" onchange="changeKaryawan('idkar')">
-                        <?php
-                        if (count($karyawans) > 0) {
-                            $usernm = $karyawans[0]->usernm;
-                            $img = "";
-                        }
-                        ?>
-                        @foreach($karyawans as $karyawan)
-                        <?php if ($karyawan->jnsusr == 2) { ?>
-                            <option value="{{ $karyawan->idkar }}">{{ $karyawan->nama }}</option>
-                            <?php
-                            if ($img == "") {
-                                $img = $karyawan->pic;
-                            }
-                        }
-                        ?>
-                        @endforeach
-                    </select>
-                    <input type="hidden" name="getKaryawanUrl" id="getKaryawanUrl" value=""/>
-                </div>
+    <div class="col-sm-12" style="">
+        <div class="panel panel-default">
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Saldo Tabungan </h3>
             </div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label">Saldo Tabungan</label>
-                <div class="col-sm-5">
-                    <input type="text" class="form-control siku text-right" name="tbsld" value="{{ Input::old("tbsld") }}"/>
-                    @if($errors->first('tbsld'))
-                    <div class="col-sm-12 alert alert-danger siku" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tbsld') }}</div>
-                    @endif
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label"></label>
-                <div class="col-sm-4">
-                    <div class="col-sm-12 input-group">
-                        <button class="btn btn-success siku"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button> &nbsp;
+            <form class="form-horizontal" action="{{ action("TransaksiSaldoTabunganController@store") }}" method="POST">
+                @if(Session::has('mk01_success'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <i class="fa fa-info-circle"></i> {{ $mk01_success }}
+                </div>    
+                @endif
+                <div class="col-sm-7">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Nama Karyawan</label>
+                        <div class="col-sm-4">
+                            <select id="idkar" class="form-control siku" name="idkar" onchange="changeKaryawan('idkar')">
+                                <?php
+                                if (count($karyawans) > 0) {
+                                    $usernm = $karyawans[0]->usernm;
+                                    $img = "";
+                                }
+                                ?>
+                                @foreach($karyawans as $karyawan)
+                                <?php if ($karyawan->jnsusr == 2) { ?>
+                                    <option value="{{ $karyawan->idkar }}">{{ $karyawan->nama }}</option>
+                                    <?php
+                                    if ($img == "") {
+                                        $img = $karyawan->pic;
+                                    }
+                                }
+                                ?>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="getKaryawanUrl" id="getKaryawanUrl" value=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Saldo Tabungan</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control siku text-right" name="tbsld" value="{{ Input::old("tbsld") }}"/>
+                            @if($errors->first('tbsld'))
+                            <div class="col-sm-12 alert alert-danger siku" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tbsld') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"></label>
+                        <div class="col-sm-4">
+                            <div class="col-sm-12 input-group">
+                                <button class="btn btn-success siku"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button> &nbsp;
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="col-sm-3">
+                    <img id="img" class="thumbnail siku" src="<?php echo url("/uploads") . "/" . $img ?>" width="130" height="150">
+                </div>
+            </form>
+            
+            <div class="panel-body">
+                <table class="table table-bordered table-hover" id="datatable">
+                    <thead>
+                        <tr>
+                            <th class="text-left">No</th>
+                            <th class="text-left">Nama</th>
+                            <th class="text-right">Tabungan</th>
+                            <th class="text-left">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-left">
+                        <?php $no = 1; ?>
+                        @foreach($karyawans as $karyawan)
+                        <?php if ($karyawan->jnsusr == 2) { ?>
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $karyawan->nama }}</td>
+                                <td align="right">Rp.{{ number_format($karyawan->tbsld, 0, ",", ".") }},-</td>
+                                <td class="text-center">
+                                    <a href="{{ action('TransaksiSaldoTabunganController@show', $karyawan->idkar) }}" class="btn btn-info siku" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="col-sm-3">
-            <img id="img" class="thumbnail siku" src="<?php echo url("/uploads") . "/" . $img ?>" width="130" height="150">
-        </div>
-    </form>
-    <div class="col-sm-10 col-sm-offset-1">
-        <table class="table table-bordered table-hover" id="datatable">
-            <thead>
-                <tr>
-                    <th class="text-left">No</th>
-                    <th class="text-left">Nama</th>
-                    <th class="text-right">Tabungan</th>
-                    <th class="text-left">Opsi</th>
-                </tr>
-            </thead>
-            <tbody class="text-left">
-                <?php $no = 1; ?>
-                @foreach($karyawans as $karyawan)
-                <?php if ($karyawan->jnsusr == 2) { ?>
-                    <tr>
-                        <td>{{ $no++ }}</td>
-                        <td>{{ $karyawan->nama }}</td>
-                        <td align="right">Rp.{{ number_format($karyawan->tbsld, 0, ",", ".") }},-</td>
-                        <td class="text-center">
-                            <a href="{{ action('TransaksiSaldoTabunganController@show', $karyawan->idkar) }}" class="btn btn-info siku" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>
-                        </td>
-                    </tr>
-                <?php } ?>
-                @endforeach
-            </tbody>
-        </table>
     </div>
 </div>
 @stop

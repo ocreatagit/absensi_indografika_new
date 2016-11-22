@@ -36,10 +36,10 @@ class loginController extends \BaseController {
 
                         if ($kar[0]->jnsusr == 2) {
                             return Redirect::to('myindografika/presensikaryawan');
-                        } else if ($kar[0]->jnsusr == 2) {
-                            return Redirect::to('myindografika/gajikaryawan');
-                        } else {
+                        } else if ($kar[0]->jnsusr == 1) {
                             return Redirect::to('master/jamkerja');
+                        } else {
+                            return Redirect::to('admin/adminlaporankaryawan');
                         }
                     }else{
                         Session::flash('login_failed', 'Account anda tidak aktif!');

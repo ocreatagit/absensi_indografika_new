@@ -16,11 +16,12 @@ class TransaksiAlphaController extends \BaseController {
         $success = Session::get('ta03_success');
         $danger = Session::get('ta03_danger');
         $ta03 = new ta03();
+        $mk01 = new mk01();
 
         $data = array(
             "alphas" => $ta03->getAllAlpha(),
             "tglabs" => date("d-m-Y"),
-            "karyawans" => mk01::where("status", "=", "Y")->where("jnsusr", "<>", 0)->get(),
+            "karyawans" => $mk01->getKaryawanAktif(),
             "ta03_success" => $success,
             "ta03_danger" => $danger,
             "usermatrik" => User::getUserMatrix()

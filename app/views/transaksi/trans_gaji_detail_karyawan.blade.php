@@ -13,15 +13,16 @@
 @section('main')
 <div class="row">
     <div class="panel panel-default" id="infGaji">        
-        <div class="panel-heading">
-            <a href="{{ action('TransaksiGajiController@index') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+            <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Slip Gaji - Detail</h3>            
         </div>
         <div class="panel-body">
             <form class="form-horizontal" action="{{ action("TransaksiGajiController@store") }}" method="POST">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Nama Karyawan</label>
                     <div class="col-sm-2 input-group ">
-                        <input type="text" class="form-control disabled" value="{{ $karyawan->nama }}" disabled=""/>
+                        <input type="text" class="form-control disabled siku" value="{{ $karyawan->nama }}" disabled=""/>
                         <input type="hidden" name="idkar" value="{{ $karyawan->idkar }}"/>
                     </div>
                 </div>
@@ -53,17 +54,23 @@
                         }
                         ?>
                         <input type="text" name="nominalgaji[]" value="{{ $gaji->hari == 0 ? ($menit < 30 ? $jam : ($jam + 0.5)) : $gaji->hari }}" class="form-control" readonly=""/>
-                        <div class="input-group-addon">{{ $gaji->jntgh }}</div>
+                        <div class="input-group-addon siku">{{ $gaji->jntgh }}</div>
                     </div>
                     <label class="col-sm-3" style="margin-top: 0.5%">
                         <?php
                         if ($gaji->jntgh == "Hari" || $gaji->jntgh == "Jam") {
-                            echo "Total Jam Kerja : ".$jam . " Jam " . $menit . " Menit";
+                            echo "Total Jam Kerja : " . $jam . " Jam " . $menit . " Menit";
                         }
                         ?>
                     </label>
                 </div>
                 @endforeach
+                <div class="form-group">
+                    <label class="control-label col-sm-3"></label>
+                    <div class="col-sm-3">
+                        <a href="{{ action('TransaksiGajiController@index') }}" class="btn btn-primary siku" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
+                    </div>
+                </div>
             </form>            
         </div>
     </div>

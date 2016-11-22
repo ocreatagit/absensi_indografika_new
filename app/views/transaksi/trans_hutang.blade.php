@@ -28,13 +28,16 @@
             </div>    
             @endif
             <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Data Hutang</h3>
+            </div>
+            <div class="panel-body">
                 <div class="row">
                     <form class="form-horizontal" action="{{ action("TransaksiHutangController@store") }}" method="POST">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Nama Karyawan</label>
                                 <div class="col-sm-6 input-group">
-                                    <select id="idkar" class="form-control" name="idkar" onchange="changeKaryawan('idkar')">
+                                    <select id="idkar" class="form-control siku" name="idkar" onchange="changeKaryawan('idkar')">
                                         <?php
                                         if(count($karyawans) > 0){
                                             $usernm = $karyawans[0]->usernm;
@@ -67,8 +70,8 @@
                                 <label class="col-sm-4 control-label">Angsuran</label>
                                 <div class="col-sm-2 input-group">                                                               
                                     <div class="input-group">
-                                        <input type="text" class="form-control" name="jmlang" value="1"/>
-                                        <div class="input-group-addon"><i class="fa fa-times"></i></div>
+                                        <input type="text" class="form-control siku" name="jmlang" value="1"/>
+                                        <div class="input-group-addon siku"><i class="fa fa-times"></i></div>
                                     </div>                                    
                                 </div>                                
                                 @if($errors->first('jmlang'))
@@ -87,17 +90,17 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></label>
                                 <div class="col-sm-6 input-group">                                        
-                                    <button class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Data</button>
+                                    <button class="btn btn-primary siku"><i class="fa fa-plus-square"></i> Tambah Data</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <img src="<?php echo url("/uploads")."/".$img ?>" id="img" width="120" height="150">
+                            <img src="<?php echo url("/uploads")."/".$img ?>" id="img" width="150" class="thumbnail siku">
                         </div>
                     </form>
                 </div>
                 <div>
-                    <h3 class="page-header"><i class="fa fa-info-circle"></i> Status Pinjaman Karyawan</h3>
+                    <br>
                     <table class="table table-bordered table-hover" id="datatable">
                         <thead>
                             <tr>
@@ -120,8 +123,8 @@
                                 <td>{{ $hutang->jenhut }}</td>
                                 <td>{{ $hutang->flglns == "Y" ? "Lunas" : "Belum Lunas" }}</td>
                                 <td>
-                                    <a href="{{ action('TransaksiHutangController@edit', [$hutang->idhut]) }}" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Edit Data?"><i class="fa fa-edit"></i></a>
-                                    <a href="{{ action('TransaksiHutangController@destroy', [$hutang->idhut]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                    <a href="{{ action('TransaksiHutangController@edit', [$hutang->idhut]) }}" class="btn btn-info siku" data-toggle="tooltip" data-placement="right" title="Edit Data?"><i class="fa fa-edit"></i></a>
+                                    <a href="{{ action('TransaksiHutangController@destroy', [$hutang->idhut]) }}" class="btn btn-danger siku delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach

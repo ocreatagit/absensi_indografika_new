@@ -56,6 +56,10 @@
                 margin-top: 0.8%;
             }
 
+            .marginTop22 {
+                margin-top: 2.2%;
+            }
+
             .marginTop25{
                 margin-top: 2.5%;
             }
@@ -70,6 +74,26 @@
 
             .padleft6percent {
                 padding-left: 6%;
+            }
+
+            .ui-datepicker {
+                z-index: 1600 !important; /* has to be larger than 1050 */
+            }
+
+            #ui-datetimepicker-div {
+                z-index: 100000;
+            }
+
+            /*            #datatable_input_saldo_tabungan tbody tr td:nth-child(3), #datatable_input_saldo_tabungan tbody tr td:nth-child(1){
+                            text-align : right;
+                        }*/
+
+            #datatable_input_tabungan tbody tr td:nth-child(5) {
+                text-align : center;
+            }
+
+            #datatable_input_transfer_gaji tbody tr td:nth-child(6) {
+                text-align : center;
             }
         </style>
     </head>
@@ -149,6 +173,9 @@
                                     <?php } ?>
                                     <?php if (in_array(29, $usermatrik)) { ?>
                                         <li><?php echo HTML::link('inputdata/saldotabungan', 'Saldo Tabungan'); ?></li>
+                                    <?php } ?>
+                                    <?php if (in_array(30, $usermatrik)) { ?>
+                                        <li><?php echo HTML::link('inputdata/tarik_tabungan', 'Tarik Tabungan'); ?></li>
                                     <?php } ?>
                                 </ul>
                             <?php } ?>
@@ -334,7 +361,7 @@
                 cancel: 'ajs-cancel'
             }
         };
-        
+
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });

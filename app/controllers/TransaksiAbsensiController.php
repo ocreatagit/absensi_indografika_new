@@ -17,7 +17,7 @@ class TransaksiAbsensiController extends \BaseController {
         $danger = Session::get('ta01_danger');
         $ta01 = new ta01();
         $data = array(
-            "karyawans" => mk01::where("status", "=", "Y")->get(),
+            "karyawans" => mk01::where("status", "=", "Y")->where("jnsusr", "=", 2)->get(),
             "ta01_success" => $success,
             "ta01_danger" => $danger,
             "usermatrik" => User::getUserMatrix()
@@ -40,7 +40,11 @@ class TransaksiAbsensiController extends \BaseController {
      * @return Response
      */
     public function store($id) {
-
+        $var = User::loginCheck([0, 1], 24);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
+        
         $messages = array(
             'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
             'numeric' => 'Inputan <b>Harus Angka</b>!',
@@ -114,7 +118,18 @@ class TransaksiAbsensiController extends \BaseController {
                     }
                 }
                 return Redirect::to("inputdata/absensi_jam_kerja/" . $id);
-            } else {
+            } else if(Input::get("btn_hapus") != NULL) {
+                $tanggal = Input::get('tglabs');
+                $abscd = Input::get('abscd');
+                $jam = Input::get('jmmsk');
+                $ta01_id = Presensi::GetTa01_id($id, $tanggal);
+                if ($ta01_id) {
+                    if ($ta02_id = Presensi::CheckPresensi($id, $ta01_id, $tanggal, $abscd)) {
+                        Presensi::DeletePresensi($ta02_id);
+                    }
+                    return Redirect::to("inputdata/absensi_jam_kerja/" . $id);
+                }
+            } else if (Input::get("btn_cari") != NULL) {
                 $success = Session::get('ta01_success');
                 $danger = Session::get('ta01_danger');
                 $ta01 = new ta01();

@@ -14,9 +14,7 @@
 <div class="row">
     <div class="col-sm-12" style="">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <a href="{{ action('TransaksiHutangController@index') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
-            </div>
+            <div class="panel-heading"></div>
             @if(Session::has('th01_success'))
             <div class="alert alert-success alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -30,25 +28,28 @@
             </div>    
             @endif
             <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Data Hutang - Detail</h3>
+            </div>
+            <div class="panel-body">
                 <div class="row">
                     <form class="form-horizontal" action="{{ action("TransaksiHutangController@update", [$hutang[0]->idhut]) }}" method="POST">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Nama Karyawan</label>
                                 <div class="col-sm-6">
-                                    <input type="text" disabled="" value="{{ $hutang[0]->nama }}" class="form-control">
+                                    <input type="text" disabled="" value="{{ $hutang[0]->nama }}" class="form-control siku">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Jenis Pinjaman</label>
                                 <div class="col-sm-3">
-                                    <input type="text" disabled="" value="{{ $hutang[0]->jenhut }}" class="form-control">
+                                    <input type="text" disabled="" value="{{ $hutang[0]->jenhut }}" class="form-control siku">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Angsuran</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control" name="jmlang" value="{{ Input::old('jmlang', $hutang[0]->jmlang) }}" {{ $hutang[0]->jenhut == 'Kas Bon' ? 'disabled' : '' }}/>
+                                    <input type="text" class="form-control siku" name="jmlang" value="{{ Input::old('jmlang', $hutang[0]->jmlang) }}" {{ $hutang[0]->jenhut == 'Kas Bon' ? 'disabled' : '' }}/>
                                     @if($errors->first('jmlang'))
                                     <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('jmlang') }}</div>
                                     @endif
@@ -58,7 +59,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Jumlah Pinjaman</label>
                                 <div class="col-sm-6">                                        
-                                    <input type="text" class="form-control" name="nilhut" value="{{ Input::old('nilhut', $hutang[0]->nilhut) }}"/>
+                                    <input type="text" class="form-control siku" name="nilhut" value="{{ Input::old('nilhut', $hutang[0]->nilhut) }}"/>
                                     @if($errors->first('nilhut'))
                                     <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('nilhut') }}</div>
                                     @endif
@@ -66,13 +67,14 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></label>
-                                <div class="col-sm-6">                                        
-                                    <button class="btn btn-info"><i class="fa fa-save"></i> Ubah Data</button>
+                                <div class="col-sm-6">
+                                    <a href="{{ action('TransaksiHutangController@index') }}" class="btn btn-primary siku" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
+                                    <button class="btn btn-info siku"><i class="fa fa-save"></i> Ubah Data</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <img src="<?php echo url("/uploads")."/".$hutang[0]->pic ?>" width="120" height="150">
+                            <img src="<?php echo url("/uploads")."/".$hutang[0]->pic ?>" width="150" class="thumbnail siku">
                         </div>
                     </form>
                 </div>

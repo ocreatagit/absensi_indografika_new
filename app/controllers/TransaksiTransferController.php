@@ -63,6 +63,7 @@ class TransaksiTransferController extends \BaseController {
         $tt01 = new tt01();
         $tz01 = new tz01();
         $mk01 = new mk01();
+        $ta03 = new ta03();
 
         $karyawan = mk01::find($tg01->idkar);
         $data = array(
@@ -80,6 +81,7 @@ class TransaksiTransferController extends \BaseController {
             "omzetIndividu" => $tz01->getOmzetIndividu($tg01->idkar, $tg01->tglgjsblm),
             "omzetTim" => $tz01->getOmzetTim($tg01->idkar, $tg01->tglgjsblm),
             "referrals" => $mk01->getReferralKar($tg01->idkar),
+            "cuti" => $ta03->getTotalAlpha($tg01->idkar, $tg01->tglgjsblm, "Cuti"),
             "tg01_success" => $success,
             "tg01_danger" => $danger,
             "usermatrik" => User::getUserMatrix()
@@ -180,6 +182,7 @@ class TransaksiTransferController extends \BaseController {
         $tt01 = new tt01();
         $tz01 = new tz01();
         $mk01 = new mk01();
+        $ta03 = new ta03();
 
         $karyawan = mk01::find($tg01->idkar);
         $data = array(
@@ -197,6 +200,8 @@ class TransaksiTransferController extends \BaseController {
             "omzetIndividu" => $tz01->getOmzetIndividu($tg01->idkar, $tg01->tgltg),
             "omzetTim" => $tz01->getOmzetTim($tg01->idkar, $tg01->tgltg),
             "referrals" => $mk01->getReferralKar($tg01->idkar),
+            "aph" => $ta03->getTotalAlpha($tg01->idkar, $tg01->tgltg, "Alpha"),
+            "cuti" => $ta03->getTotalAlpha($tg01->idkar, $tg01->tgltg, "Cuti"),
             "tg01_success" => $success,
             "tg01_danger" => $danger,
             "usermatrik" => User::getUserMatrix()

@@ -8,7 +8,7 @@ class TransaksiSaldoTabunganController extends \BaseController {
      * @return Response
      */
     public function index() {
-        $var = User::loginCheck([0, 1], 3);
+        $var = User::loginCheck([0, 1], 29);
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
         }
@@ -38,6 +38,11 @@ class TransaksiSaldoTabunganController extends \BaseController {
      * @return Response
      */
     public function store() {
+        $var = User::loginCheck([0, 1], 29);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
+        
         // 1. setting validasi
         $messages = array(
             'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
@@ -86,7 +91,7 @@ class TransaksiSaldoTabunganController extends \BaseController {
      * @return Response
      */
     public function show($id) {
-        $var = User::loginCheck([0, 1], 3);
+        $var = User::loginCheck([0, 1], 29);
         if (!$var["bool"]) {
             return Redirect::to($var["url"]);
         }
@@ -117,6 +122,10 @@ class TransaksiSaldoTabunganController extends \BaseController {
      * @return Response
      */
     public function update($id) {
+        $var = User::loginCheck([0, 1], 29);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
         // 1. setting validasi
         $messages = array(
             'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',

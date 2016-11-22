@@ -12,7 +12,7 @@
 
 @section('main')
 <div class="panel panel-default">
-    <div class="panel-heading">Laporan Gaji</div>
+    <div class="panel-heading">Status Gaji Terakhir</div>
     <div class="panel-body">
         @if(Session::has('filter'))
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -20,21 +20,22 @@
             <i class="fa fa-info-circle"></i> {{ $filter }}
         </div>    
         @endif
+        <!--
         <form class="form-horizontal" action="{{ action("FiturController@histori_pembayaran_gaji_query") }}" method="POST">
             <div class="form-group">
                 <label class="col-sm-2 control-label">Periode</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control siku" value="{{ date('d-m-Y') }}" name="tglfrom" id="tglfrom">
+                    <input type="text" class="form-control siku" disabled="" value="{{ date('d-m-Y') }}" name="tglfrom" id="tglfrom">
                 </div>
                 <label class="col-sm-1 control-label">s/d</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control siku" value="{{ date('d-m-Y') }}" name="tglto" id="tglto">
+                    <input type="text" class="form-control siku" disabled="" value="{{ date('d-m-Y') }}" name="tglto" id="tglto">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Status</label>
                 <div class="col-sm-3">                                        
-                    <select class="form-control siku" name="status">
+                    <select class="form-control siku" disabled="" name="status">
                         <option value="Y">Terbayar</option>
                         <option value="N">Belum Terbayar</option>
                     </select>
@@ -43,11 +44,12 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label"></label>
                 <div class="col-sm-4">                                        
-                    <button type="submit" class="btn btn-success siku" name="btn_filter" value="btn_filter"><i class="fa fa-search"></i> Filter</button>
+                    <button type="submit" class="btn btn-success siku" disabled="" name="btn_filter" value="btn_filter"><i class="fa fa-search"></i> Filter</button>
                 </div>
             </div>                               
         </form>    
         <hr>
+        -->
         <table class="table table-bordered table-hover" id="datatable">
             <thead>
                 <tr>

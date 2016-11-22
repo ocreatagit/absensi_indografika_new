@@ -8,19 +8,31 @@ class TransaksiTarikTabunganController extends \BaseController {
      * @return Response
      */
     public function index() {
+        $var = User::loginCheck([0, 1], 30);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
+        
         $success = Session::get('tt02_success');
         $danger = Session::get('tt02_danger');
         $tt02 = new tt02();
+        $mk01 = new mk01();
         $data = array(
-            "karyawanalls" => mk01::where("status", "=", "Y")->get(),
+            "karyawanalls" => $mk01->getKaryawanAktif(),
             "tariks" => $tt02->getAllTarik(),
             "tt02_success" => $success,
-            "tt02_danger" => $danger
+            "tt02_danger" => $danger,
+            "usermatrik" => User::getUserMatrix()
         );
         return View::make("transaksi.trans_tarik_tabungan", $data);
     }
 
     public function update_saldo_tabungan() {
+        $var = User::loginCheck([0, 1], 30);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
+        
         // 1. setting validasi
         $messages = array(
             'required' => 'Inputan <b>Tidak Boleh Kosong</b>!',
@@ -58,7 +70,7 @@ class TransaksiTarikTabunganController extends \BaseController {
                 $mk01->save();
                 Session::flash('tt02_success', 'Data Telah Ditambahkan!');
             }
-            return Redirect::to('inputdata/tarik_tabungan   ');
+            return Redirect::to('inputdata/tarik_tabungan');
         }
         // 2b. jika tidak, kembali ke halaman form registrasi
         else {
@@ -69,6 +81,11 @@ class TransaksiTarikTabunganController extends \BaseController {
     }
 
     public function delete($id) {
+        
+        $var = User::loginCheck([0, 1], 30);
+        if (!$var["bool"]) {
+            return Redirect::to($var["url"]);
+        }
         
         $tt02 = tt02::find($id);
         $idkar = $tt02->idkar;

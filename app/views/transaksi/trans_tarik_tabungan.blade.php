@@ -12,93 +12,122 @@
 
 @section('main')
 <div class="row">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <!--<a id="tambah" href="{{ action('TransaksiOmzetController@create') }}" class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Omzet</a>-->
-        </div>
-        @if(Session::has('tt02_success'))
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-info-circle"></i> {{ $tt02_success }}
-        </div>    
-        @endif
-        @if(Session::has('tt02_danger'))
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-warning"></i> {{ $tt02_danger }}
-        </div>    
-        @endif
-        <div class="panel-body">
-            <div class="col-sm-12">
-                <form class="form-horizontal" action="{{ action("TransaksiTarikTabunganController@update_saldo_tabungan") }}" method="POST">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Nama Karyawan : </label>
-                        <div class="col-sm-2 input-group ">
-                            <select class="form-control" name="idkar">
-                                @foreach($karyawanalls as $karyawanall)
-                                <option value="{{ $karyawanall->idkar }}">{{ $karyawanall->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Tanggal Tarik Tabungan :</label>
-                        <div class="col-sm-3 input-group ">
-                            <input type="text" name="tgltt" id="tgltt" value="{{ Input::old("tgltt", date('d-m-Y')) }}" class="form-control"/>
-                            @if($errors->first('tgltt'))
-                            <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tgltt') }}</div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Jumlah Penarikan : </label>
-                        <div class="col-sm-4 input-group ">
-                            <input type="text" name="niltt" value="" class="form-control"/>
-                            @if($errors->first('niltt'))
-                            <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('niltt') }}</div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"></label>
-                        <div class="col-sm-4">
-                            <div class="col-sm-8 input-group">
-                                <?php if (count($karyawanalls) > 0) { ?>
-                                    <button class="btn btn-success"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
-                                <?php } else { ?>
-                                    <button class="btn btn-danger" disabled=""> <i class="glyphicon glyphicon-floppy-disk"></i> Simpan</button>
-                                <?php } ?>
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <!--<a id="tambah" href="{{ action('TransaksiOmzetController@create') }}" class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Omzet</a>-->
+            </div>
+            @if(Session::has('tt02_success'))
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-info-circle"></i> {{ $tt02_success }}
+            </div>    
+            @endif
+            @if(Session::has('tt02_danger'))
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-warning"></i> {{ $tt02_danger }}
+            </div>    
+            @endif
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Penarikan Tabungan</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <form class="form-horizontal" action="{{ action("TransaksiTarikTabunganController@update_saldo_tabungan") }}" method="POST">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Nama Karyawan : </label>
+                                <div class="col-sm-4 input-group ">
+                                    <select class="form-control" name="idkar" onchange="changeKaryawan('idkar')" id="idkar">
+                                        <?php
+                                        if (count($karyawanalls) > 0) {
+                                            $usernm = $karyawanalls[0]->usernm;
+                                            $img = $karyawanalls[0]->pic;
+                                            $tbsld = $karyawanalls[0]->tbsld;
+                                        }
+                                        ?>
+                                        @foreach($karyawanalls as $karyawanall)
+                                        <option value="{{ $karyawanall->idkar }}">{{ $karyawanall->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Kode Absensi</label>
+                                <div class="col-sm-3 input-group">
+                                    <input type="text" class="form-control" id="abscd" name="abscd" value="<?php echo $usernm ?>" disabled=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Tanggal Tarik Tabungan :</label>
+                                <div class="col-sm-3 input-group ">
+                                    <input type="text" name="tgltt" id="tgltt" value="{{ Input::old("tgltt", date('d-m-Y')) }}" class="form-control"/>
+                                    @if($errors->first('tgltt'))
+                                    <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('tgltt') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Saldo Tabungan: </label>
+                                <div class="col-sm-5 input-group ">
+                                    <input type="text" id="tbsld" name="tbsld" value="{{ number_format($tbsld, 0, ",", ".") }}" class="form-control" disabled=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Jumlah Penarikan : </label>
+                                <div class="col-sm-5 input-group ">
+                                    <input type="text" name="niltt" value="" class="form-control"/>
+                                    @if($errors->first('niltt'))
+                                    <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('niltt') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-4">
+                                    <div class="col-sm-8 input-group">
+                                        <?php if (count($karyawanalls) > 0) { ?>
+                                            <button class="btn btn-success siku"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                                        <?php } else { ?>
+                                            <button class="btn btn-danger siku" disabled=""> <i class="glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                                        <?php } ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-                <hr>
-                <table class="table table-bordered table-hover" id="datatable">
-                    <thead>
-                        <tr>
-                            <th class="text-left">No</th>
-                            <th class="text-left">Tanggal Transaksi</th>
-                            <th class="text-left">Nama</th>
-                            <th class="text-left">Nilai Penarikan</th>
-                            <th class="text-center">Opsi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-left">
-                        <?php $no = 1; ?>
-                        @foreach($tariks as $tarik)
-                        <tr>
-                            <td>{{ $no }}</td>
-                            <td>{{ strftime("%d-%b-%Y", strtotime($tarik->tgltt)) }}</td>
-                            <td>{{ $tarik->nama }}</td>
-                            <td>Rp.{{ number_format($tarik->niltt,0,',','.') }},-</td>
-                            <td class="text-center">
-                                <a href="{{ action('TransaksiTarikTabunganController@delete', [$tarik->idtt]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="left" title="Hapus Data?"><i class="fa fa-trash"></i></a>
-                            </td>
-                            <?php $no++; ?>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        <div class="col-sm-3">
+                            <img src="<?php echo url("/uploads") . "/" . $img ?>" id="img" width="150" class="thumbnail siku">
+                        </div>
+                    </form>
+                    <hr>
+                    <table class="table table-bordered table-hover" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="text-left">No</th>
+                                <th class="text-left">Tanggal Transaksi</th>
+                                <th class="text-left">Nama</th>
+                                <th class="text-left">Nilai Penarikan</th>
+                                <th class="text-center">Opsi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-left">
+                            <?php $no = 1; ?>
+                            @foreach($tariks as $tarik)
+                            <tr>
+                                <td>{{ $no }}</td>
+                                <td>{{ strftime("%d-%b-%Y", strtotime($tarik->tgltt)) }}</td>
+                                <td>{{ $tarik->nama }}</td>
+                                <td>Rp.{{ number_format($tarik->niltt,0,',','.') }},-</td>
+                                <td class="text-center">
+                                    <a href="{{ action('TransaksiTarikTabunganController@delete', [$tarik->idtt]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="left" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                </td>
+                                <?php $no++; ?>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -179,6 +208,20 @@
             }
         });
     });
+
+    function changeKaryawan(idkar) {
+        var id = document.getElementById(idkar).value;
+        var url = "<?php echo url("/master/karyawan/get_karyawan") ?>" + "/" + id;
+
+        $.get(url, function (data) {
+            var mk01 = JSON.parse(data);
+            console.log(mk01);
+            $("#abscd").val(mk01.usernm);
+            var img = "<?php echo url("/uploads") ?>" + "/" + mk01.pic;
+            $("#img").attr("src", img);
+            $("#tbsld").val(mk01.tbsld.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        });
+    }
 </script> 
 @stop
 

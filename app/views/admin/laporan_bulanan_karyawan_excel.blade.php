@@ -4,6 +4,7 @@
         <thead>
             <tr>
                 <th class="text-center cell"></th>
+                <th class="text-right">Pembayaran</th>
                 <?php
                 if (in_array(26, $usermatrik)) {
                     if (Session::get("user.tipe") == 0) {
@@ -28,7 +29,7 @@
         </thead>
         <tbody class="text-center">
             <tr>
-                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 13 : 9) : 9) ?>" class="cell">&nbsp;</td>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 14 : 9) : 9) ?>" class="cell">&nbsp;</td>
             </tr>
             <?php
             $totalOmzet = 0;
@@ -38,6 +39,7 @@
             @foreach($laporans as $laporan)
             <tr>
                 <td class="cell">{{ $laporan["nama"] }}</td>
+                <td align="cell">{{ $laporan["bln_pembayaran"] }}</td>
                 <?php
                 if (in_array(26, $usermatrik)) {
                     if (Session::get("user.tipe") == 0) {
@@ -71,14 +73,14 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 13 : 9) : 9) ?>" class="cell">&nbsp;</td>
+                <td colspan="<?php echo ((in_array(26, $usermatrik)) ? (Session::get("user.tipe") == 0 ? 14 : 9) : 9) ?>" class="cell">&nbsp;</td>
             </tr>
             <tr>
                 <?php
                 if (in_array(26, $usermatrik)) {
                     if (Session::get("user.tipe") == 0) {
                         ?>
-                        <td colspan="2">Total Keseluruhan</td>
+                        <td colspan="3">Total Keseluruhan</td>
                         <td>{{ $totalGajiBersih }}</td>
                         <td>{{ $totalGajiKotor }}</td>
                         <?php

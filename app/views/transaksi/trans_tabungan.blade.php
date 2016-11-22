@@ -28,13 +28,16 @@
             </div>    
             @endif
             <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Data Tabungan</h3>
+            </div>
+            <div class="panel-body">
                 <div class="row">
                     <form class="form-horizontal"  action="{{ action("TransaksiTabunganController@store") }}" method="POST">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Nama Karyawan</label>
                                 <div class="col-sm-6">
-                                    <select id="idkar" class="form-control" name="idkar" onchange="changeKaryawan('idkar')">
+                                    <select id="idkar" class="form-control siku" name="idkar" onchange="changeKaryawan('idkar')">
                                         <?php
                                         if(count($karyawans) > 0){
                                             $usernm = $karyawans[0]->usernm;
@@ -51,13 +54,13 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Kode Absensi</label>
                                 <div class="col-sm-6">                                        
-                                    <input type="text" class="form-control" id="abscd" name="abscd" value="<?php echo $usernm; ?>" disabled=""/>
+                                    <input type="text" class="form-control siku" id="abscd" name="abscd" value="<?php echo $usernm; ?>" disabled=""/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Jumlah Tabungan</label>
                                 <div class="col-sm-6">                                        
-                                    <input type="text" class="form-control" name="niltb" value=""/>
+                                    <input type="text" class="form-control siku" name="niltb" value=""/>
                                     @if($errors->first('niltb'))
                                     <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('niltb') }}</div>
                                     @endif
@@ -67,22 +70,22 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></label>
                                 <div class="col-sm-6">                                        
-                                    <button class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Data</button>
+                                    <button class="btn btn-primary siku"><i class="fa fa-plus-square"></i> Tambah Data</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <img id="img" src="<?php echo url("/uploads")."/".$img ?>" width="120" height="150">
+                            <img id="img" class="thumbnail" src="<?php echo url("/uploads")."/".$img ?>" width="120" height="150">
                         </div>
                     </form>
                 </div>
                 <div>
-                    <h3 class="page-header"><i class="fa fa-info-circle"></i> Status Pinjaman Karyawan</h3>
+                    <br>
                     <table class="table table-bordered table-hover" id="datatable">
                         <thead>
                             <tr>
                                 <th class="text-center">Tanggal</th>
-                                <th class="text-center">Nomor Transaksi Hutang</th>
+                                <th class="text-center">Nomor Transaksi Tabungan</th>
                                 <th class="text-center">Nama Karyawan</th>
                                 <th class="text-center">Total Tabungan</th>
                                 <th class="text-center">Opsi</th>
@@ -96,8 +99,8 @@
                                 <td>{{ $tabungan->nama }}</td>
                                 <td>Rp.<?php echo number_format($tabungan->niltb, 0, ',', '.') ?>,-</td>
                                 <td>
-                                    <a href="{{ action('TransaksiTabunganController@edit', [$tabungan->idtb]) }}" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Edit Data?"><i class="fa fa-edit"></i></a>
-                                    <a href="{{ action('TransaksiTabunganController@destroy', [$tabungan->idtb]) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                    <a href="{{ action('TransaksiTabunganController@edit', [$tabungan->idtb]) }}" class="btn btn-info siku" data-toggle="tooltip" data-placement="right" title="Edit Data?"><i class="fa fa-edit"></i></a>
+                                    <a href="{{ action('TransaksiTabunganController@destroy', [$tabungan->idtb]) }}" class="btn btn-danger delete siku" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach

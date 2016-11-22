@@ -22,25 +22,28 @@
             </div>    
             @endif
             <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Data Tabungan - Detail</h3>
+            </div>
+            <div class="panel-body">
                 <div class="row">
                     <form class="form-horizontal"  action="{{ action("TransaksiTabunganController@update", [$tabungan[0]->idtb]) }}" method="POST">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Nama Karyawan</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" value="{{ $tabungan[0]->nama }}" disabled=""/>
+                                    <input type="text" class="form-control siku" value="{{ $tabungan[0]->nama }}" disabled=""/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Kode Absensi</label>
                                 <div class="col-sm-6">                                        
-                                    <input type="text" class="form-control" id="disabledInput" name="abscd" value="{{ $tabungan[0]->idkar }}" disabled=""/>
+                                    <input type="text" class="form-control siku" id="disabledInput" name="abscd" value="{{ $tabungan[0]->idkar }}" disabled=""/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Jumlah Tabungan</label>
                                 <div class="col-sm-6">                                        
-                                    <input type="text" class="form-control" name="niltb" value="{{ Input::old('niltb', $tabungan[0]->niltb) }}"/>
+                                    <input type="text" class="form-control siku" name="niltb" value="{{ Input::old('niltb', $tabungan[0]->niltb) }}"/>
                                     @if($errors->first('niltb'))
                                     <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('niltb') }}</div>
                                     @endif
@@ -50,12 +53,13 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></label>
                                 <div class="col-sm-6">                                        
-                                    <button class="btn btn-primary"><i class="fa fa-plus-square"></i> Tambah Data</button>
+                                    <a href="{{ action("TransaksiTabunganController@index") }}" class="btn btn-primary siku"> <i class="fa fa-backward"></i> Kembali</a>
+                                    <button class="btn btn-info siku"><i class="fa fa-plus-square"></i> Tambah Data</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <img src="http://placehold.it/120x150">
+                            <img src="<?php echo url("/uploads")."/".$tabungan[0]->pic ?>" width="150" class="thumbnail siku">
                         </div>
                     </form>
                 </div>

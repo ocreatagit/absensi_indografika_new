@@ -15,8 +15,8 @@ class MasterKaryawanController extends \BaseController {
 
         $success = Session::get('mk01_success');
         $mk01 = new mk01();
-        $karyawans = mk01::all();
-        $sql = "select * from mm01";
+        $karyawans = mk01::where('jnsusr', '<>', 0)->orderBy('status', "DESC")->orderBy("jnsusr", "DESC")->orderBy("nama", "ASC")->get();
+        $sql = "select * from mm01 ORDER BY klpk_menu ASC";
         $data = array(
             "karyawans" => $karyawans,
             "mk01_success" => $success,
@@ -110,7 +110,7 @@ class MasterKaryawanController extends \BaseController {
                     return Redirect::to('master/karyawan/create');
                 }
             } else {
-                $filename = "";
+                $filename = "noavatar.jpg";
             }
 
             $karyawan = new mk01();
@@ -668,12 +668,12 @@ class MasterKaryawanController extends \BaseController {
 
         return Redirect::to('master/karyawan');
     }
-    
-    public function getUserMatrixKar(){
+
+    public function getUserMatrixKar() {
         $id = Input::get('idkar');
         $sql = "SELECT mm01_id FROM `mm02` WHERE `mk01_id` = " . $id . " ORDER BY mm01_id ASC";
         $data = DB::select(DB::raw($sql));
-        
+
         return json_encode($data);
     }
 

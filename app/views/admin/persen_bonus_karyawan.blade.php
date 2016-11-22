@@ -10,9 +10,13 @@
 @stop
 
 @section('main')
-<div class="row">    
+<div class="row">
+    <div class="col-sm-12">
         <div class="panel panel-default">
-            <div class="panel-heading">Ubah Persen Bonus Karyawan </div>
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Ubah Persen Bonus Karyawan </h3>
+            </div>
             <div class="panel-body">
                 @if(Session::has('filter'))
                 <div class="alert alert-success alert-dismissible" role="alert">
@@ -26,11 +30,23 @@
                         <div class="col-sm-1 input-group">                            
                             <div class="input-group">
                                 <input type="text" class="form-control siku" value="{{ Input::old('prsbns', $prsbns) }}" name="prsbns">
-                                <div class="input-group-addon">%</div>
+                                <div class="input-group-addon siku">%</div>
                             </div>
                         </div>
                         @if($errors->first('prsbns'))
                         <div class="col-sm-3 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('prsbns') }}</div>
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Maksimal Telat (Menit) </label>
+                        <div class="col-sm-2 input-group">                            
+                            <div class="input-group">
+                                <input type="text" class="form-control siku" value="{{ Input::old('maxtelat', $maxtelat) }}" name="maxtelat">
+                                <div class="input-group-addon">Menit</div>
+                            </div>
+                        </div>
+                        @if($errors->first('prsbns'))
+                        <div class="col-sm-3 col-sm-offset-2 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;">{{ $errors->first('maxtelat') }}</div>
                         @endif
                     </div>
                     <div class="form-group">
@@ -43,6 +59,7 @@
             </div>
         </div>
     </div>
+</div>
 
 @stop
 

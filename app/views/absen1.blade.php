@@ -27,9 +27,7 @@
                 </div>
                 <div class="col-lg-6" >
                     <img class="col-lg-12" src="<?php echo url('assets/logo.jpg'); ?>">
-                    Jalan Ngagel Madya V no. xx, No Telp. 000000000
-                    <br>
-                    and somethings
+                    Jl. Ngagel Madya V No.52, Baratajaya, Gubeng, No Telp. (031) 5041592
                 </div>                
             </div>
             <hr style="border: 1px red solid;">
@@ -86,7 +84,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-6">
                     <div class="panel panel-info">
                         <div class="panel-heading" style="font-size: large">
                             Catatan dan Pemberitahuan
@@ -127,13 +125,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-6">
                     <div class="panel panel-info">
                         <div class="panel-heading" style="font-size: large">
                             Developer Note
                         </div>
                         <div class="panel-body">
-                             belum di update ke indografika
+                            <ul class="">
+                                <li>Fingerprint Jangan Lupa <font color="red"> Dimatikan </font> bagi yang terakhir pulang!</li>
+                                <li>Fingerprint Jangan Lupa <font color="green"> Dinyalakan </font> bagi yang pertama kali datang!</li>
+                            </ul>
                         </div>
                     </div>
                 </div>

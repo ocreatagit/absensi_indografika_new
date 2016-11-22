@@ -1,0 +1,201 @@
+<?php $__env->startSection('title'); ?>
+<title>ABSENSI - Input Data</title>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('header'); ?>
+<h1 class="page-header">Input Data
+    <small>Hutang</small>
+</h1>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('main'); ?>
+<div class="row">
+    <div class="col-sm-12" style="">
+        <div class="panel panel-default">
+            <div class="panel-heading"></div>
+            <?php if(Session::has('th01_success')): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-info-circle"></i> <?php echo $th01_success; ?>
+
+            </div>    
+            <?php endif; ?>
+            <?php if(Session::has('th01_danger')): ?>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="fa fa-warning"></i> <?php echo $th01_danger; ?>
+
+            </div>    
+            <?php endif; ?>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Data Hutang - Detail</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <form class="form-horizontal" action="<?php echo action("TransaksiHutangController@update", [$hutang[0]->idhut]); ?>" method="POST">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Nama Karyawan</label>
+                                <div class="col-sm-6">
+                                    <input type="text" disabled="" value="<?php echo $hutang[0]->nama; ?>" class="form-control siku">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Jenis Pinjaman</label>
+                                <div class="col-sm-3">
+                                    <input type="text" disabled="" value="<?php echo $hutang[0]->jenhut; ?>" class="form-control siku">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Angsuran</label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control siku" name="jmlang" value="<?php echo Input::old('jmlang', $hutang[0]->jmlang); ?>" <?php echo $hutang[0]->jenhut == 'Kas Bon' ? 'disabled' : ''; ?>/>
+                                    <?php if($errors->first('jmlang')): ?>
+                                    <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('jmlang'); ?></div>
+                                    <?php endif; ?>
+                                </div>                                
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Jumlah Pinjaman</label>
+                                <div class="col-sm-6">                                        
+                                    <input type="text" class="form-control siku" name="nilhut" value="<?php echo Input::old('nilhut', $hutang[0]->nilhut); ?>"/>
+                                    <?php if($errors->first('nilhut')): ?>
+                                    <div class="col-sm-12 alert alert-danger" style="margin-top: 5px; margin-bottom: 0px;"><?php echo $errors->first('nilhut'); ?></div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-6">
+                                    <a href="<?php echo action('TransaksiHutangController@index'); ?>" class="btn btn-primary siku" data-toggle="tooltip" data-placement="left" title=""><i class="fa fa-backward"></i> Kembali</a>
+                                    <button class="btn btn-info siku"><i class="fa fa-save"></i> Ubah Data</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <img src="<?php echo url("/uploads")."/".$hutang[0]->pic ?>" width="150" class="thumbnail siku">
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h3 class="page-header"><i class="fa fa-info-circle"></i> Status Pinjaman Karyawan</h3>
+                    <table class="table table-bordered table-hover" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Jumlah Angsuran</th>
+                                <th class="text-center">Tanggal Angsur</th>
+                                <th class="text-center">Nilai Angsuran</th>
+                                <th class="text-center">Status Bayar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <?php $no = 1; ?>
+                            <?php foreach($hutangs as $hutang): ?>
+                            <tr>
+                                <td> <?php echo $no; ?> </td>
+                                <td> <?php echo strftime("%d-%b-%Y", strtotime($hutang->tglph)); ?></td>
+                                <td>Rp.<?php echo number_format($hutang->nilph, 0, ',', '.') ?>,-</td>
+                                <td><?php echo $hutang->status; ?></td>
+                                <?php $no++; ?>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.clockpicker').clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            donetext: 'Done'
+        });
+        $('#datatable').DataTable();
+
+        alertify.defaults = {
+            // dialogs defaults
+            modal: true,
+            basic: false,
+            frameless: false,
+            movable: true,
+            resizable: true,
+            closable: true,
+            closableByDimmer: true,
+            maximizable: true,
+            startMaximized: false,
+            pinnable: true,
+            pinned: true,
+            padding: true,
+            overflow: true,
+            maintainFocus: true,
+            transition: 'pulse',
+            autoReset: true,
+            // notifier defaults
+            notifier: {
+                // auto-dismiss wait time (in seconds)  
+                delay: 5,
+                // default position
+                position: 'bottom-right'
+            },
+            // language resources 
+            glossary: {
+                // dialogs default title
+                title: 'Konfirmasi',
+                // ok button text
+                ok: 'OK',
+                // cancel button text
+                cancel: 'Batal'
+            },
+            // theme settings
+            theme: {
+                // class name attached to prompt dialog input textbox.
+                input: 'ajs-input',
+                // class name attached to ok button
+                ok: 'ajs-ok',
+                // class name attached to cancel button 
+                cancel: 'ajs-cancel'
+            }
+        };
+
+        $(".delete").click(function (e) {
+            e.preventDefault();
+            var a = this.href;
+            alertify.confirm('Hapus Hutang Karyawan?', function (e) {
+                if (e) {
+                    window.location.assign(a);
+                } else {
+                    //after clicking Cancel
+                }
+            });
+        });
+
+    });
+
+    function changeKaryawan(idkar) {
+        var id = document.getElementById(idkar).value;
+        var url = "<?php echo url("/master/karyawan/get_karyawan") ?>" + "/" + id;
+
+//        $.ajax({
+//            url: url,
+//            type: 'POST',
+//            success: function (data, textStatus, jqXHR) {
+//                var lokasi = JSON.parse(data);
+//            }, error: function (jqXHR, textStatus, errorThrown) {
+//                alert(JSON.stringify(jqXHR));
+//            }
+//        });
+    }
+</script> 
+<?php $__env->stopSection(); ?>
+
+
+
+
+<?php echo $__env->make('template.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

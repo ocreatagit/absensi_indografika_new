@@ -17,7 +17,7 @@ class TransaksiHutangController extends \BaseController {
         $danger = Session::get('th01_danger');
         $th01 = new th01();
         $data = array(
-            "karyawans" => mk01::where("status", "=", "Y")->get(),
+            "karyawans" => mk01::where("status", "=", "Y")->where("jnsusr", "=", 2)->get(),
             "hutangs" => $th01->getHutangBlmLunas(),
 //            "hutangs" => $th01::all(),
             "th01_success" => $success,

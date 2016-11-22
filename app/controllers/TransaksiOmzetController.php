@@ -17,7 +17,7 @@ class TransaksiOmzetController extends \BaseController {
         $danger = Session::get('tz01_danger');
         $tz01 = new tz01();
         $data = array(
-            "karyawanalls" => mk01::all(),
+            "karyawanalls" => mk01::where("status", "=", "Y")->where("jnsusr", "=", 2)->get(),
             "omzets" => $tz01->getOmzet(),
             "tz01_success" => $success,
             "tz01_danger" => $danger,

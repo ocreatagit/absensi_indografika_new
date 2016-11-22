@@ -11,9 +11,13 @@
 @stop
 
 @section('main')
-<div class="row">    
+<div class="row">
+    <div class="col-sm-12" style="">
         <div class="panel panel-default">
-            <div class="panel-heading">Laporan Presensi </div>
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Laporan Presensi</h3>
+            </div>
             <div class="panel-body">
                 @if(Session::has('filter'))
                 <div class="alert alert-success alert-dismissible" role="alert">
@@ -86,7 +90,7 @@
             </div>
         </div>
     </div>
-
+</div>
 @stop
 
 @section('script')

@@ -79,7 +79,7 @@ class FiturController extends \BaseController {
         $tg01 = new tg01();
         $data = array();
         $data["karyawan"] = mk01::find($userloginid["idkar"]);
-        $data["gajis"] = $tg01->getGajiStatusN('', '', $userloginid["idkar"]);
+        $data["gajis"] = $tg01->getGajiStatusN($data["karyawan"]->tglgj, $data["karyawan"]->tglgj, $userloginid["idkar"]);
         $data['filter'] = Session::get('filter');
         $data['usermatrik'] = User::getUserMatrix();
 //        return View::make('master.my_gaji', $data);
@@ -282,9 +282,10 @@ class FiturController extends \BaseController {
         $tz01 = new tz01();
         $tglfrom = "";
         $tglto = "";
+        $karyawan = mk01::find($userloginid["idkar"]);
         $data = array(
-            "karyawan" => mk01::find($userloginid["idkar"]),
-            "allOmzets" => $tz01->getAllOmzet($tglfrom, $tglto, $userloginid["idkar"]),
+            "karyawan" => $karyawan,
+            "allOmzets" => $tz01->getAllOmzet($karyawan->tglgj, $karyawan->tglgj, $userloginid["idkar"]),
             "usermatrik" => User::getUserMatrix()
         );
         return View::make('myindografika.my_omzet', $data);

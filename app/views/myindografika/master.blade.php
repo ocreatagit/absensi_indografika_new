@@ -12,17 +12,17 @@
         {{ HTML::style('css/clockpicker.css') }}
         {{ HTML::style('jquery-ui/jquery-ui.min.css') }}
         {{-- HTML::style('http://fonts.googleapis.com/css?family=Open+Sans') --}}
-        
+
         <style>
             #pageHeader {
                 margin-top: 0px;
                 padding-top: 0px;
             }
-            
+
             .ui-datepicker-year, .ui-datepicker-month{
                 color: black;
             }
-            
+
             .marginTop08 {
                 margin-top: 0.8%;
             }
@@ -30,10 +30,11 @@
             .marginTop25{
                 margin-top: 2.5%;
             }
-            
+
             .siku {
                 border-radius: 0px;
             }
+            
         </style>
     </head>
     <body>
@@ -69,7 +70,7 @@
                             </a>
                             <!--<img src="assets/img/find_user.png" class="user-image img-responsive"/>-->
                         </li>
-                        
+
                         <li class="active-menu">
                             <a class="active-menu"  href=""><i class="fa fa-user "></i> Nama : {{ $karyawan->nama }}</a>
                         </li>
@@ -77,31 +78,33 @@
                             <a class=""  href="{{ url('myaccount') }}"><i class="fa fa-cogs "></i> My Account</a>
                         </li>
                         <?php if (count(array_intersect([14, 15, 16, 17, 18], $usermatrik)) > 0) { ?>
-                        <?php if (in_array(14, $usermatrik)) { ?>
-                        <li>
-                            <a href="{{ url('myindografika/gajikaryawan') }}"><i class="fa fa-book "></i> Gaji</a>
-                        </li>
-                        <?php } ?>
-                        <?php if (in_array(15, $usermatrik)) { ?>
-                        <li>
-                            <a href="{{ url('myindografika/tabungankaryawan') }}"><i class="fa fa-money "></i> Tabungan </a>
-                        </li>
-                        <?php } ?>
-                        <?php if (in_array(16, $usermatrik)) { ?>
-                        <li>
-                            <a href="{{ url('myindografika/pinjamankaryawan') }}"><i class="fa fa-minus-circle "></i> Hutang </a>
-                        </li>
-                        <?php } ?>
-                        <?php if (in_array(17, $usermatrik)) { ?>
-                        <li>
-                            <a href="{{ url('myindografika/omzetkaryawan') }}"><i class="fa fa-dollar "></i> Omzet </a>
-                        </li>
-                        <?php } ?>
-                        <?php if (in_array(18, $usermatrik)) { ?>
-                        <li>
-                            <a href="{{ url('myindografika/presensikaryawan') }}"><i class="fa fa-check-circle "></i> Presensi </a>
-                        </li>
-                        <?php }} ?>
+                            <?php if (in_array(14, $usermatrik)) { ?>
+                                <li>
+                                    <a href="{{ url('myindografika/gajikaryawan') }}"><i class="fa fa-book "></i> Gaji</a>
+                                </li>
+                            <?php } ?>
+                            <?php if (in_array(15, $usermatrik)) { ?>
+                                <li>
+                                    <a href="{{ url('myindografika/tabungankaryawan') }}"><i class="fa fa-money "></i> Tabungan </a>
+                                </li>
+                            <?php } ?>
+                            <?php if (in_array(16, $usermatrik)) { ?>
+                                <li>
+                                    <a href="{{ url('myindografika/pinjamankaryawan') }}"><i class="fa fa-minus-circle "></i> Hutang </a>
+                                </li>
+                            <?php } ?>
+                            <?php if (in_array(17, $usermatrik)) { ?>
+                                <li>
+                                    <a href="{{ url('myindografika/omzetkaryawan') }}"><i class="fa fa-dollar "></i> Omzet </a>
+                                </li>
+                            <?php } ?>
+                            <?php if (in_array(18, $usermatrik)) { ?>
+                                <li>
+                                    <a href="{{ url('myindografika/presensikaryawan') }}"><i class="fa fa-check-circle "></i> Presensi </a>
+                                </li>
+                            <?php }
+                        }
+                        ?>
                         <!--                        <li>
                                                     <a href=""><i class="fa fa-sign-out "></i> Logout </a>
                                                 </li>-->
@@ -113,11 +116,11 @@
             <!-- /. NAV SIDE  -->
             <div id="page-wrapper" >
                 <div id="page-inner">
-<!--                    <div class="row">
-                        <div class="col-lg-12" id="pageHeader">
-                            @yield('header')
-                        </div>
-                    </div>-->
+                    <!--                    <div class="row">
+                                            <div class="col-lg-12" id="pageHeader">
+                                                @yield('header')
+                                            </div>
+                                        </div>-->
                     <div class="row">
                         <div class="col-md-12">
                             @yield('main')

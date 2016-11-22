@@ -14,9 +14,7 @@
 <div class="row">
     <div class="col-sm-12" style="">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <a href="{{ action("TransaksiAbsensiController@index") }}" class="btn btn-primary"><i class="fa fa-backward"></i> Kembali</a>
-            </div>
+            <div class="panel-heading"></div>
             @if(Session::has('ta01_success'))
             <div class="alert alert-success alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -30,13 +28,16 @@
             </div>    
             @endif
             <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Data Absensi - Detail </h3>
+            </div>
+            <div class="panel-body">
                 <div class="row">
                     <form class="form-horizontal" action="{{ action("TransaksiAbsensiController@store", [$karyawan->idkar]) }}" method="POST">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Nama Karyawan</label>
                                 <div class="col-sm-4 input-group">
-                                    <select readonly id="idkar" class="form-control" name="idkar" onchange="changeKaryawan('idkar')">
+                                    <select readonly id="idkar" class="form-control siku" name="idkar" onchange="changeKaryawan('idkar')">
                                         <?php
                                         $usernm = $karyawan->usernm;
                                         $img = $karyawan->pic;
@@ -49,7 +50,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Tanggal Absensi</label>
                                 <div class="col-sm-4 input-group">
-                                    <input id="tglabs" type="text" class="form-control" value="{{ Input::old('tglabs', $tglabs) }}" name="tglabs">
+                                    <input id="tglabs" type="text" class="form-control siku" value="{{ Input::old('tglabs', $tglabs) }}" name="tglabs">
 <!--                                    <select id="idkar" class="form-control" name="idjk" onchange="">
                                         @foreach($jamkerjas as $jamkerja)
                                         <option value="{{ $jamkerja->ta01_id }}">{{ date('d-m-Y', strtotime($jamkerja->tgl)) }}</option>
@@ -63,7 +64,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Jenis Jam Kerja</label>
                                 <div class="col-sm-3 input-group">                                        
-                                    <select id="idkar" class="form-control" name="abscd" onchange="">
+                                    <select id="idkar" class="form-control siku" name="abscd" onchange="">
                                         <option value="0">Jam Masuk</option>
                                         <option value="2">Jam Istirahat Keluar</option>
                                         <option value="3">Jam Istirahat Kembali</option>
@@ -76,8 +77,8 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Jam Masuk</label>
                                 <div class="col-sm-2 input-group clockpicker">
-                                    <input type="text" class="form-control" value="{{ Input::old('jmmsk', '08:00') }}" name="jmmsk">
-                                    <span class="input-group-addon">
+                                    <input type="text" class="form-control siku" value="{{ Input::old('jmmsk', '08:00') }}" name="jmmsk">
+                                    <span class="input-group-addon siku">
                                         <span class="glyphicon glyphicon-time"></span>
                                     </span>
                                 </div>
@@ -86,15 +87,18 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label"></label>
-                                <div class="col-sm-8 input-group">                                        
-                                    <button class="btn btn-primary" name="btn_tambah" value="tambah"><i class="fa fa-plus-square"></i> Tambah / Edit Jam Kerja</button>
-                                    <button class="btn btn-success" name="btn_cari" value="cari"><i class="fa fa-search"></i> Cari </button>
+                                <div class="col-sm-4 text-right">
+                                    <a href="{{ action("TransaksiAbsensiController@index") }}" class="btn btn-primary siku"><i class="fa fa-backward"></i> Kembali</a> 
+                                </div>
+                                <div class="col-sm-8 input-group">
+                                    <button class="btn btn-primary siku" name="btn_tambah" value="tambah"><i class="fa fa-plus-square"></i> Tambah / Edit Jam Kerja</button> &nbsp;
+                                    <button class="btn btn-danger siku" name="btn_hapus" value="hapus"><i class="fa fa-times"></i> Hapus </button> &nbsp;
+                                    <button class="btn btn-success siku" name="btn_cari" value="cari"><i class="fa fa-search"></i> Cari </button> &nbsp;
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <img id="img" src="<?php echo url("/uploads") . "/" . $img ?>" width="120" height="150">
+                            <img id="img" src="<?php echo url("/uploads") . "/" . $img ?>" width="120" height="150" class="thumbnail">
                         </div>
                     </form>
                 </div>

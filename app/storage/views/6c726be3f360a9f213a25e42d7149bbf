@@ -27,10 +27,13 @@
 
             </div>    
             <?php endif; ?>
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Transfer Gaji</h3>
+            </div>
             <form action="<?php echo action("TransaksiTransferController@saveall"); ?>" method="POST">
-                <div class="panel panel-heading">
+                <div class="panel-body">
                     <button class="btn btn-success siku pull-right" type="submit" value="bayar" name="btn_submit" data-toggle="tooltip" data-placement="left" title="Buat Transaksi yang Dipilih?"><i class="fa fa-check-circle"></i> Transfer Slip Gaji</button>
-                    <br><br>
                 </div>
                 <div class="panel-body">
                     <div id="lbl_selected" class="alert alert-info">

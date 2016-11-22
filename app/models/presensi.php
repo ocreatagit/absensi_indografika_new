@@ -291,6 +291,11 @@ class Presensi {
         $ta02->tglmsk = date("Y-m-d", strtotime($tanggal)) . " " . $jam;
         $ta02->save();
     }
+    
+    public static function DeletePresensi($id) {
+        $ta02 = ta02::find($id);
+        $ta02->delete();
+    }
 
     public static function InsertPresensi($idkar, $idjk, $tanggal, $jam, $abscd) {
         $ta02 = new ta02();
@@ -302,7 +307,6 @@ class Presensi {
         $ta02->updated_at = date("Y-m-d H:i:s");
         $ta02->save();
     }
-
 }
 
 ?>

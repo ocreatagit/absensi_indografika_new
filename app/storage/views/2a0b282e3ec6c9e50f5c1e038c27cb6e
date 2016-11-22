@@ -27,8 +27,10 @@
 
             </div>    
             <?php endif; ?>
-            <div class="panel-heading">
-                <a id="tambah" href="<?php echo action('TransaksiGajiController@show'); ?>" class="btn btn-primary"><i class="fa fa-plus-square"></i> Pembayaran Gaji Karyawan</a>
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Slip Gaji</h3>
+                <a id="tambah" href="<?php echo action('TransaksiGajiController@show'); ?>" class="btn btn-primary siku"><i class="fa fa-plus-square"></i> Pembayaran Gaji Karyawan</a>
             </div>
             <div class="panel-body">
                 <div class="col-sm-12">
@@ -63,7 +65,7 @@
                                 }
                                 ?>
                                 <td class="text-center" width="15%">
-                                    <a href="<?php echo action('TransaksiGajiController@destroy', [$gaji->idtg]); ?>" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Hapus Transaksi?"><i class="fa fa-times"></i></a>
+                                    <a href="<?php echo action('TransaksiGajiController@destroy', [$gaji->idtg]); ?>" class="btn btn-danger siku" data-toggle="tooltip" data-placement="left" title="Hapus Transaksi?"><i class="fa fa-times"></i></a>
                                         <?php $no++; ?>
                                 </td>
                             </tr>

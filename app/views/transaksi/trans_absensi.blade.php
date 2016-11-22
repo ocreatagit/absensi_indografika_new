@@ -28,31 +28,31 @@
             </div>    
             @endif
             <div class="panel-body">
-                <div>
-                    <h3 class="page-header"><i class="fa fa-info-circle"></i> Absensi Karyawan </h3>
-                    <table class="table table-bordered table-hover" id="datatable">
-                        <thead>
-                            <tr>
-                                <th class="text-center">No</th>
-                                <th class="text-center">Nama</th>
-                                <th class="text-center">Opsi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center">
-                            <?php $no = 1; ?>
-                            @foreach($karyawans as $kar)
-                            <tr>
-                                <td>{{ $no }}</td>
-                                <td>{{ $kar->nama }}</td>
-                                <td>
-                                    <a href="{{ action('TransaksiAbsensiController@show', $kar->idkar) }}" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Edit Data?"><i class="fa fa-edit"></i></a>
-                                </td>
-                            </tr>
-                            <?php $no++; ?>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Input Data Absensi </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover" id="datatable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Nama</th>
+                            <th class="text-center">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <?php $no = 1; ?>
+                        @foreach($karyawans as $kar)
+                        <tr>
+                            <td>{{ $no }}</td>
+                            <td>{{ $kar->nama }}</td>
+                            <td>
+                                <a href="{{ action('TransaksiAbsensiController@show', $kar->idkar) }}" class="btn btn-info siku" data-toggle="tooltip" data-placement="right" title="Edit Data?"><i class="fa fa-edit"></i></a>
+                            </td>
+                        </tr>
+                        <?php $no++; ?>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

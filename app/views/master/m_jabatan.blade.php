@@ -12,78 +12,87 @@
 
 @section('main')
 <div class="row">
-    <form class="form-horizontal" action="{{ $action }}" method="POST">
-        @if(Session::has('mj01_success'))
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <i class="fa fa-info-circle"></i> {{ $mj01_success }}
-        </div>    
-        @endif
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Nama Jabatan</label>
-            <div class="col-sm-4 input-group">
-                <input type="text" class="form-control" value="{{ Input::old('nama', $jabatan['nama']) }}" name="nama">
+    <div class="col-sm-12" style="">
+        <div class="panel panel-default">
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <h3 class="page-header"><i class="fa fa-info-circle"></i> Master Jabatan</h3>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"></label>
-            <div class="col-sm-4 input-group">
-                <span class="input-group-addon">
-                    <?php $flag = Input::old('flgomzt', $jabatan['flgomzt']);
-                    ?>
-                    <input type="checkbox" name="flgomzt" value="Y" {{ (isset($flag)) ? (($flag == 'Y') ? "checked" : "") : "" }}>
-                </span>
-                <input readonly type="text" class="form-control" value="Memiliki omset">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Status Aktif</label>
-            <div class="col-sm-4 input-group">
-                <span class="input-group-addon">
-                    <?php $flagAktif = Input::old('status', $jabatan['status']); ?>
-                    <input type="checkbox" name="status" value="Y" {{ (isset($flagAktif)) ? (($flagAktif == 'Y') ? "checked" : "") : "checked" }}>
-                </span>
-                <input readonly type="text" class="form-control" value="Aktif">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label"></label>
-            <div class="col-sm-4">
-                <div class="col-sm-8 input-group">
-                    <button class="btn btn-success" type="submit" value="btn_submit"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
-                    <a href="{{ action('MasterJabatanController@index') }}" class="btn btn-default"><i class="fa fa-repeat"></i> Reset</a>
+            <form class="form-horizontal" action="{{ $action }}" method="POST">
+                @if(Session::has('mj01_success'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <i class="fa fa-info-circle"></i> {{ $mj01_success }}
+                </div>    
+                @endif
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Nama Jabatan</label>
+                    <div class="col-sm-4 input-group">
+                        <input type="text" class="form-control siku" value="{{ Input::old('nama', $jabatan['nama']) }}" name="nama">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4 input-group">
+                        <span class="input-group-addon siku">
+                            <?php $flag = Input::old('flgomzt', $jabatan['flgomzt']);
+                            ?>
+                            <input type="checkbox" name="flgomzt" value="Y" {{ (isset($flag)) ? (($flag == 'Y') ? "checked" : "") : "" }}>
+                        </span>
+                        <input readonly type="text" class="form-control siku" value="Memiliki omset">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Status Aktif</label>
+                    <div class="col-sm-4 input-group">
+                        <span class="input-group-addon siku">
+                            <?php $flagAktif = Input::old('status', $jabatan['status']); ?>
+                            <input type="checkbox" name="status" value="Y" {{ (isset($flagAktif)) ? (($flagAktif == 'Y') ? "checked" : "") : "checked" }}>
+                        </span>
+                        <input readonly type="text" class="form-control siku" value="Aktif">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-4">
+                        <div class="col-sm-8 input-group">
+                            <button class="btn btn-success siku" type="submit" value="btn_submit"> <i class=" glyphicon glyphicon-floppy-disk"></i> Simpan</button>
+                            &nbsp; <a href="{{ action('MasterJabatanController@index') }}" class="btn btn-default siku"><i class="fa fa-repeat"></i> Reset</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-hover" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="text-left">No</th>
+                                <th class="text-left">Nama Jabatan</th>
+                                <th class="text-left">Omzet</th>
+                                <th class="text-left">Status Aktif</th>
+                                <th class="text-left">Opsi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-left">
+                            <?php $no = 1; ?>
+                            @foreach($jabatans as $jabatan)
+                            <tr>
+                                <td>{{ $no }}</td>
+                                <td>{{ $jabatan->nama }}</td>
+                                <td>{{ $jabatan->flgomzt == 'N' ? 'Tidak memiliki omset' : 'Memiliki omset'; }}</td>
+                                <td>{{ $jabatan->status == 'N' ? 'Tidak Aktif' : 'Aktif'; $no++; }}</td>
+                                <td class="text-center">
+                                    <a href="{{ action('MasterJabatanController@edit', $jabatan->idjb) }}" class="btn btn-info siku" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>
+                                    <a href="{{ action('MasterJabatanController@destroy', $jabatan->idjb) }}" class="btn btn-danger siku delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </form>
-    <hr>
-    <div class="col-sm-12">
-        <table class="table table-bordered table-hover" id="datatable">
-            <thead>
-                <tr>
-                    <th class="text-left">No</th>
-                    <th class="text-left">Nama Jabatan</th>
-                    <th class="text-left">Omzet</th>
-                    <th class="text-left">Status Aktif</th>
-                    <th class="text-left">Opsi</th>
-                </tr>
-            </thead>
-            <tbody class="text-left">
-                <?php $no = 1; ?>
-                @foreach($jabatans as $jabatan)
-                <tr>
-                    <td>{{ $no }}</td>
-                    <td>{{ $jabatan->nama }}</td>
-                    <td>{{ $jabatan->flgomzt == 'N' ? 'Tidak memiliki omset' : 'Memiliki omset'; }}</td>
-                    <td>{{ $jabatan->status == 'N' ? 'Tidak Aktif' : 'Aktif'; $no++; }}</td>
-                    <td class="text-center">
-                        <a href="{{ action('MasterJabatanController@edit', $jabatan->idjb) }}" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Edit Data?"><i class="fa fa-edit"></i></a>
-                        <a href="{{ action('MasterJabatanController@destroy', $jabatan->idjb) }}" class="btn btn-danger delete" data-toggle="tooltip" data-placement="right" title="Hapus Data?"><i class="fa fa-trash"></i></a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
     </div>
 </div>
 @stop
@@ -114,8 +123,7 @@
         closableByDimmer: true,
         maximizable: true,
         startMaximized: false,
-        pinnable: true,
-        pinned: true,
+        pinnable: true, pinned: true,
         padding: true,
         overflow: true,
         maintainFocus: true,
